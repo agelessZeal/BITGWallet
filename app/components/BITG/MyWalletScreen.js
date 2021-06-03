@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
     balanceText: {
-        color: colors.gray,
+        color: colors.grey400,
+        fontSize:12,
         marginStart: 20
     },
     bitgContainer: {
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     },
     usdText: {
         fontSize: 35,
-        color: colors.gray,
+        color: colors.grey,
         marginStart: 5
     },
     bitgButton: {
@@ -92,11 +93,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginStart: 20,
         marginEnd: 20,
-        marginTop: 30
     },
     textDays: {
         fontSize: 16,
-        color: colors.gray,
+        color: colors.grey,
         marginStart: 10
     },
     textTransaction: {
@@ -135,11 +135,11 @@ const styles = StyleSheet.create({
     },
     incomeText: {
         fontSize: 12,
-        color: colors.gray,
+        color: colors.grey,
     },
     expenseText: {
         fontSize: 12,
-        color: colors.gray,
+        color: colors.grey,
     },
     inExText: {
         fontSize: 16,
@@ -147,13 +147,12 @@ const styles = StyleSheet.create({
         color: colors.blackColor,
     },
     sendReceiveContainer: {
-        marginStart: 20,
-        marginEnd: 20,
         alignSelf: 'stretch',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginTop: 10
+        marginTop: 10,
+        marginBottom:10,
     },
     latestFromBitgButton: {
         height: 70,
@@ -192,10 +191,88 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: colors.redColor,
         textAlign: 'center'
-    }
+    },
+    buttonContainer:{
+        marginHorizontal:20,
+      },
+    buttonWrapper:{
+        width:'30%',
+        borderRadius:5,
+        backgroundColor:colors.green,
+        height:90,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    buttonVibWrapper:{
+        width:'30%',
+        borderRadius:5,
+        backgroundColor:colors.orange,
+        height:90,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    buttonShopWrapper:{
+        width:'30%',
+        borderRadius:5,
+        backgroundColor:colors.blue,
+        height:90,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    buttonImage:{
+        resizeMode:'contain',
+        width: 30,
+        height:30,
+    },
+    buttonText:{
+        marginTop:10,
+        color:colors.white
+    },
+    impactWrapper:{
+        width:'100%',
+        paddingHorizontal:20,
+        paddingVertical:10,
+        backgroundColor:colors.grey000
+    },
+    impactItem:{
+        width:'100%',
+        borderRadius:5,
+        backgroundColor:colors.white,
+        padding:10,
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center',
+        marginTop:10,
+        borderColor:colors.grey050,
+        borderWidth:1,
+        borderRadius:5,
+    },
+    impactItemClose:{
+        position:'absolute',
+        right:6,
+        top:6,
+    },
+    impactItemStar:{
+        tintColor:colors.blue,
+        width:25,
+        height:25,
+    },
+    impactItemTitle:{
+        minWidth:'70%',
+        justifyContent:'space-around'
+    },
+    impactText1:{
+        color:colors.grey200
+    },
+    impactText2:{
+        color:colors.black
+    },
 })
 
 const bitgImageSource = require("../../images/ic_bitg.png");
+const impactImageSource = require("../../images/ic_stars_24px.png");
+const initiativeImageSource = require("../../images/ic_vibration_24px.png");
+const shopImageSource = require("../../images/ic_store_mall_directory_24px.png");
 
 function MyWalletScreen({ 
     	swapsTokens,
@@ -224,9 +301,19 @@ function MyWalletScreen({
     });
 
     const [periodDays, setPeriodDays] = useState(30);
-    const [graphData, setGraphData] = useState([34, 100,22,15]);
+    const [graphData, setGraphData] = useState([34, 80,22,165,2]);
     const [income, setIncome] = useState(0);
     const [expense, setExpense] = useState(0);
+
+    const [impactData, setImpactData] = useState([{
+        title:'Name',
+        time:'5 min ago',
+        content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
+    },{
+        title:'Name s',
+        time:'1 hour ago',
+        content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
+    }]);
 
     // useEffect(() => {
     //     getWalletInfo()
@@ -363,7 +450,7 @@ function MyWalletScreen({
                                             </TouchableRipple>
                                         </View>
                                         <View style={styles.usdContainer}>
-                                            <Feather style={styles.usdSmallImage} name="dollar-sign" size={18} color={colors.gray} />
+                                            <Feather style={styles.usdSmallImage} name="dollar-sign" size={18} color={colors.grey} />
                                             <Text style={styles.usdText}>{toFixedFloor(availableBalance?.exchangeBalance, 3)}</Text>
                                             <View style={styles.usdButton}>
                                                 <Text style={{ fontSize: 18, marginBottom: 6 }}>{strings('bitg_wallet.usd_symbol')}</Text>
@@ -371,14 +458,35 @@ function MyWalletScreen({
                                         </View>
                                     </View>
                                 </View>
+                                <View style={styles.impactWrapper}>
+                                    {
+                                        impactData.map((item)=>(
+                                            <View style={styles.impactItem}>
+                                                <Image source={impactImageSource} style={styles.impactItemStar}/>
+                                                <TouchableOpacity style={styles.impactItemTitle}>
+                                                    <Text style={styles.impactText1}>
+                                                        {`${item.title}  ${item.time}`}
+                                                    </Text>
+                                                    <Text style={styles.impactText2}>
+                                                        {item.content}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.impactItemClose}>
+                                                  <MaterialIcons name="close" size={14} color={colors.grey300} />
+                                                </TouchableOpacity>
+                                                
+                                            </View>
+                                        ))
+                                    }
+                                </View>
                                 <View style={styles.transactionContainer}>
                                     <View style={{ flexDirection: 'row' }}>
-                                        <MaterialIcons style={{ transform: [{ rotate: "90deg" }] }} name="compare-arrows" size={24} color={colors.gray} />
+                                        <MaterialIcons style={{ transform: [{ rotate: "90deg" }] }} name="compare-arrows" size={24} color={colors.grey} />
                                         <Text style={styles.textDays}>{`Past ${periodDays} days`}</Text>
                                     </View>
-                                    <TouchableRipple style={styles.transactionButton}>
+                                    <TouchableOpacity style={styles.transactionButton}>
                                         <Text style={styles.textTransaction}>{strings('bitg_wallet.view_transaction')} </Text>
-                                    </TouchableRipple>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={[styles.graphView, { overflow: 'hidden', backgroundColor: "#ffffff" }]}>
                                     <LineChart
@@ -391,7 +499,7 @@ function MyWalletScreen({
                                             ]
                                         }}
                                         width={getGraphWidth(Dimensions.get("window").width + 25, graphData.length)}
-                                        height={170}
+                                        height={150}
                                         chartConfig={{
                                             backgroundGradientFrom: "#ffffff",
                                             backgroundGradientFromOpacity: 0,
@@ -440,11 +548,26 @@ function MyWalletScreen({
                                 </View>
                             </View>
                         </ScrollView>
-                        <View style={styles.sendReceiveContainer}>
-                            <TouchableOpacity style={styles.latestFromBitgButton} activeOpacity={0.7}>
-                                <Text style={styles.latestFromBitgText}>{strings('bitg_wallet.latest_news')}</Text>
-                            </TouchableOpacity>
+                        <View style={styles.buttonContainer}>
+                            <View style={styles.sendReceiveContainer}>
+                                <TouchableOpacity style={styles.buttonWrapper}>
+                                    <Image  source={impactImageSource} style={styles.buttonImage}/>
+                                    <Text style={styles.buttonText}>My Impact</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.buttonVibWrapper}>
+                                    <Image  source={initiativeImageSource} style={styles.buttonImage}/>
+                                    <Text style={styles.buttonText}>Initiatives</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.buttonShopWrapper}>
+                                    <Image  source={shopImageSource} style={styles.buttonImage}/>
+                                    <Text style={styles.buttonText}>Shop</Text>
+                                </TouchableOpacity>
+
+                            </View>
                         </View>
+
                     </>
             }
         </View >

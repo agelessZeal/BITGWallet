@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Alert, TouchableOpacity, View, Image, StyleSheet, Text, ScrollView, InteractionManager } from 'react-native';
+import { Alert, TouchableOpacity, View, Image, StyleSheet, Text, ScrollView, InteractionManager ,ImageBackground} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.grey000
 	},
 	accountBgOverlay: {
+		paddingTop:50,
 		borderBottomColor: colors.grey100,
 		borderBottomWidth: 1,
 		padding: 17
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		lineHeight: 24,
 		marginBottom: 5,
-		color: colors.fontPrimary,
+		color: colors.white,
 		...fontStyles.normal
 	},
 	caretDown: {
@@ -108,19 +109,19 @@ const styles = StyleSheet.create({
 		marginLeft: 7,
 		marginTop: 3,
 		fontSize: 18,
-		color: colors.fontPrimary
+		color: colors.white
 	},
 	accountBalance: {
 		fontSize: 14,
 		lineHeight: 17,
 		marginBottom: 5,
-		color: colors.fontPrimary,
+		color: colors.white,
 		...fontStyles.normal
 	},
 	accountAddress: {
 		fontSize: 12,
 		lineHeight: 17,
-		color: colors.fontSecondary,
+		color: colors.white,
 		...fontStyles.normal
 	},
 	buttons: {
@@ -572,16 +573,16 @@ class DrawerView extends PureComponent {
 	};
 
 	submitFeedback = () => {
-		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_SEND_FEEDBACK);
-		this.goToBrowserUrl(
-			'https://community.metamask.io/c/feature-requests-ideas/',
-			strings('drawer.request_feature')
-		);
+		// this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_SEND_FEEDBACK);
+		// this.goToBrowserUrl(
+		// 	'https://community.metamask.io/c/feature-requests-ideas/',
+		// 	strings('drawer.request_feature')
+		// );
 	};
 
 	showHelp = () => {
-		this.goToBrowserUrl('https://support.metamask.io', strings('drawer.metamask_support'));
-		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_GET_HELP);
+		// this.goToBrowserUrl('https://support.metamask.io', strings('drawer.metamask_support'));
+		// this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_GET_HELP);
 	};
 
 	goToBrowserUrl(url, title) {
@@ -848,14 +849,14 @@ class DrawerView extends PureComponent {
 		return (
 			<View style={styles.wrapper} testID={'drawer-screen'}>
 				<ScrollView>
-					<View style={styles.header}>
+					{/* <View style={styles.header}>
 						<View style={styles.metamaskLogo}>
 							<Image source={bitg_logo} style={styles.metamaskFox} resizeMethod={'auto'} />
-							{/* <Image source={metamask_name} style={styles.metamaskName} resizeMethod={'auto'} /> */}
+							<Image source={metamask_name} style={styles.metamaskName} resizeMethod={'auto'} />
 						</View>
-					</View>
+					</View> */}
 					<View style={styles.account}>
-						<View style={styles.accountBgOverlay}>
+						<ImageBackground source={require('../../../images/img_header_menu.png')} style={styles.accountBgOverlay}>
 							<TouchableOpacity
 								style={styles.identiconWrapper}
 								onPress={this.toggleAccountsModal}
@@ -890,7 +891,7 @@ class DrawerView extends PureComponent {
 									</View>
 								)}
 							</TouchableOpacity>
-						</View>
+						</ImageBackground>
 					</View>
 					<View style={styles.buttons}>
 						<StyledButton
