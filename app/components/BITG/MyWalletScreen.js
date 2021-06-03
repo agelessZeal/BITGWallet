@@ -224,7 +224,7 @@ function MyWalletScreen({
     });
 
     const [periodDays, setPeriodDays] = useState(30);
-    const [graphData, setGraphData] = useState([1, 1]);
+    const [graphData, setGraphData] = useState([34, 100,22,15]);
     const [income, setIncome] = useState(0);
     const [expense, setExpense] = useState(0);
 
@@ -451,7 +451,7 @@ function MyWalletScreen({
     );
 }
 
-MyWalletScreen.navigationOptions = ({ navigation }) => getBITGWalletNavbarOptions('wallet.title',navigation);
+MyWalletScreen.navigationOptions = ({ navigation }) => getBITGWalletNavbarOptions('bitg_wallet.my_wallet',navigation);
 
 MyWalletScreen.propTypes = {
 	swapsTokens: PropTypes.arrayOf(PropTypes.object),

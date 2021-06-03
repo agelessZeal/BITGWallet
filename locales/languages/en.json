@@ -1557,6 +1557,7 @@
 		"view_transaction":"VIEW TRANSACTION",
 		"income":"INCOMING",
 		"expense":"OUTGOING",
-		"latest_news":"Latest from BitGreen"
+		"latest_news":"Latest from BitGreen",
+		"my_wallet":"My BitGreen"
 	}
 }
