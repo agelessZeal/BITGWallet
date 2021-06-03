@@ -5,6 +5,9 @@
 /**
  * Map of color names to HEX values
  */
+const tintColor = '#00a519';
+const darkTintColor = '#008b15'
+
 export const colors = {
 	fontPrimary: '#000000',
 	fontSecondary: '#00A519',
@@ -68,7 +71,25 @@ export const colors = {
 	overlay: 'rgba(0,0,0,.5)',
 	darkAlert: 'rgba(0,0,0,.75)',
 	normalAlert: 'rgba(55,55,55,.97)',
-	spinnerBackground: `rgba(185, 156, 171, 0.396)`
+	spinnerBackground: `rgba(185, 156, 171, 0.396)`,
+
+	tintColor,
+	darkTintColor,
+	light_gray: '#f1f5f7',
+	tabIconDefault: '#a4adb1',
+	tabIconSelected: tintColor,
+	tabBar: '#fefefe',
+	errorBackground: 'red',
+	errorText: '#fff',
+	warningBackground: '#EAEB5E',
+	warningText: '#666804',
+	noticeBackground: tintColor,
+	noticeText: '#fff',
+	transparent: 'transparent',
+	locationBoxColor: '#f5f5f5',
+	blackColor: '#000000',
+	progressColor: '#f87c00',
+	redColor: '#e80000'
 };
 
 /**

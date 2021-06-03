@@ -68,6 +68,7 @@ coverage
 .js.env
 .ios.env
 .android.env
+app/constants/constant.js
 
 # Sentry
 /sentry.debug.properties

@@ -36,3 +36,15 @@ export function findRouteNameFromNavigatorState({ routes }) {
 export const capitalize = str => (str && str.charAt(0).toUpperCase() + str.slice(1)) || false;
 
 export const toLowerCaseCompare = (a, b) => tlc(a) === tlc(b);
+
+export const toFixedFloor = (value, decimals = 3) => {
+	let multiplier = Math.pow(10, decimals);
+	let outputString = (Math.floor(value * multiplier) / multiplier).toString();
+	if (value === parseInt(value) && decimals > 0)
+	  outputString += '.';
+	let zeroPadding = decimals === 0 ? 0 : (decimals + 2 - outputString.length)
+	for (let i = 0; i < zeroPadding; i++)
+	  outputString += '0';
+	return outputString;
+  }
+

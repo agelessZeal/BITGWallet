@@ -52,7 +52,7 @@ import ActivityView from '../../Views/ActivityView';
 import SwapsAmountView from '../../UI/Swaps';
 import SwapsQuotesView from '../../UI/Swaps/QuotesView';
 import { colors } from '../../../styles/common';
-import { color } from 'react-native-reanimated';
+import MyWalletScreen from '../../BITG/MyWalletScreen'
 
 
 const tabImages = {
@@ -135,6 +135,9 @@ export default createStackNavigator(
 				{
 					WalletTabHome: createStackNavigator(
 						{
+						BITGWallet: {
+							screen: MyWalletScreen
+						},	
 						WalletView: {
 							screen: Wallet
 						},

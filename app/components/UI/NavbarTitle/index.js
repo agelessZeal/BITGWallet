@@ -62,6 +62,10 @@ class NavbarTitle extends PureComponent {
 		 * Boolean that specifies if the title needs translation
 		 */
 		translate: PropTypes.bool,
+				/**
+		 * Boolean that specifies if the title needs translation
+		 */
+		hideNetwork: PropTypes.bool,
 		/**
 		 * Boolean that specifies if the network can be changed
 		 */
@@ -109,16 +113,20 @@ class NavbarTitle extends PureComponent {
 				testID={'open-networks-button'}
 			>
 				{title ? (
-					<Text numberOfLines={1} style={styles.title}>
+					<Text numberOfLines={1} style={[styles.title,{color:this.props.hideNetwork?colors.white:colors.black}]}>
 						{realTitle}
 					</Text>
 				) : null}
-				<View style={styles.network}>
-					<View style={[styles.networkIcon, color ? { backgroundColor: color } : styles.otherNetworkIcon]} />
-					<Text style={styles.networkName} testID={'navbar-title-network'}>
-						{name}
-					</Text>
-				</View>
+				{
+					!this.props.hideNetwork ? (		
+						<View style={styles.network}>
+							<View style={[styles.networkIcon, color ? { backgroundColor: color } : styles.otherNetworkIcon]} />
+							<Text style={styles.networkName} testID={'navbar-title-network'}>
+								{name}
+							</Text>
+						</View>): null
+				}
+
 			</TouchableOpacity>
 		);
 	};

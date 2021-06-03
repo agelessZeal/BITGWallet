@@ -1549,5 +1549,14 @@
 		"invalid_chain": "The %{rpcUrl} for this Chain ID does not match the chainid.network listing",
 		"alert_recommend": "We recommend you",
 		"alert_verify": "verify the chain ID"
+	},
+	"bitg_wallet":{
+		"available_balance":"AVAILABLE BALANCE",
+		"bitg_symbol":"BITG",
+		"usd_symbol":"USD",
+		"view_transaction":"VIEW TRANSACTION",
+		"income":"INCOMING",
+		"expense":"OUTGOING",
+		"latest_news":"Latest from BitGreen"
 	}
 }
