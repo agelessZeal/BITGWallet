@@ -30,14 +30,13 @@ const styles = StyleSheet.create({
     },
     itemContainer: {
         flex: 1,
-        minHeight: 150,
         flexDirection: 'column',
         overflow: 'hidden',
         borderBottomWidth: 10,
         borderColor: colors.white
     },
     imgBG: {
-        flex: 1,
+        flex:1,
         resizeMode: 'cover'
     }
 })
@@ -50,7 +49,32 @@ function NewsScreen(props) {
     const client = createApolloClient();
 
     const [loading, setLoading] = useState(false);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([
+        {
+            image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
+            header:"Article main heading",
+            url:"https://bitg.org",
+            datePublished:"June 12 2011",
+            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
+
+        },
+        {
+            image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
+            header:"Article main heading",
+            url:"https://bitg.org",
+            datePublished:"June 12 2011",
+            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
+
+        },
+        {
+            image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
+            header:"Article main heading",
+            url:"https://bitg.org",
+            datePublished:"June 12 2011",
+            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
+
+        }
+    ]);
 
     const onMenuPress = () => {
         navigation.pop()

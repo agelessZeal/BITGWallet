@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.tintColor
     },
     leftContainer: {
-        marginStart: 10,
+        marginStart: 5,
         flexDirection: 'row',
         alignItems: 'center'
     },
