@@ -1567,7 +1567,10 @@
 		"reward_history":"Reward History",
 		"impact_initiatives":"Impact initiatives",
 		"impact_learn_more" : "Learn more and get involved",
-		"current_initiatives":"current initiatives"
+		"current_initiatives":"current initiatives",
+		"shop_subtitle":"Discover sustainable vendors",
+		"search":"Search",
+		"find_merchants":"Find Merchants"
 
 	}
 }

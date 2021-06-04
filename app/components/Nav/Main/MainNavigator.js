@@ -55,6 +55,7 @@ import { colors } from '../../../styles/common';
 import MyWalletScreen from '../../BITG/MyWalletScreen';
 import MyImpactScreen from "../../BITG/MyImpactScreen";
 import ImpactInitiativesScreen from '../../BITG/ImpactInitiativesScreen'
+import ShopScreen from '../../BITG/ShopScreen'
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -170,8 +171,8 @@ export default createStackNavigator(
 					),
 					StoreTabHome: createStackNavigator(
 						{
-							StoreView: {
-								screen: MyWalletScreen
+							ShopScreen: {
+								screen: ShopScreen
 							}
 						},
 						{
