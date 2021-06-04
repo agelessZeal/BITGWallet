@@ -15,7 +15,7 @@ import { strings } from '../../../locales/i18n';
 import { colors, fontStyles } from '../../styles/common';
 import { NavigationContext } from 'react-navigation';
 
-import { getSwapsAmountNavbar, getBITGWalletNavbarOptions } from '../UI/Navbar';
+import { getBITGWalletNavbarOptions } from '../UI/Navbar';
 import { toFixedFloor} from '../../util/general'
 
 import {
@@ -460,8 +460,8 @@ function MyWalletScreen({
                                 </View>
                                 <View style={styles.impactWrapper}>
                                     {
-                                        impactData.map((item)=>(
-                                            <View style={styles.impactItem}>
+                                        impactData.map((item,index)=>(
+                                            <View  key={index} style={styles.impactItem}>
                                                 <Image source={impactImageSource} style={styles.impactItemStar}/>
                                                 <TouchableOpacity style={styles.impactItemTitle}>
                                                     <Text style={styles.impactText1}>

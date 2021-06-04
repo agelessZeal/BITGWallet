@@ -1558,6 +1558,16 @@
 		"income":"INCOMING",
 		"expense":"OUTGOING",
 		"latest_news":"Latest from BitGreen",
-		"my_wallet":"My BitGreen"
+		"my_wallet":"My BitGreen",
+		"my_impact":"My Impact",
+		"initiatives":"Initiatives",
+		"shop":"Shop",
+		"total_reward":"Total Rewards",
+		"this_week":"This week",
+		"reward_history":"Reward History",
+		"impact_initiatives":"Impact initiatives",
+		"impact_learn_more" : "Learn more and get involved",
+		"current_initiatives":"current initiatives"
+
 	}
 }

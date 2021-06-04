@@ -729,6 +729,13 @@ export function getBITGWalletNavbarOptions(title, navigation) {
 	};
 }
 
+export function getEmptyHeaderOptions() {
+	return {
+		header:null,
+	};
+
+}
+
 
 
 /**

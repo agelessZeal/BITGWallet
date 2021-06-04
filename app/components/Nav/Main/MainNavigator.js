@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, View,Text } from 'react-native';
+import { Image, StyleSheet, View, Text } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
@@ -52,8 +52,9 @@ import ActivityView from '../../Views/ActivityView';
 import SwapsAmountView from '../../UI/Swaps';
 import SwapsQuotesView from '../../UI/Swaps/QuotesView';
 import { colors } from '../../../styles/common';
-import MyWalletScreen from '../../BITG/MyWalletScreen'
-
+import MyWalletScreen from '../../BITG/MyWalletScreen';
+import MyImpactScreen from "../../BITG/MyImpactScreen";
+import ImpactInitiativesScreen from '../../BITG/ImpactInitiativesScreen'
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -72,56 +73,49 @@ const styles = StyleSheet.create({
 	tabIcon: {
 		width: 30,
 		height: 30,
-		resizeMode:'contain'
+		resizeMode: 'contain'
 	},
 	badgeWrapper: {
-		position:'absolute',
-		top:-5,
-		right:-5,
-		backgroundColor:colors.red900,
-		justifyContent:'center',
-		alignItems:'center'	,
-		borderRadius:8,
-		height:16,
-		width:16,	
-		
+		position: 'absolute',
+		top: -5,
+		right: -5,
+		backgroundColor: colors.red900,
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 8,
+		height: 16,
+		width: 16
 	},
-	badgeText:{
-		fontSize:15,
-		color:colors.white,
+	badgeText: {
+		fontSize: 15,
+		color: colors.white
 	}
 });
 
-const getNavigationOption = (navigation,type) => {
-
-	let badgeNumber = 1;
-	if(type === 'wallet'){
-		badgeNumber = 0;
+const getNavigationOption = (navigation, type) => {
+	let badgeNumber = 0;
+	if (type === 'star') {
+		badgeNumber = 1;
 	}
 
-	return (
-		{
-			title:'',
-			tabBarIcon:({focused}) => (
-				<View>
-					<Image source={tabImages[type]} style={[styles.tabIcon,{tintColor:focused?colors.green:colors.grey200}]}/>
-					{
-						badgeNumber > 0 ? 			
-								(<View style={styles.badgeWrapper}>
-									<Text style={styles.badgeText}>{badgeNumber}</Text>
-
-						</View>):null
-					}
-
-					
-				</View>
-			
-			),
-			tabBarBadge:false,
-		}
-	)
-}
-
+	return {
+		title: '',
+		tabBarIcon: ({ focused }) => (
+			<View>
+				<Image
+					source={tabImages[type]}
+					style={[styles.tabIcon, { tintColor: focused ? colors.green : colors.grey200 }]}
+				/>
+				{badgeNumber > 0 ? (
+					<View style={styles.badgeWrapper}>
+						<Text style={styles.badgeText}>{badgeNumber}</Text>
+					</View>
+				) : null}
+			</View>
+		),
+		tabBarBadge: false
+	};
+};
 
 /**
  * Navigator component that wraps
@@ -135,61 +129,118 @@ export default createStackNavigator(
 				{
 					WalletTabHome: createStackNavigator(
 						{
-						BITGWallet: {
-							screen: MyWalletScreen
-						},	
-						WalletView: {
-							screen: Wallet
-						},
-						Asset: {
-							screen: Asset
-						},
-						AddAsset: {
-							screen: AddAsset
-						},
-						Collectible: {
-							screen: Collectible
-						},
-						CollectibleView: {
-							screen: CollectibleView
-						},
-						RevealPrivateCredentialView: {
-							screen: RevealPrivateCredential
-						}
-					},{
-						navigationOptions:({navigation} ) => getNavigationOption(navigation,'wallet')
-					}),
-					BrowserTabHome: createStackNavigator({
-						BrowserView: {
-							screen: Browser,
-							navigationOptions: {
-								gesturesEnabled: false
+							WalletView: {
+								screen: MyWalletScreen
+							},
+							WalletView2: {
+								screen: Wallet
+							},
+							Asset: {
+								screen: Asset
+							},
+							AddAsset: {
+								screen: AddAsset
+							},
+							Collectible: {
+								screen: Collectible
+							},
+							CollectibleView: {
+								screen: CollectibleView
+							},
+							RevealPrivateCredentialView: {
+								screen: RevealPrivateCredential
 							}
+						},
+						{
+							navigationOptions: ({ navigation }) => getNavigationOption(navigation, 'wallet')
 						}
-					},{
-						navigationOptions:({navigation} ) => getNavigationOption(navigation,'star')
-					}
 					),
-					TransactionsHome: createStackNavigator({
-						TransactionsView: {
-							screen: ActivityView
+					ImpactTabHome: createStackNavigator(
+						{
+							ImpactInitiativesScreen:{
+								screen:ImpactInitiativesScreen
+							},
+							MyImpact: {
+								screen: MyImpactScreen
+							}
+						},
+						{
+							navigationOptions: ({ navigation }) => getNavigationOption(navigation, 'star')
 						}
-					},
-					{
-						navigationOptions:({navigation} ) => getNavigationOption(navigation,'store')
-					}
-					)
+					),
+					StoreTabHome: createStackNavigator(
+						{
+							StoreView: {
+								screen: MyWalletScreen
+							}
+						},
+						{
+							navigationOptions: ({ navigation }) => getNavigationOption(navigation, 'store')
+						}
+					),
+
+					SendTabHome: createStackNavigator(
+						{
+							SendView: {
+								screen:  MyWalletScreen,
+								navigationOptions: {
+									gesturesEnabled: false
+								}
+							}
+						},
+						{
+							navigationOptions: ({ navigation }) => getNavigationOption(navigation, 'send')
+						}
+					),
+					DashHome: createStackNavigator(
+						{
+							DashView: {
+								screen:  MyWalletScreen
+							}
+						},
+						{
+							navigationOptions: ({ navigation }) => getNavigationOption(navigation, 'dash')
+						}
+					),
 				},
 				{
 					defaultNavigationOptions: () => ({
 						tabBarVisible: true
 					}),
-					activeColor:colors.green,
-					inactiveColor:colors.green300,
-					barStyle:{backgroundColor:colors.grey000}
+					showLable:false,
+					activeColor: colors.green,
+					inactiveColor: colors.green300,
+					barStyle: { backgroundColor: colors.grey000 },
+					adaptive:false,
+					shifting:false,
+					labeled:false
+
 				}
 			)
 		},
+		BrowserTabHome:{
+			screen:createStackNavigator(
+				{
+					BrowserView: {
+						screen: Browser,
+						navigationOptions: {
+							gesturesEnabled: false
+						}
+					}
+				},
+			),
+		},
+		TransactionsHome:{
+			screen:createStackNavigator(
+				{
+					TransactionsView: {
+						screen: ActivityView
+					}
+				},
+			),
+		},
+		
+		
 		Webview: {
 			screen: createStackNavigator(
 				{
@@ -384,9 +435,7 @@ export default createStackNavigator(
 					defaultNavigationOptions: {
 						// eslint-disable-next-line
 						headerTitle: () => (
-							<View>
-
-							</View>
+							<View />
 							// <Image
 							// 	style={styles.headerLogo}
 							// 	source={require('../../../images/bitg_name.png')}

@@ -25,16 +25,16 @@ const styles = StyleSheet.create({
 		color: colors.white
 	},
 	orange: {
-		backgroundColor: colors.green200
+		backgroundColor: colors.green
 	},
 	orangeText: {
 		color: colors.white
 	},
 	infoText: {
-		color: colors.green200
+		color: colors.green
 	},
 	confirm: {
-		backgroundColor: colors.green200,
+		backgroundColor: colors.green,
 		minHeight: 50
 	},
 	confirmText: {
@@ -43,19 +43,19 @@ const styles = StyleSheet.create({
 	roundedNormal: {
 		backgroundColor: colors.white,
 		borderWidth: 1,
-		borderColor: colors.green200,
+		borderColor: colors.green,
 		padding: 8
 	},
 	roundedNormalText: {
-		color: colors.green200
+		color: colors.green
 	},
 	normal: {
 		backgroundColor: colors.white,
 		borderWidth: 1,
-		borderColor: colors.green600
+		borderColor: colors.green
 	},
 	normalText: {
-		color: colors.green600
+		color: colors.green
 	},
 	transparent: {
 		backgroundColor: colors.transparent,
