@@ -729,6 +729,87 @@ export function getBITGWalletNavbarOptions(title, navigation) {
 	};
 }
 
+/**
+ * Function that returns the navigation options
+ * for our wallet screen,
+ *
+ * @returns {Object} - Corresponding navbar options containing headerTitle, headerTitle and headerTitle
+ */
+export function getBITGNewsNavbarOptions(title, navigation) {
+	const onScanSuccess = (data, content) => {
+		if (data.private_key) {
+			Alert.alert(
+				strings('wallet.private_key_detected'),
+				strings('wallet.do_you_want_to_import_this_account'),
+				[
+					{
+						text: strings('wallet.cancel'),
+						onPress: () => false,
+						style: 'cancel'
+					},
+					{
+						text: strings('wallet.yes'),
+						onPress: async () => {
+							try {
+								await importAccountFromPrivateKey(data.private_key);
+								navigation.navigate('ImportPrivateKeySuccess');
+							} catch (e) {
+								Alert.alert(
+									strings('import_private_key.error_title'),
+									strings('import_private_key.error_message')
+								);
+							}
+						}
+					}
+				],
+				{ cancelable: false }
+			);
+		} else if (data.seed) {
+			Alert.alert(strings('wallet.error'), strings('wallet.logout_to_import_seed'));
+		} else {
+			setTimeout(() => {
+				DeeplinkManager.parse(content, { origin: AppConstants.DEEPLINKS.ORIGIN_QR_CODE });
+			}, 500);
+		}
+	};
+
+	function openDrawer() {
+		navigation.openDrawer();
+		trackEvent(ANALYTICS_EVENT_OPTS.COMMON_TAPS_HAMBURGER_MENU);
+	}
+
+	function openQRScanner() {
+		navigation.navigate('QRScanner', {
+			onScanSuccess
+		});
+		trackEvent(ANALYTICS_EVENT_OPTS.WALLET_QR_SCANNER);
+	}
+
+	return {
+		headerTitle: <NavbarTitle title={title} hideNetwork/>,
+		headerLeft: (
+			<TouchableOpacity onPress={openDrawer} style={styles.backButton} testID={'hamburger-menu-button-wallet'}>
+				<IonicIcon
+					name={Device.isAndroid() ? 'md-menu' : 'ios-menu'}
+					size={Device.isAndroid() ? 24 : 28}
+					style={styles.backIconWhite}
+				/>
+			</TouchableOpacity>
+		),
+		headerRight: (
+			<TouchableOpacity  style={styles.backButton} testID={'hamburger-menu-button-wallet'}>
+				<IonicIcon
+					name={Device.isAndroid() ? 'add' : 'ios-add'}
+					size={Device.isAndroid() ? 24 : 28}
+					style={styles.backIconWhite}
+				/>
+			</TouchableOpacity>
+		),
+		headerStyle:{backgroundColor:colors.green}
+	};
+}
+
+
 export function getEmptyHeaderOptions() {
 	return {
 		header:null,

@@ -56,6 +56,7 @@ import MyWalletScreen from '../../BITG/MyWalletScreen';
 import MyImpactScreen from "../../BITG/MyImpactScreen";
 import ImpactInitiativesScreen from '../../BITG/ImpactInitiativesScreen'
 import ShopScreen from '../../BITG/ShopScreen'
+import NewsScreen from '../../BITG/NewsScreen'
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -193,10 +194,10 @@ export default createStackNavigator(
 							navigationOptions: ({ navigation }) => getNavigationOption(navigation, 'send')
 						}
 					),
-					DashHome: createStackNavigator(
+					NewsHomw: createStackNavigator(
 						{
-							DashView: {
-								screen:  MyWalletScreen
+							NewsScreen: {
+								screen:  NewsScreen
 							}
 						},
 						{
