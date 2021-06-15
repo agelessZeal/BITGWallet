@@ -1592,8 +1592,12 @@
 		"payment_button":"New Transaction",
 		"transaction_id":"Transaction ID",
 		"invalid_send_data":"You need to enter a valid data to send transactions. Please go to Previous page and enter correct data",
+		"receive_title":"Receive BITG",
 		"view":"View",
-		"copy":"Copy"
+		"copy":"Copy",
+		"share":"Share",
+		"my_wallet_address":"my wallet address",
+		"my_wallet_description":"This is your wallet address that stores BITG. Use it to transfer funds into your wallet, or share it with others who are sending you BITG."
 
 	}
 }

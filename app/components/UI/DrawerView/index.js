@@ -479,8 +479,11 @@ class DrawerView extends PureComponent {
 	};
 
 	onReceive = () => {
-		this.toggleReceiveModal();
-		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_RECEIVE);
+
+		this.props.navigation.navigate('ReceiveScreenView');
+
+		// this.toggleReceiveModal();
+		// this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_RECEIVE);
 	};
 
 	onSend = async () => {

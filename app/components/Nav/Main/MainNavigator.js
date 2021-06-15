@@ -58,6 +58,7 @@ import ImpactInitiativesScreen from '../../BITG/ImpactInitiativesScreen'
 import ShopScreen from '../../BITG/ShopScreen'
 import NewsScreen from '../../BITG/NewsScreen'
 import SendScreen from '../../BITG/send/SendScreen'
+import ReceiveScreen  from '../../BITG/ReceiveScreen';
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -189,7 +190,7 @@ export default createStackNavigator(
 								navigationOptions: {
 									gesturesEnabled: false
 								}
-							}
+							},
 						},
 						{
 							navigationOptions: ({ navigation }) => getNavigationOption(navigation, 'send')
@@ -328,6 +329,13 @@ export default createStackNavigator(
 					headerMode: 'none'
 				}
 			)
+		},
+		ReceiveScreenView: {
+			screen: createStackNavigator({
+				ReceiveScreen: {
+					screen: ReceiveScreen
+				}
+			})
 		},
 		SendView: {
 			screen: createStackNavigator({
