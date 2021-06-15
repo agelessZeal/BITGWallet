@@ -12,6 +12,7 @@ import { NavigationContext } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Device from '../../../util/Device';
+import { renderShortAddress } from '../../../util/address';
 
 import { getEmptyHeaderOptions, getBITGWalletNavbarOptions } from '../../UI/Navbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,7 +23,7 @@ const walletImageSource = require('../../../images/ic_wallet.png');
 const address_book_source = require('../../../images/ic_address_book.png');
 const barcode_source = require('../../../images/ic_barcode.png');
 
-const bit_logo = require('../../../images/ic_bitg.png');
+const bit_currency = require('../../../images/ic_bitg.png');
 
 const styles = StyleSheet.create({
   container: {
@@ -300,14 +301,17 @@ function SendingToScreen({
   };
 
   const searchFieldChanged = text => {
-    setSendingData({...sendingData, name: text.trim(), address: undefined});
+    setSendingData({...sendingData, address: text.trim()});
+    getSendingData({...sendingData, address: text.trim()});
   };
 
   const amountBITGFieldChanged = text => {
     setSendingData({...sendingData, amount: text.trim()});
+    getSendingData({...sendingData, amount: text.trim()});
   };
 
   const amountUSDFieldChanged = text => {
+    getSendingData({...sendingData, usd: text.trim()});
     setSendingData({...sendingData, usd: text.trim()});
   };
 
@@ -357,7 +361,7 @@ function SendingToScreen({
           <Text
             style={{fontSize: 14, color: colors.blackColor, marginEnd: 10}}
             numberOfLines={2}>
-            {myWalletAddress}
+            {renderShortAddress(myWalletAddress)}
           </Text>
         </View>
       </View>
@@ -396,7 +400,7 @@ function SendingToScreen({
               style={styles.icon}
               onPress={() => openOrCloseQrCodeModal(true)}>
               <Image
-                style={[styles.icon, {resizeMode: 'center'}]}
+                style={[styles.icon, {resizeMode: 'contain'}]}
                 source={barcode_source}
               />
             </TouchableOpacity>
@@ -411,7 +415,7 @@ function SendingToScreen({
         <View style={styles.amountWrapper}>
           <Image
                 style={[styles.currencyIcon, {resizeMode: 'center'}]}
-                source={bit_logo}
+                source={bit_currency}
           />
 
           <TextInput

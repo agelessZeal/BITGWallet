@@ -1582,6 +1582,18 @@
 		"send_address_hint":"Search contract or enter  address",
 		"send_label":"label",
 		"send_label_hint":"Enter a name for this transaction",
-		"amount":"amount"
+		"amount":"amount",
+		"from":"From",
+		"my_primary_wallet": "my primary wallet",
+		"send_to":"sending to",
+		"after_balance":"Blance after transfer",
+		"payment_sent":"Payment sent",
+		"payment_sub_title":"Your payment has been sent to the network and will be processed shortly",
+		"payment_button":"New Transaction",
+		"transaction_id":"Transaction ID",
+		"invalid_send_data":"You need to enter a valid data to send transactions. Please go to Previous page and enter correct data",
+		"view":"View",
+		"copy":"Copy"
+
 	}
 }

@@ -1,3 +1,5 @@
+import { Alert } from 'react-native';
+
 export const tlc = str => String(str).toLowerCase();
 
 /**
@@ -47,4 +49,16 @@ export const toFixedFloor = (value, decimals = 3) => {
 	  outputString += '0';
 	return outputString;
   }
+export const makeAlert = (message) => {
+	Alert.alert(
+		"BITG",
+		message,
+		[
+		{
+			text: "OK",
+		}
+		]
+	)
+}
 
+export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))

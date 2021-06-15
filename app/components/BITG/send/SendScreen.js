@@ -14,6 +14,8 @@ import {TouchableRipple} from 'react-native-paper';
 import ViewPager from '@react-native-community/viewpager';
 import NetInfo from '@react-native-community/netinfo';
 
+import { showAlert } from '../../../actions/alert';
+
 import { strings } from '../../../../locales/i18n';
 import { colors, fontStyles } from '../../../styles/common';
 
@@ -27,7 +29,8 @@ import { getEmptyHeaderOptions, getBITGWalletNavbarOptions } from '../../UI/Navb
 import SendingToScreen from './SendingToScreen';
 import SendingProgressScreen from './SendingProgressScreen';
 import PaymentSendScreen from './PaymentSendScreen';
-
+import Device from '../../../util/Device';
+import {makeAlert,sleep} from '../../../util/general'
 // import WalletManager from '../../wallet';
 import {createApolloClient} from '../api/createApolloClient';
 // import {showAlert, SATOSHI_CONST, sleep} from '../../lib/Helpers';
@@ -51,9 +54,10 @@ const styles = StyleSheet.create({
   },
   viewPager: {
     flex: 1,
+    minHeight:Device.height,
   },
   footerView: {
-    height: 50,
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -76,6 +80,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.blackColor,
     fontWeight: 'bold',
+    textTransform:'uppercase'
   },
   nextText: {
     fontSize: 16,
@@ -125,7 +130,7 @@ function SendScreen(props) {
   const [refreshWallet, setRefreshWallet] = useState(false);
   const [loading, setLoading] = useState(false);
   const [myPrimaryAddress, setPrimaryAddress] = useState(props.selectedAddress);
-  const [myBalance, setMyBalance] = useState(0);
+  const [myBalance, setMyBalance] = useState(300);
   const [page, setPage] = useState(0);
   const viewPager = useRef();
 
@@ -187,35 +192,42 @@ function SendScreen(props) {
   const move = delta => {
     NetInfo.fetch().then(state => {
       if (!state.isConnected) {
-        showAlert('Please connect to the internet');
+        makeAlert('Please connect to the internet');
+
       } else {
-        (async () => {
+          console.log('move',props.showAlert)
           var nextPage = page + delta;
+
+          // viewPager.current.setPage(nextPage);
+
           if (
-            sendingData.name === undefined ||
-            sendingData.name === null ||
-            sendingData.name === ''
+            sendingData.address === undefined ||
+            sendingData.address === null ||
+            sendingData.address === ''
           ) {
-            showAlert('Please write Recipient');
-          } else if (sendingData.name === myPrimaryAddress) {
-            showAlert("App doesn't support sending coins to your address");
+            makeAlert('Please write Recipient');
+
+          } else if (sendingData.address === myPrimaryAddress) {
+            
+            makeAlert("App doesn't support sending coins to your address");
+
           } else {
             if (
               sendingData.amount === undefined ||
               sendingData.amount === null ||
               sendingData.amount == 0
             ) {
-              showAlert('Please write Amount');
+              makeAlert('Please write Amount');
             } else {
               if (sendingData.amount > myBalance) {
-                showAlert(
+                makeAlert(
                   'You try to send more BITG than you have on your wallet',
                 );
               } else {
                 if (nextPage == 2) {
                   if (sendingData.address != undefined) {
-                    setLoading(true);
-                    await sleep(1000);
+                    // setLoading(true);
+                    // await sleep(1000);
                     // try {
                     //   const wallet = WalletManager.getWalletByName(
                     //     'BITGWallet',
@@ -229,9 +241,11 @@ function SendScreen(props) {
                     //     ...sendingData,
                     //     transactionHash: hashTrans,
                     //   });
-                    //   sleep(2000).then(() => {
-                    //     viewPager.current.setPage(nextPage);
-                    //   });
+                      sleep(2000).then(() => {
+                        viewPager.current.setPage(nextPage);
+                      });
+                      
+
                     // } catch (error) {
                     //   setLoading(false);
                     //   showAlert(
@@ -252,13 +266,23 @@ function SendScreen(props) {
               }
             }
           }
-        })();
       }
     });
   };
 
   const newTransaction = async () => {
     setLoading(false);
+    setClearChildrenState(true);
+    setSendingData({
+      name: undefined,
+      address: undefined,
+      amount: undefined,
+      transactionHash: undefined,
+    });
+    viewPager.current.setPageWithoutAnimation(0);
+    await sleep(2000);
+    setClearChildrenState(false);
+
     // if (route.params.data === undefined) {
     //   setClearChildrenState(true);
     //   setSendingData({
@@ -280,6 +304,25 @@ function SendScreen(props) {
   };
 
   const getSendingData = data => {
+
+    let inputValue = data.amount;
+
+    let inputValueConversion, renderableInputValueConversion, hasExchangeRate, comma;
+    // Remove spaces from input
+    
+    if(!inputValue){
+      inputValue = inputValue && inputValue.replace(/\s+/g, '');
+      // Handle semicolon for other languages
+      if (inputValue && inputValue.includes(',')) {
+        comma = true;
+        inputValue = inputValue.replace(',', '.');
+      }
+    }
+
+
+    // const processedInputValue = isDecimal(inputValue) ? handleWeiNumber(inputValue) : '0';
+
+    
     const amountValue =
       data.amount === undefined || data.amount === null || data.amount === ''
         ? undefined
@@ -291,9 +334,9 @@ function SendScreen(props) {
       amount:
         amountValue === undefined
           ? undefined
-          : isNaN(amountValue)
+          : isNaN(inputValue)
           ? undefined
-          : parseFloat(amountValue),
+          : parseFloat(inputValue),
     });
   };
 
@@ -377,7 +420,7 @@ function SendScreen(props) {
               navigation={navigation}
               clerarChildrenState={clerarChildrenState}
             />
-            {/* <SendingProgressScreen
+            <SendingProgressScreen
               key="2"
               currentPage={page}
               myCurrentWalletBalance={myBalance}
@@ -393,9 +436,9 @@ function SendScreen(props) {
               currentPage={page}
               sendingData={sendingData}
               viewTransactionHistory={openTransactionHistory}
-              globalState={state}
+              // globalState={state}
               updateGlobalState={updateTransactionsState}
-            /> */}
+            />
           </ViewPager>
           {loading == true ? null : (
             <KeyboardAvoidingView
@@ -421,7 +464,7 @@ function SendScreen(props) {
                       styles.pageIndicator,
                       {
                         backgroundColor:
-                          page == 0 ? colors.tintColor : colors.grey,
+                          page == 0 ? colors.tintColor : colors.grey200,
                       },
                     ]}
                   />
@@ -430,7 +473,7 @@ function SendScreen(props) {
                       styles.pageIndicator,
                       {
                         backgroundColor:
-                          page == 1 ? colors.tintColor : colors.grey,
+                          page == 1 ? colors.tintColor : colors.grey200,
                       },
                     ]}
                   />
@@ -439,7 +482,7 @@ function SendScreen(props) {
                       styles.pageIndicator,
                       {
                         backgroundColor:
-                          page == 2 ? colors.tintColor : colors.grey,
+                          page == 2 ? colors.tintColor : colors.grey200,
                       },
                     ]}
                   />
@@ -492,7 +535,12 @@ SendScreen.propTypes = {
 	/**
 	 * An object containing token exchange rates in the format address => exchangeRate
 	 */
-	tokenExchangeRates: PropTypes.object
+  tokenExchangeRates: PropTypes.object,
+  
+    /**
+  /* Triggers global alert
+  */
+  showAlert: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -505,5 +553,13 @@ const mapStateToProps = state => ({
 	currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency
 });
 
-export default connect(mapStateToProps)(SendScreen);
+const mapDispatchToProps = dispatch => ({
+	showAlert: config => dispatch(showAlert(config)),
+});
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps)
+(SendScreen);
 
