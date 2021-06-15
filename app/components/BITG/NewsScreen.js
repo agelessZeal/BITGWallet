@@ -51,6 +51,7 @@ function NewsScreen(props) {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([
         {
+            id:1,
             image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
             header:"Article main heading",
             url:"https://bitg.org",
@@ -59,6 +60,7 @@ function NewsScreen(props) {
 
         },
         {
+            id:2,
             image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
             header:"Article main heading",
             url:"https://bitg.org",
@@ -67,6 +69,7 @@ function NewsScreen(props) {
 
         },
         {
+            id:3,
             image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
             header:"Article main heading",
             url:"https://bitg.org",
@@ -123,7 +126,7 @@ function NewsScreen(props) {
                 style={{ margin: 10 }}
                 data={data}
                 renderItem={({ item }) => <ItemView itemData={item} itemClicked={itemClicked} />}
-                keyExtractor={item => item.id}
+                keyExtractor={item => (item.id + '')}
             />
         </View>
     );
