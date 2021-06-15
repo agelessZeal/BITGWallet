@@ -57,6 +57,7 @@ import MyImpactScreen from "../../BITG/MyImpactScreen";
 import ImpactInitiativesScreen from '../../BITG/ImpactInitiativesScreen'
 import ShopScreen from '../../BITG/ShopScreen'
 import NewsScreen from '../../BITG/NewsScreen'
+import SendScreen from '../../BITG/send/SendScreen'
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -184,7 +185,7 @@ export default createStackNavigator(
 					SendTabHome: createStackNavigator(
 						{
 							SendView: {
-								screen:  MyWalletScreen,
+								screen:  SendScreen,
 								navigationOptions: {
 									gesturesEnabled: false
 								}

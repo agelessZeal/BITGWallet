@@ -68,7 +68,7 @@
     "react-native-level-fs/**/semver": "^4.3.2"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.19",
+    "@apollo/client": "^3.3.20",
     "@estebanmino/controllers": "^3.3.17",
     "@exodus/react-native-payments": "https://github.com/wachunei/react-native-payments.git#package-json-hack",
     "@metamask/contract-metadata": "^1.23.0",
@@ -254,7 +254,7 @@
       },
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/BITG.app",
-        "build": "BITG_ENVIRONMNET='production' yarn build:ios:release:e2e",
+        "build": "BITG_ENVIRONMENT='production' yarn build:ios:release:e2e",
         "type": "ios.simulator",
         "device": {
           "type": "iPhone 11 Pro"
@@ -270,7 +270,7 @@
       },
       "android.emu.release": {
         "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
-        "build": "BITG_ENVIRONMNET='production' yarn build:android:release:e2e",
+        "build": "BITG_ENVIRONMENT='production' yarn build:android:release:e2e",
         "type": "android.emulator",
         "device": {
           "avdName": "Pixel_3_API_29"

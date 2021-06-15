@@ -1571,7 +1571,17 @@
 		"shop_subtitle":"Discover sustainable vendors",
 		"search":"Search",
 		"find_merchants":"Find Merchants",
-		"news":"Latest from BitGreen"
-
+		"news":"Latest from BitGreen",
+		"previous":"previous",
+		"confirm":"confirm",
+		"next":"next",
+		"send":"Send",
+		"send_title":"Send BITG to anyone",
+		"my_primary_address":"My primary address",
+		"sending_to":"sending to",
+		"send_address_hint":"Search contract or enter  address",
+		"send_label":"label",
+		"send_label_hint":"Enter a name for this transaction",
+		"amount":"amount"
 	}
 }

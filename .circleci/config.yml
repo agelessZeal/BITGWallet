@@ -143,7 +143,7 @@ jobs:
           command: |
               jq 'del(.engines)' package.json > new.json && mv new.json package.json
               node -v
-              BITG_ENVIRONMNET='production' yarn build:android:pre-release:bundle
+              BITG_ENVIRONMENT='production' yarn build:android:pre-release:bundle
       - store_artifacts:
           path: android/app/build/outputs/bundle/release
           destination: bundle
@@ -185,7 +185,7 @@ jobs:
           command: |
               jq 'del(.engines)' package.json > new.json && mv new.json package.json
               node -v
-              BITG_ENVIRONMNET='production' yarn build:ios:pre-release
+              BITG_ENVIRONMENT='production' yarn build:ios:pre-release
       - store_artifacts:
           path: sourcemaps/ios
           destination: sourcemaps-ios

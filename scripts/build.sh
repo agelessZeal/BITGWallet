@@ -315,8 +315,8 @@ printTitle
 if [ "$MODE" == "release" ] || [ "$MODE" == "releaseE2E" ] ; then
 	checkAuthToken 'sentry.release.properties'
 	export SENTRY_PROPERTIES="${REPO_ROOT_DIR}/sentry.release.properties"
-	if [ -z "$BITG_ENVIRONMNET" ]; then
-		printError "Missing BITG_ENVIRONMNET; set to 'production' for a production release, 'prerelease' for a pre-release, or 'local' otherwise"
+	if [ -z "$BITG_ENVIRONMENT" ]; then
+		printError "Missing BITG_ENVIRONMENT; set to 'production' for a production release, 'prerelease' for a pre-release, or 'local' otherwise"
 		exit 1
 	fi
 fi
