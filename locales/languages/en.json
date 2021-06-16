@@ -250,7 +250,9 @@
 		"logout_cancel": "NO",
 		"feedback": "Feedback",
 		"metamask_support": "BITG Support",
-		"public_address": "Public Address"
+		"public_address": "Public Address",
+		"address_book" : "Address book"
+		
 	},
 	"send": {
 		"title": "Send",
@@ -1603,7 +1605,8 @@
 		"backup_wallet":"Backup wallet",
 		"backup_wallet_description":"Backup your wallet by exposing your mnemonic key, so you can note it down and store it somewhere safely",
 		"create_wallet":"create wallet",
-		"network":"Network"
+		"network":"Network",
+		"blockchain_explorer":"Blockchian  Explorer"
 
 
 	}

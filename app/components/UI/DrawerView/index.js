@@ -205,7 +205,8 @@ const styles = StyleSheet.create({
 	},
 	menuItemIconImage: {
 		width: 22,
-		height: 22
+		height: 22,
+		resizeMode:'contain'
 	},
 	bottomModal: {
 		justifyContent: 'flex-end',
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
 const bitg_logo = require('../../../images/bitg_logo.png'); // eslint-disable-line
 const ICON_IMAGES = {
 	wallet: require('../../../images/wallet-icon.png'),
-	'selected-wallet': require('../../../images/selected-wallet-icon.png')
+	'selected-wallet': require('../../../images/bitg_wallet.png')
 };
 
 /**
@@ -488,7 +489,8 @@ class DrawerView extends PureComponent {
 
 	onSend = async () => {
 		this.props.newAssetTransaction(getEther(this.props.ticker));
-		this.props.navigation.navigate('SendFlowView');
+		// this.props.navigation.navigate('SendFlowView');
+		this.props.navigation.navigate('SendView');
 		this.hideDrawer();
 		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_SEND);
 	};
@@ -588,6 +590,43 @@ class DrawerView extends PureComponent {
 		// this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_GET_HELP);
 	};
 
+	showAddressBook = async () => {
+		this.props.navigation.navigate('SettingsView');
+		this.hideDrawer();
+		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_SETTINGS);
+	};
+
+	showMyImapct = async () => {
+		this.props.navigation.navigate('MyImpact');
+		this.hideDrawer();
+		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_SETTINGS);
+	};
+
+	showImpactInitiatives = async () => {
+		this.props.navigation.navigate('ImpactInitiativesScreen');
+		this.hideDrawer();
+		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_SETTINGS);
+	};
+
+	showShop = async () => {
+		this.props.navigation.navigate('ShopScreen');
+		this.hideDrawer();
+		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_SETTINGS);
+	};
+
+	goToBlockchainExploer = async () => {
+		let url = 'https://bitg.org';
+		let title = "Blockchain explorer"
+
+
+		this.props.navigation.navigate('Webview', {
+			url,
+			title
+		});
+		this.hideDrawer();
+
+	};
+
 	goToBrowserUrl(url, title) {
 		this.props.navigation.navigate('Webview', {
 			url,
@@ -680,13 +719,13 @@ class DrawerView extends PureComponent {
 		}
 		return [
 			[
-				{
-					name: strings('drawer.browser'),
-					icon: this.getIcon('globe'),
-					selectedIcon: this.getSelectedIcon('globe'),
-					action: this.goToBrowser,
-					routeNames: ['BrowserView', 'AddBookmark']
-				},
+				// {
+				// 	name: strings('drawer.browser'),
+				// 	icon: this.getIcon('globe'),
+				// 	selectedIcon: this.getSelectedIcon('globe'),
+				// 	action: this.goToBrowser,
+				// 	routeNames: ['BrowserView', 'AddBookmark']
+				// },
 				{
 					name: strings('drawer.wallet'),
 					icon: this.getImageIcon('wallet'),
@@ -709,12 +748,18 @@ class DrawerView extends PureComponent {
 					action: this.onShare
 				},
 				{
-					name:
-						(blockExplorer && `${strings('drawer.view_in')} ${blockExplorerName}`) ||
-						strings('drawer.view_in_etherscan'),
-					icon: this.getIcon('eye'),
-					action: this.viewInEtherscan
-				}
+					name: strings('drawer.address_book'),
+					icon: this.getIcon('address-book-o'),
+					selectedIcon: this.getSelectedIcon('address-book'),
+					action: this.showAddressBook
+				},
+				// {
+				// 	name:
+				// 		(blockExplorer && `${strings('drawer.view_in')} ${blockExplorerName}`) ||
+				// 		strings('drawer.view_in_etherscan'),
+				// 	icon: this.getIcon('eye'),
+				// 	action: this.viewInEtherscan
+				// }
 			],
 			[
 				{
@@ -724,15 +769,38 @@ class DrawerView extends PureComponent {
 					action: this.showSettings
 				},
 				{
-					name: strings('drawer.help'),
-					icon: this.getFeatherIcon('help-circle'),
-					action: this.showHelp
+					name: strings('bitg_wallet.my_impact'),
+					icon: this.getMaterialIcon('sword-cross'),
+					selectedIcon: this.getSelectedMaterialIcon('sword-cross'),
+					action: this.showMyImapct
 				},
 				{
-					name: strings('drawer.request_feature'),
-					icon: this.getFeatherIcon('message-square'),
-					action: this.submitFeedback
+					name: strings('bitg_wallet.impact_initiatives'),
+					icon: this.getFeatherIcon('inbox'),
+					selectedIcon: this.getSelectedFeatherIcon('inbox'),
+					action: this.showImpactInitiatives
 				},
+				{
+					name: strings('bitg_wallet.shop'),
+					icon: this.getMaterialIcon('store'),
+					selectedIcon: this.getSelectedMaterialIcon('store'),
+					action: this.showShop
+				},
+				{
+					name: strings('bitg_wallet.blockchain_explorer'),
+					icon: this.getIcon('eye'),
+					action: this.goToBlockchainExploer
+				},
+				// {
+				// 	name: strings('drawer.help'),
+				// 	icon: this.getFeatherIcon('help-circle'),
+				// 	action: this.showHelp
+				// },
+				// {
+				// 	name: strings('drawer.request_feature'),
+				// 	icon: this.getFeatherIcon('message-square'),
+				// 	action: this.submitFeedback
+				// },
 				{
 					name: strings('drawer.logout'),
 					icon: this.getFeatherIcon('log-out'),
@@ -754,6 +822,13 @@ class DrawerView extends PureComponent {
 				data: { msg: strings('account_details.account_copied_to_clipboard') }
 			});
 		});
+	};
+
+
+	onImportAccount = () => {
+		this.toggleAccountsModal();
+		this.props.navigation.navigate('ImportPrivateKey');
+		this.hideDrawer();
 	};
 
 	onShare = () => {

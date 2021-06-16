@@ -188,6 +188,14 @@ class SettingsScreen extends PureComponent {
 	resetPassword = () => {
 		this.props.navigation.navigate('ResetPassword');
     };
+
+    goToRevealPrivateCredential = () => {
+		this.props.navigation.navigate('RevealPrivateCredentialView', { privateCredentialName: 'seed_phrase' });
+	};
+
+	goToExportPrivateKey = () => {
+		this.props.navigation.navigate('RevealPrivateCredentialView', { privateCredentialName: 'private_key' });
+	};
     
 
     updateBiometryChoice = async biometryChoice => {
@@ -263,9 +271,15 @@ class SettingsScreen extends PureComponent {
 					<Text style={styles.itemText}>{strings('onboarding.start_exploring_now')} ,add new current wallet</Text>
 				</TouchableOpacity>
 
-                <TouchableOpacity style={styles.item}>
+                <TouchableOpacity style={styles.item} onPress={this.manualBackup}>
 					<Text style={styles.itemTitle}>{strings('bitg_wallet.backup_wallet')}</Text>
 					<Text style={styles.itemText}>{strings('bitg_wallet.backup_wallet_description')}</Text>
+				</TouchableOpacity>
+
+
+                <TouchableOpacity style={styles.item} onPress={this.goToRevealPrivateCredential}>
+					<Text style={styles.itemTitle}>{strings('reveal_credential.seed_phrase_title')}</Text>
+					<Text style={styles.itemText}>{strings('app_settings.protect_desc')}</Text>
 				</TouchableOpacity>
 
 
