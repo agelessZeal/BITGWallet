@@ -692,7 +692,7 @@ class ResetPassword extends PureComponent {
 								<Image
 										source={lockedImage}
 										style={styles.lockImage}
-										resizeMethod={'contain'}
+										resizeMethod={'auto'}
 								/>
 
 								<View style={styles.content}>

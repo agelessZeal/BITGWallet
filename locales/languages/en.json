@@ -1606,6 +1606,7 @@
 		"backup_wallet_description":"Backup your wallet by exposing your mnemonic key, so you can note it down and store it somewhere safely",
 		"create_wallet":"create wallet",
 		"network":"Network",
+		"network_id":"Network ID",
 		"blockchain_explorer":"Blockchian  Explorer"
 
 

@@ -59,7 +59,8 @@ import ShopScreen from '../../BITG/ShopScreen'
 import NewsScreen from '../../BITG/NewsScreen'
 import SendScreen from '../../BITG/send/SendScreen'
 import ReceiveScreen  from '../../BITG/ReceiveScreen';
-import SettingsScreen from '../../BITG/SettingsScreen'
+import SettingsScreen from '../../BITG/SettingsScreen';
+import NetworkIDSetting from '../../BITG/NetworkIDSetting'
 
 
 const tabImages = {
@@ -317,6 +318,9 @@ export default createStackNavigator(
 				},
 				EnterPasswordSimple: {
 					screen: EnterPasswordSimple
+				},
+				NetworkIDSetting :{
+					screen:NetworkIDSetting 
 				}
 			})
 		},

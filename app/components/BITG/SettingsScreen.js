@@ -195,7 +195,11 @@ class SettingsScreen extends PureComponent {
 
 	goToExportPrivateKey = () => {
 		this.props.navigation.navigate('RevealPrivateCredentialView', { privateCredentialName: 'private_key' });
-	};
+    };
+    
+    goNetworkIdSetting = () => {
+		this.props.navigation.navigate('NetworkIDSetting');
+    };
     
 
     updateBiometryChoice = async biometryChoice => {
@@ -283,7 +287,7 @@ class SettingsScreen extends PureComponent {
 				</TouchableOpacity>
 
 
-				<TouchableOpacity style={styles.subMenu}>
+				<TouchableOpacity style={styles.subMenu} onPress={this.goNetworkIdSetting}>
                     <MaterialIcons name="rss-feed" size={25} color={colors.green} style={styles.icon} />
 					<Text style={styles.titleText}>{strings('bitg_wallet.network')}</Text>
 				</TouchableOpacity>

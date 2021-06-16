@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
 
 const demoData = [
     {
+		id:1,
         name: 'Merchant name',
         image: 'https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg',
         url: 'https://bitg.org',
@@ -159,6 +160,7 @@ const demoData = [
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...'
     },
     {
+		id:2,
         name: 'Merchant name',
         image: 'https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg',
         url: 'https://bitg.org',
@@ -271,7 +273,7 @@ function ShopScreen({
 				style={{ margin: 10 }}
 				data={filteredData}
 				renderItem={({ item }) => <ItemView itemData={item} itemClicked={itemClicked} />}
-				keyExtractor={item => item.id}
+				keyExtractor={item => (item.id + '')}
 			/>
 		</View>
 	);
