@@ -1607,7 +1607,10 @@
 		"create_wallet":"create wallet",
 		"network":"Network",
 		"network_id":"Network ID",
-		"blockchain_explorer":"Blockchian  Explorer"
+		"blockchain_explorer":"Blockchian  Explorer",
+		"signup_impact_portal":"Sign up for the impact protal",
+		"signup_impact_others" : "And gain access to the",
+		"email_address":"Email Address"
 
 
 	}

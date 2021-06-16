@@ -217,7 +217,7 @@ class NetworkIDSetting extends PureComponent {
 				<View style={styles.ctaWrapper}>
 					<StyledButton
 						type={'blue'}
-						onPress={this.onPressCreate}
+						onPress={this.onPressSave}
 						testID={'submit-button'}
 						disabled={!canSubmit}
 					>

@@ -597,7 +597,7 @@ class DrawerView extends PureComponent {
 	};
 
 	showMyImapct = async () => {
-		this.props.navigation.navigate('MyImpact');
+		this.props.navigation.navigate('MyImpactSignup');
 		this.hideDrawer();
 		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_SETTINGS);
 	};

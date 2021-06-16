@@ -53,7 +53,9 @@ import SwapsAmountView from '../../UI/Swaps';
 import SwapsQuotesView from '../../UI/Swaps/QuotesView';
 import { colors } from '../../../styles/common';
 import MyWalletScreen from '../../BITG/MyWalletScreen';
-import MyImpactScreen from "../../BITG/MyImpactScreen";
+import MyImpactSignup from "../../BITG/MyImpactSignup";
+import MyImpactDash from '../../BITG/MyImpactDash'
+
 import ImpactInitiativesScreen from '../../BITG/ImpactInitiativesScreen'
 import ShopScreen from '../../BITG/ShopScreen'
 import NewsScreen from '../../BITG/NewsScreen'
@@ -162,13 +164,19 @@ export default createStackNavigator(
 							navigationOptions: ({ navigation }) => getNavigationOption(navigation, 'wallet')
 						}
 					),
-					ImpactTabHome: createStackNavigator(
+					MyImpactTabHome: createStackNavigator(
 						{
+							MyImpactSignup: {
+								screen: MyImpactSignup,
+								navigationOptions: {
+									gesturesEnabled: false
+								}
+							},
+							MyImpactDash: {
+								screen: MyImpactDash,
+							},
 							ImpactInitiativesScreen:{
 								screen:ImpactInitiativesScreen
-							},
-							MyImpact: {
-								screen: MyImpactScreen
 							}
 						},
 						{

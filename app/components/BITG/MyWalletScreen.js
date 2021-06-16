@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         marginHorizontal:20,
-      },
+    },
     buttonWrapper:{
         width:'30%',
         borderRadius:5,
@@ -417,6 +417,21 @@ function MyWalletScreen({
         return income / (income + expense)
     }
 
+
+
+    const goToShopViews = () => {
+		navigation.navigate('ShopScreen');
+	}
+
+	const goToInitiativesViews = () => {
+		navigation.navigate('ImpactInitiativesScreen');
+    }
+
+    const goToMyImpactViews = () => {
+		navigation.navigate('MyImpactDash');
+    }
+
+
     return (
         <View style={styles.container}>
             {/* <ToolBar title={Strings.MY_WALLET} iconName={Strings.ICON_MENU} onMenuPress={onMenuPress} /> */}
@@ -517,7 +532,7 @@ function MyWalletScreen({
                                         withHorizontalLines={false}
                                         withVerticalLabels={false}
                                         withHorizontalLabels={false}
-                                        fromZero={true}
+                                        fromZero={true} 
                                         bezier
                                     />
                                 </View>
@@ -550,19 +565,19 @@ function MyWalletScreen({
                         </ScrollView>
                         <View style={styles.buttonContainer}>
                             <View style={styles.sendReceiveContainer}>
-                                <TouchableOpacity style={styles.buttonWrapper}>
+                                <TouchableOpacity style={styles.buttonWrapper}  onPress={goToMyImpactViews}>
                                     <Image  source={impactImageSource} style={styles.buttonImage}/>
-                                    <Text style={styles.buttonText}>My Impact</Text>
+                                    <Text style={styles.buttonText}>{strings('bitg_wallet.my_impact')}</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.buttonVibWrapper}>
+                                <TouchableOpacity style={styles.buttonVibWrapper} onPress={goToInitiativesViews}>
                                     <Image  source={initiativeImageSource} style={styles.buttonImage}/>
-                                    <Text style={styles.buttonText}>Initiatives</Text>
+                                    <Text style={styles.buttonText}>{strings('bitg_wallet.initiatives')}</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.buttonShopWrapper}>
+                                <TouchableOpacity style={styles.buttonShopWrapper} onPress={goToShopViews}>
                                     <Image  source={shopImageSource} style={styles.buttonImage}/>
-                                    <Text style={styles.buttonText}>Shop</Text>
+                                    <Text style={styles.buttonText}>{strings('bitg_wallet.shop')}</Text>
                                 </TouchableOpacity>
 
                             </View>

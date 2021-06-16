@@ -1,8 +1,7 @@
-import React, { useEffect, useCallback, useState, useContext, PureComponent } from 'react';
-import { View, FlatList, StyleSheet,Switch,Image, TouchableOpacity} from 'react-native';
+import React, { PureComponent } from 'react';
+import { View, StyleSheet,Switch,Image, TouchableOpacity} from 'react-native';
 import { Text, TouchableRipple } from 'react-native-paper';
 
-import { NavigationContext } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -181,6 +180,11 @@ class SettingsScreen extends PureComponent {
 		this.mounted = false;
     }
     
+    createNewWallet = () => {
+		// this.props.navigation.navigate('OnboardingNav');
+	};
+
+
     manualBackup = () => {
 		this.props.navigation.navigate('ManualBackupStep1');
 	};
@@ -270,7 +274,7 @@ class SettingsScreen extends PureComponent {
 				</View>
 
 
-				<TouchableOpacity style={styles.item}>
+				<TouchableOpacity style={styles.item} onPress={this.createNewWallet}>
 					<Text style={styles.itemTitle}>{strings('bitg_wallet.create_wallet')}</Text>
 					<Text style={styles.itemText}>{strings('onboarding.start_exploring_now')} ,add new current wallet</Text>
 				</TouchableOpacity>
