@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { Alert } from 'react-native';
+import Moment from 'moment';
+import url from 'url'
 const createHash = require('create-hash');
 
 export const SATOSHI_CONST = 100000000;
@@ -148,4 +150,20 @@ export const getTransactionColor = (address) => {
   let txPrefix = addressHash[0] + addressHash[1] * 256;
 
   return paletteColors[txPrefix % paletteColors.length];
+}
+
+
+export const  getParseDate = (date) => {
+  var d = Date.parse(date);
+  return Moment(d).calendar()
+}
+
+export const  extractHostname = (link) => {
+  let urlArr = url.parse(link).hostname.split('.')
+  return urlArr.length > 2 ? urlArr[1] : urlArr[0]
+}
+
+
+export const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }

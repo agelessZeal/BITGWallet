@@ -21,6 +21,7 @@ import { GET_ARTICLES } from './api/queries/user';
 import { createApolloClient } from './api/createApolloClient';
 
 
+import {getParseDate,extractHostname,capitalizeFirstLetter} from './lib/Helpers'
 import { getBITGNewsNavbarOptions } from '../UI/Navbar';
 
 const styles = StyleSheet.create({
@@ -161,19 +162,6 @@ const ItemView = ({ itemData, itemClicked }) => (
     </TouchableRipple>
 )
 
-function getParseDate(date) {
-    var d = Date.parse(date);
-    return Moment(d).calendar()
-}
-
-function extractHostname(link) {
-    let urlArr = url.parse(link).hostname.split('.')
-    return urlArr.length > 2 ? urlArr[1] : urlArr[0]
-}
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 NewsScreen.navigationOptions = ({ navigation }) =>  getBITGNewsNavbarOptions('bitg_wallet.news',navigation);
 

@@ -1,5 +1,14 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity,ImageBackground } from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	TouchableOpacity,
+	ImageBackground,
+	FlatList,
+	RefreshControl
+} from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -8,8 +17,15 @@ import { colors, fontStyles } from '../../styles/common';
 import { NavigationContext } from 'react-navigation';
 import { Snackbar, ProgressBar } from 'react-native-paper';
 import { getEmptyHeaderOptions } from '../UI/Navbar';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ToolBar from './ToolBar';
 
-import ToolBar from './ToolBar'
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+
+
+import {getParseDate} from './lib/Helpers'
+
 
 const styles = StyleSheet.create({
 	container: {
@@ -17,20 +33,11 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white
 	},
 	header: {
-		margin: 20,
-		marginTop:30,
-		paddingHorizontal: 20,
+		margin: 15,
+		marginTop: 20,
 		alignItems: 'center',
-		justifyContent:'center',
-	},
-	headerLeftContainer: {
-		height: 100,
-		width: 100,
-		backgroundColor: colors.tintColor
-	},
-	headerRightContainer: {
-		flex: 1,
-		alignItems: 'flex-end'
+		justifyContent: 'space-between',
+		flexDirection: 'row'
 	},
 	initiativesButton: {
 		height: 50,
@@ -60,31 +67,36 @@ const styles = StyleSheet.create({
 		padding: 10
 	},
 	bitg: {
-		marginTop: 40,
-		flexDirection: 'row',
-		alignItems: 'center',
+		marginTop: 10,
+		alignItems: 'flex-start',
 		justifyContent: 'space-around'
 	},
 	totalRewards: {
-		justifyContent: 'center',
-		alignItems: 'center'
+		justifyContent: 'flex-start',
+		alignItems: 'flex-start'
 	},
 	thisWeek: {
-		justifyContent: 'center',
-		alignItems: 'center'
+		justifyContent: 'flex-start',
+		alignItems: 'flex-start'
 	},
 	totalRewardsText: {
-		fontSize: 16,
-		color: colors.grey
+		fontSize: 14,
+		color: colors.grey500,
+		textAlign: 'left'
 	},
 	thisWeekText: {
-		fontSize: 16,
-		color: colors.grey
+		fontSize: 14,
+		color: colors.grey500,
+		textAlign: 'left'
+	},
+	bitgBalanceText: {
+		fontSize: 30,
+		color: colors.blackColor
 	},
 	bitgSmallImage: {
-		width: 30,
-		height: 30,
-		resizeMode: 'center'
+		width: 20,
+		height: 20,
+		resizeMode: 'contain'
 	},
 	rewardsHistoryButton: {
 		height: 50,
@@ -105,83 +117,177 @@ const styles = StyleSheet.create({
 		padding: 10,
 		fontWeight: 'bold'
 	},
-	buttonContainer:{
-		marginHorizontal:20,
-		backgroundColor:'red',
-		flex:1,
-    },
-    buttonWrapper:{
-        width:'30%',
-        borderRadius:5,
-        backgroundColor:colors.green,
-        height:90,
-        justifyContent:'center',
-        alignItems:'center'
-    },
-    buttonVibWrapper:{
-        width:'30%',
-        borderRadius:5,
-        backgroundColor:colors.orange,
-        height:90,
-        justifyContent:'center',
-        alignItems:'center'
+	buttonContainer: {
+		flexDirection: 'row',
+		flex: 1,
+		justifyContent: 'center'
 	},
-	buttonShopWrapper:{
-        width:'30%',
-        borderRadius:5,
-        backgroundColor:colors.blue,
-        height:90,
-        justifyContent:'center',
-        alignItems:'center'
+	buttonVibWrapper: {
+		width: 90,
+		borderRadius: 5,
+		backgroundColor: colors.orange,
+		height: 90,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginHorizontal: 5
 	},
-	buttonText:{
-        marginTop:10,
-        color:colors.white
+	buttonShopWrapper: {
+		width: 90,
+		borderRadius: 5,
+		backgroundColor: colors.blue,
+		height: 90,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginHorizontal: 5
 	},
-	buttonImage:{
-        resizeMode:'contain',
-        width: 30,
-        height:30,
+	buttonText: {
+		marginTop: 10,
+		color: colors.white
+	},
+	buttonImage: {
+		resizeMode: 'contain',
+		width: 30,
+		height: 30
 	},
 	headerImage: {
-        width:'100%',
-        aspectRatio:1.6,
-        alignSelf: 'stretch',
-                
-    },
-    headerContent:{
-        backgroundColor:'rgba(248,124,0,0.75)',
-        flex: 1, 
-        justifyContent: 'center', 
-        alignItems: 'center'
-    },
-    headerText: {
-        fontSize: 30,
-        color: colors.white
-    },
-    headerSubText: {
-        fontSize: 14,
-        color: colors.white
+		width: '100%',
+		aspectRatio: 1.6,
+		alignSelf: 'stretch'
+	},
+	headerContent: {
+		backgroundColor: 'rgba(248,124,0,0.75)',
+		flex: 1,
+		justifyContent: 'flex-end',
+		alignItems: 'center'
+	},
+	headerText: {
+		marginTop: 10,
+		fontSize: 28,
+		color: colors.white,
+		marginBottom: 15
+	},
+	headerSubText: {
+		fontSize: 14,
+		color: colors.white
 	},
 	progressBar: {
-        width: 200,
-        height: 6,
-        borderRadius: 3,
-        marginTop: 5,
-        marginStart: 5,
-        backgroundColor: colors.progressColor
-    },
+		width: 130,
+		height: 6,
+		borderRadius: 3,
+		marginTop: 5,
+		marginStart: 5,
+		backgroundColor: 'rgba(248,224,160,0.55)'
+	},
+	shield: {
+		position: 'relative'
+	},
+	shieldText: {
+		fontSize: 35,
+		color: colors.orange,
+		position: 'absolute',
+		top: 15,
+		left: 25,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	smallShieldText: {
+		fontSize: 27,
+		color: colors.white,
+		position: 'absolute',
+		top: 10,
+		left: 17,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	moreText: {
+		fontSize: 13,
+		color: colors.grey500
+	},
+	moreText2: {
+		fontSize: 13,
+		color: colors.orange
+	},
+	recentText: {
+		marginHorizontal: 20,
+		marginTop: 15,
+		color: colors.green,
+		fontSize: 16,
+		textTransform: 'uppercase'
+	},
+	itemContainer: {
+		flex: 1,
+		flexDirection: 'column',
+		overflow: 'hidden',
+		borderBottomWidth: 10,
+		borderColor: colors.white
+	},
+	imgBG: {
+		flex: 1,
+		resizeMode: 'contain'
+	},
+	// imgBG: {
+	// 	width: 50,
+	// 	height: 50,
+	// 	borderRadius: 25,
+	// 	resizeMode: 'cover'
+    // },
+    replyImage:{
+		marginStart:5,
+        width:12,
+        height:12,
+        resizeMode:'contain'
+	},
+	extraView:{
+        flexDirection: 'row',
+        justifyContent:'space-around',
+        alignItems:'center'
+	},
+	rewardText:{
+		color:colors.green,
+		fontSize:16,
+		fontWeight:'400',
+
+	}
 });
 
 const bitgImageSource = require('../../images/ic_bitg.png');
-const impactImageSource = require('../../images/ic_stars_24px.png');
+
 const initiativeImageSource = require('../../images/ic_vibration_24px.png');
 const shopImageSource = require('../../images/ic_store_mall_directory_24px.png');
 
-const headerImage = require("../../images/impact_header.png");
+const headerImage = require('../../images/impact_header.png');
+
+const impact_activities = [
+	{
+		id: '1',
+		name: 'Action 1',
+		reward: 5.2,
+		date: "June 12 2011",
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
+		icon: require('../../images/earth-day-initiative.png')
+	},
+	{
+		id: '2',
+		name: 'Action 2',
+		reward: 2.2,
+		date:"June 12 2011",
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
+		icon: require('../../images/earth-day-initiative.png')
+	},
+	{
+		id: '3',
+		name: 'Action 3',
+		reward: 3.2,
+		date: "June 12 2011",
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
+		icon: require('../../images/earth-day-initiative.png')
+	}
+];
 
 class MyImpactDash extends PureComponent {
-
 	static navigationOptions = ({ navigation }) => getEmptyHeaderOptions();
 
 	static propTypes = {
@@ -215,89 +321,148 @@ class MyImpactDash extends PureComponent {
 		loading: false,
 		error: null,
 		ready: true,
-		level:5,
+		level: 5,
+		total_reward: 124.31,
+		week_reward: 22.05,
+		activities: impact_activities
 	};
-
 
 	goToShopViews = () => {
 		this.props.navigation.navigate('ShopScreen');
-	}
+	};
 
 	goToInitiativesViews = () => {
 		this.props.navigation.navigate('ImpactInitiativesScreen');
-	}
+	};
 
+	onMenuPress = () => {
+		this.props.navigation.toggleDrawer();
+	};
 
-    onMenuPress = () => {
-        this.props.navigation.toggleDrawer()
-    }
+	onActivityClick = item => {};
 
+	onRefresh = () => {
+		// getArticle()
+	};
+
+	renderItem = ({ item }) => {
+
+		return (
+			<TouchableOpacity style={styles.itemContainer} onPress={() => this.onRefresh(item)}>
+				<View style={{ flex: 1, flexDirection: 'row' }}>
+					<View style={{ flex: 2, backgroundColor: colors.transparent ,justifyContent:'center',alignItems:'center'}}>
+						<Image source={item.icon} style={styles.imgBG} />
+					</View>
+					<View style={{ flex: 7, marginStart: 10, justifyContent: 'flex-start' }}>
+
+						<View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+							<Text numberOfLines={1} style={{ marginEnd: 10, fontSize: 18, fontWeight: 'bold' }}>{item.name}</Text>
+							<View style={styles.extraView}>
+								<Feather style={{ marginStart: 10}} name="plus" size={16} color={colors.green} />
+								<Image source={bitgImageSource} style={styles.replyImage}/>
+								<Text style={styles.rewardText}>{item.reward}</Text>
+							</View>
+						</View>
+
+						<View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 5 }}>
+							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+								<Feather name="clock" size={14} color={colors.grey} />
+								<Text style={{ fontSize: 14, marginStart: 5, color: colors.grey }}>
+									{getParseDate(item.date)}
+								</Text>
+							</View>
+						</View>
+						<Text numberOfLines={3} style={{ fontSize: 14, marginTop: 5 }}>
+							{item.description}
+						</Text>
+					</View>
+				</View>
+			</TouchableOpacity>
+		);
+	};
 
 	render() {
-
-
-		const {
-			level,
-			error,
-			loading,
-		} = this.state;
+		const { level, error, loading, total_reward, week_reward, activities } = this.state;
 
 		return (
 			<View style={styles.container}>
-
 				<ImageBackground source={headerImage} style={styles.headerImage}>
-					<ToolBar
-						background={colors.transparent}
-						iconName="menu"
-						onMenuPress={this.onMenuPress} />
+					<ToolBar background={colors.transparent} iconName="menu" onMenuPress={this.onMenuPress} />
 					<View style={styles.headerContent}>
-						<Text style={styles.headerSubText}>{strings('bitg_wallet.my_impact')}</Text>
+						<View style={styles.shield}>
+							<MaterialCommunityIcons name="shield" size={70} color={colors.white} />
+							<Text style={styles.shieldText}>{level}</Text>
+						</View>
+
+						<Text style={styles.headerSubText}>{strings('bitg_wallet.level', { level: level })}</Text>
 						<ProgressBar
-								style={styles.progressBar}
-								progress={level === undefined ? 0 : level <= 8 ? level / 10 : 1}
-								color={colors.white} />
+							style={styles.progressBar}
+							progress={level === undefined ? 0 : level <= 8 ? level / 10 : 1}
+							color={colors.white}
+						/>
 
 						<Text style={styles.headerText}>{strings('bitg_wallet.my_impact')}</Text>
 					</View>
 				</ImageBackground>
 
 				<View style={styles.header}>
+					<View style={styles.bitg}>
+						<View style={styles.totalRewards}>
+							<Text style={styles.totalRewardsText}>{strings('bitg_wallet.total_reward')}</Text>
+							<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+								<Image style={styles.bitgSmallImage} source={bitgImageSource} />
+								<Text style={styles.bitgBalanceText}>{total_reward}</Text>
+							</View>
+						</View>
+						<View style={styles.thisWeek}>
+							<Text style={styles.thisWeekText}>{strings('bitg_wallet.this_week')}</Text>
+							<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+								<Image style={styles.bitgSmallImage} source={bitgImageSource} />
+								<Text style={styles.bitgBalanceText}>{week_reward}</Text>
+							</View>
+						</View>
+					</View>
+
 					<View style={styles.buttonContainer}>
-						<View style={styles.buttonContainer}>
-								<TouchableOpacity style={styles.buttonVibWrapper} onPress={this.goToInitiativesViews}>
-									<Image  source={initiativeImageSource} style={styles.buttonImage}/>
-									<Text style={styles.buttonText}>{strings('bitg_wallet.initiatives')}</Text>
-								</TouchableOpacity>
-								<TouchableOpacity style={styles.buttonShopWrapper}  onPress={this.goToShopViews}>
-									<Image  source={shopImageSource} style={styles.buttonImage}/>
-									<Text style={styles.buttonText}>{strings('bitg_wallet.shop')}</Text>
-								</TouchableOpacity>
-						</View>
-					</View>
-
-				</View>
-
-
-
-				<View style={styles.bitg}>
-					<View style={styles.totalRewards}>
-						<Text style={styles.totalRewardsText}>{strings('bitg_wallet.total_reward')}</Text>
-						<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-							<Image style={styles.bitgSmallImage} source={bitgImageSource} />
-							<Text style={{ fontSize: 40, color: colors.blackColor }}>124.30</Text>
-						</View>
-					</View>
-					<View style={styles.thisWeek}>
-						<Text style={styles.thisWeekText}>{strings('bitg_wallet.this_week')}</Text>
-						<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-							<Image style={styles.bitgSmallImage} source={bitgImageSource} />
-							<Text style={{ fontSize: 40, color: colors.blackColor }}>22.05</Text>
-						</View>
+						<TouchableOpacity style={styles.buttonVibWrapper} onPress={this.goToInitiativesViews}>
+							<Image source={initiativeImageSource} style={styles.buttonImage} />
+							<Text style={styles.buttonText}>{strings('bitg_wallet.initiatives')}</Text>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.buttonShopWrapper} onPress={this.goToShopViews}>
+							<Image source={shopImageSource} style={styles.buttonImage} />
+							<Text style={styles.buttonText}>{strings('bitg_wallet.shop')}</Text>
+						</TouchableOpacity>
 					</View>
 				</View>
-				<TouchableOpacity style={styles.rewardsHistoryButton} activeOpacity={0.4}>
+
+				<View style={styles.header}>
+					<View style={styles.shield}>
+						<MaterialCommunityIcons name="shield" size={50} color={colors.orange} />
+						<Text style={styles.smallShieldText}>{level}</Text>
+					</View>
+
+					<Text style={styles.moreText} numberOfLines={2}>
+						Complete 3 more{'\n'}actions to progress
+					</Text>
+
+					<Text style={styles.moreText2} numberOfLines={2}>
+						Great Work! You're in the {'\n'}top 10% of users
+					</Text>
+				</View>
+
+				<Text style={styles.recentText}>{strings('bitg_wallet.recent_activity')}</Text>
+
+				<FlatList
+					refreshControl={<RefreshControl refreshing={loading} onRefresh={this.onRefresh} />}
+					style={{ margin: 10 }}
+					data={activities}
+					renderItem={this.renderItem}
+					keyExtractor={item => item.id + ''}
+				/>
+
+				{/* <TouchableOpacity style={styles.rewardsHistoryButton} activeOpacity={0.4}>
 					<Text style={styles.rewardsHistoryText}>{strings('bitg_wallet.reward_history')}</Text>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 			</View>
 		);
 	}

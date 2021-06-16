@@ -198,7 +198,7 @@ class MyImpactSignup extends PureComponent {
 
 
 	onPressStart = async () => {
-
+		this.props.navigation.navigate('MyImpactDash');
 	}
 
 	onPasswordChange = val => {
