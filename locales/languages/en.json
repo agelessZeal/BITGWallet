@@ -949,9 +949,9 @@
 	},
 	"authentication": {
 		"auth_prompt_title": "Authentication required",
-		"auth_prompt_desc": "Please authenticate in order to use BITG",
+		"auth_prompt_desc": "Please authenticate in order to use BITG wallet",
 		"fingerprint_prompt_title": "Authentication required",
-		"fingerprint_prompt_desc": "Use your fingerprint to unlock BITG",
+		"fingerprint_prompt_desc": "Use your fingerprint to unlock BITG wallet",
 		"fingerprint_prompt_cancel": "Cancel"
 	},
 	"accountApproval": {
@@ -1597,7 +1597,14 @@
 		"copy":"Copy",
 		"share":"Share",
 		"my_wallet_address":"my wallet address",
-		"my_wallet_description":"This is your wallet address that stores BITG. Use it to transfer funds into your wallet, or share it with others who are sending you BITG."
+		"my_wallet_description":"This is your wallet address that stores BITG. Use it to transfer funds into your wallet, or share it with others who are sending you BITG.",
+		"change_password_description":"Change the password that  is used to unlock your wallet",
+		"use_biometrics_description" : "Enable your device's {{biometryType}} unlock to alos unlock your BitGreen wallet",
+		"backup_wallet":"Backup wallet",
+		"backup_wallet_description":"Backup your wallet by exposing your mnemonic key, so you can note it down and store it somewhere safely",
+		"create_wallet":"create wallet",
+		"network":"Network"
+
 
 	}
 }

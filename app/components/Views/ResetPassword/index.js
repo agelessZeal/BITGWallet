@@ -39,6 +39,7 @@ import { getPasswordStrengthWord, passwordRequirementsMet } from '../../../util/
 import NotificationManager from '../../../core/NotificationManager';
 import { syncPrefs } from '../../../util/sync';
 
+
 const styles = StyleSheet.create({
 	mainWrapper: {
 		backgroundColor: colors.white,
@@ -48,10 +49,10 @@ const styles = StyleSheet.create({
 		flexGrow: 1
 	},
 	confirm_title: {
-		fontSize: 32,
+		fontSize: 26,
 		marginTop: 10,
 		marginBottom: 10,
-		color: colors.fontPrimary,
+		color: colors.green,
 		justifyContent: 'center',
 		textAlign: 'left',
 		...fontStyles.normal
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
 	confirm_label: {
 		fontSize: 16,
 		lineHeight: 23,
-		color: colors.fontPrimary,
+		color: colors.grey700,
 		textAlign: 'left',
 		...fontStyles.normal
 	},
@@ -98,6 +99,12 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 		width: 80,
 		height: 80
+	},
+	lockImage: {
+		alignSelf: 'center',
+		width: 100,
+		resizeMode:'contain',
+		marginTop:40
 	},
 	passwordRequiredContent: {
 		marginBottom: 20
@@ -214,7 +221,7 @@ const styles = StyleSheet.create({
 	},
 	// eslint-disable-next-line react-native/no-unused-styles
 	strength_strong: {
-		color: colors.green300
+		color: colors.green
 	},
 	showMatchingPasswords: {
 		position: 'absolute',
@@ -243,6 +250,7 @@ const styles = StyleSheet.create({
 		alignSelf: 'center'
 	}
 });
+const lockedImage =  require("../../../images/ic_locked.png")
 
 const PASSCODE_NOT_SET_ERROR = 'Error: Passcode not set.';
 const RESET_PASSWORD = 'reset_password';
@@ -499,7 +507,7 @@ class ResetPassword extends PureComponent {
 								onValueChange={this.updateBiometryChoice} // eslint-disable-line react/jsx-no-bind
 								value={biometryChoice}
 								style={styles.biometrySwitch}
-								trackColor={Device.isIos() ? { true: colors.green300, false: colors.grey300 } : null}
+								trackColor={Device.isIos() ? { true: colors.green, false: colors.grey300 } : null}
 								ios_backgroundColor={colors.grey300}
 							/>
 						</View>
@@ -511,7 +519,7 @@ class ResetPassword extends PureComponent {
 							onValueChange={rememberMe => this.setState({ rememberMe })} // eslint-disable-line react/jsx-no-bind
 							value={rememberMe}
 							style={styles.biometrySwitch}
-							trackColor={Device.isIos() ? { true: colors.green300, false: colors.grey300 } : null}
+							trackColor={Device.isIos() ? { true: colors.green, false: colors.grey300 } : null}
 							ios_backgroundColor={colors.grey300}
 						/>
 					</>
@@ -583,6 +591,13 @@ class ResetPassword extends PureComponent {
 				<KeyboardAwareScrollView style={baseStyles.flexGrow} enableOnAndroid>
 					<View style={styles.confirmPasswordWrapper}>
 						<View style={[styles.content, styles.passwordRequiredContent]}>
+
+							<Image
+									source={lockedImage}
+									style={styles.lockImage}
+									resizeMethod={'contain'}
+							/>
+
 							<Text style={styles.confirm_title}>{strings('manual_backup_step_1.confirm_password')}</Text>
 							<View style={styles.text}>
 								<Text style={styles.confirm_label}>
@@ -673,6 +688,13 @@ class ResetPassword extends PureComponent {
 							resetScrollToCoords={{ x: 0, y: 0 }}
 						>
 							<View testID={'create-password-screen'}>
+
+								<Image
+										source={lockedImage}
+										style={styles.lockImage}
+										resizeMethod={'contain'}
+								/>
+
 								<View style={styles.content}>
 									<Text style={styles.title}>{strings('reset_password.title')}</Text>
 									<View style={styles.text}>
@@ -722,7 +744,7 @@ class ResetPassword extends PureComponent {
 									/>
 									<View style={styles.showMatchingPasswords}>
 										{passwordsMatch ? (
-											<Icon name="check" size={16} color={colors.green300} />
+											<Icon name="check" size={16} color={colors.green} />
 										) : null}
 									</View>
 									<Text style={styles.hintLabel}>
@@ -736,14 +758,16 @@ class ResetPassword extends PureComponent {
 										onValueChange={this.setSelection}
 										style={styles.checkbox}
 										tintColors={{ true: colors.green }}
+										onCheckColor={colors.green}
+										onTintColor={colors.green}
 										boxType="square"
 										testID={'password-understand-box'}
 									/>
 									<Text style={styles.label} onPress={this.setSelection} testID={'i-understand-text'}>
 										{strings('reset_password.i_understand')}{' '}
-										<Text onPress={this.learnMore} style={styles.learnMore}>
+										{/* <Text onPress={this.learnMore} style={styles.learnMore}>
 											{strings('reset_password.learn_more')}
-										</Text>
+										</Text> */}
 									</Text>
 								</View>
 

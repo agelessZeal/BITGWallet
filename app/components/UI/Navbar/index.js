@@ -51,10 +51,10 @@ const styles = StyleSheet.create({
 	},
 	closeIcon: {
 		paddingLeft: Device.isAndroid() ? 22 : 18,
-		color: colors.green
+		color: colors.white
 	},
 	backIcon: {
-		color: colors.green
+		color: colors.white
 	},
 	backIconWhite: {
 		color: colors.white
@@ -196,10 +196,10 @@ export function getNavigationOptionsTitle(title, navigation) {
 		title,
 		headerTitleStyle: {
 			fontSize: 20,
-			color: colors.fontPrimary,
+			color: colors.white,
 			...fontStyles.normal
 		},
-		headerTintColor: colors.green,
+		headerTintColor: colors.white,
 		headerLeft: (
 			<TouchableOpacity onPress={navigationPop} style={styles.backButton} testID={'title-back-arrow-button'}>
 				<IonicIcon
@@ -208,7 +208,8 @@ export function getNavigationOptionsTitle(title, navigation) {
 					style={styles.backIcon}
 				/>
 			</TouchableOpacity>
-		)
+		),
+		headerStyle:{backgroundColor:colors.green}
 	};
 }
 

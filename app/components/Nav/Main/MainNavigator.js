@@ -59,6 +59,8 @@ import ShopScreen from '../../BITG/ShopScreen'
 import NewsScreen from '../../BITG/NewsScreen'
 import SendScreen from '../../BITG/send/SendScreen'
 import ReceiveScreen  from '../../BITG/ReceiveScreen';
+import SettingsScreen from '../../BITG/SettingsScreen'
+
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -259,6 +261,9 @@ export default createStackNavigator(
 		},
 		SettingsView: {
 			screen: createStackNavigator({
+				SettingsScreen:{
+					screen: SettingsScreen
+				},
 				Settings: {
 					screen: Settings
 				},

@@ -111,6 +111,8 @@ export default class OnboardingCarousel extends PureComponent {
 	static navigationOptions = ({ navigation }) => getTransparentOnboardingNavbarOptions(navigation);
 
 	static propTypes = {
+
+		
 		/**
 		 * The navigator object
 		 */
