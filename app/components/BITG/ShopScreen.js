@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { TouchableRipple } from 'react-native-paper';
 import ToolBar from './ToolBar';
@@ -32,7 +33,6 @@ import { createApolloClient } from './api/createApolloClient';
 import { getEmptyHeaderOptions } from '../UI/Navbar';
 
 const headerImage = require('../../images/shop_header.png');
-const replyImage =  require('../../images/ic_reply_24px.png')
 
 const viewWalletImageSource = require('../../images/ic_view_wallet.png');
 
@@ -303,8 +303,8 @@ const ItemView = ({ itemData, itemClicked }) => (
 				<View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 					<Text style={styles.itemTitle}>{itemData.name}</Text>
                     <View style={styles.externalLink}>
-                        <Image source={replyImage} style={styles.replyImage}/>
-                         {/* <MaterialIcons style={{ transform: [{ rotate: "90deg" }] ,marginStart: 10}} name="reply" size={16} color={colors.green} /> */}
+                        {/* <Image source={replyImage} style={styles.replyImage}/> */}
+                         <MaterialCommunityIcons style={{marginStart: 10}} name="share" size={16} color={colors.green} />
                          <Text style={styles.externalLinkText}>BROWSE</Text>
                     </View>
 

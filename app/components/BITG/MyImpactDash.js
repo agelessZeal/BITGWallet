@@ -218,11 +218,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'column',
 		overflow: 'hidden',
-		borderBottomWidth: 10,
-		borderColor: colors.white
+		paddingBottom:10,
+		borderBottomWidth: 1,
+		borderColor: colors.grey000,
+		marginTop:10,
 	},
 	imgBG: {
-		flex: 1,
+		width:'90%',
 		resizeMode: 'contain'
 	},
 	// imgBG: {
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
 	// 	borderRadius: 25,
 	// 	resizeMode: 'cover'
     // },
-    replyImage:{
+    bitgImage:{
 		marginStart:5,
         width:12,
         height:12,
@@ -240,7 +242,8 @@ const styles = StyleSheet.create({
 	extraView:{
         flexDirection: 'row',
         justifyContent:'space-around',
-        alignItems:'center'
+		alignItems:'center',
+		marginEnd:10,
 	},
 	rewardText:{
 		color:colors.green,
@@ -265,7 +268,9 @@ const impact_activities = [
 		date: "June 12 2011",
 		description:
 			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
-		icon: require('../../images/earth-day-initiative.png')
+		icon: require('../../images/earth-day-initiative-inverse.png'),
+		share:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
+		position:'345 Some Lane Town, City, Country'
 	},
 	{
 		id: '2',
@@ -274,7 +279,9 @@ const impact_activities = [
 		date:"June 12 2011",
 		description:
 			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
-		icon: require('../../images/earth-day-initiative.png')
+		icon: require('../../images/earth-day-initiative-inverse.png'),
+		share:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
+		position:'345 Some Lane Town, City, Country'
 	},
 	{
 		id: '3',
@@ -283,7 +290,9 @@ const impact_activities = [
 		date: "June 12 2011",
 		description:
 			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
-		icon: require('../../images/earth-day-initiative.png')
+		icon: require('../../images/earth-day-initiative-inverse.png'),
+		share:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
+		position:'345 Some Lane Town, City, Country'
 	}
 ];
 
@@ -321,7 +330,7 @@ class MyImpactDash extends PureComponent {
 		loading: false,
 		error: null,
 		ready: true,
-		level: 5,
+		level: 3,
 		total_reward: 124.31,
 		week_reward: 22.05,
 		activities: impact_activities
@@ -339,7 +348,10 @@ class MyImpactDash extends PureComponent {
 		this.props.navigation.toggleDrawer();
 	};
 
-	onActivityClick = item => {};
+	onActivityClick = item => {
+		console.log(item,'as')
+		this.props.navigation.navigate('ImpactActivityDetail',{activity:item})
+	};
 
 	onRefresh = () => {
 		// getArticle()
@@ -348,7 +360,7 @@ class MyImpactDash extends PureComponent {
 	renderItem = ({ item }) => {
 
 		return (
-			<TouchableOpacity style={styles.itemContainer} onPress={() => this.onRefresh(item)}>
+			<TouchableOpacity style={styles.itemContainer} onPress={() => this.onActivityClick(item)}>
 				<View style={{ flex: 1, flexDirection: 'row' }}>
 					<View style={{ flex: 2, backgroundColor: colors.transparent ,justifyContent:'center',alignItems:'center'}}>
 						<Image source={item.icon} style={styles.imgBG} />
@@ -359,7 +371,7 @@ class MyImpactDash extends PureComponent {
 							<Text numberOfLines={1} style={{ marginEnd: 10, fontSize: 18, fontWeight: 'bold' }}>{item.name}</Text>
 							<View style={styles.extraView}>
 								<Feather style={{ marginStart: 10}} name="plus" size={16} color={colors.green} />
-								<Image source={bitgImageSource} style={styles.replyImage}/>
+								<Image source={bitgImageSource} style={styles.bitgImage}/>
 								<Text style={styles.rewardText}>{item.reward}</Text>
 							</View>
 						</View>

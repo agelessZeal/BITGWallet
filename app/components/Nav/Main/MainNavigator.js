@@ -63,6 +63,7 @@ import SendScreen from '../../BITG/send/SendScreen'
 import ReceiveScreen  from '../../BITG/ReceiveScreen';
 import SettingsScreen from '../../BITG/SettingsScreen';
 import NetworkIDSetting from '../../BITG/NetworkIDSetting'
+import ImpactActivityDetail from '../../BITG/ImpactActivityDetail'
 
 
 const tabImages = {
@@ -174,6 +175,9 @@ export default createStackNavigator(
 							},
 							MyImpactDash: {
 								screen: MyImpactDash,
+							},
+							ImpactActivityDetail:{
+								screen:ImpactActivityDetail
 							},
 							ImpactInitiativesScreen:{
 								screen:ImpactInitiativesScreen

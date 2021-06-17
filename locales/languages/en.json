@@ -1612,7 +1612,8 @@
 		"signup_impact_others" : "And gain access to the",
 		"email_address":"Email Address",
 		"level":"Level {{level}}",
-		"recent_activity":"Recent Activity"
+		"recent_activity":"Recent Activity",
+		"share_to_social":"Share to social media"
 
 
 	}

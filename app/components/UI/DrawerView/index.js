@@ -768,6 +768,8 @@ class DrawerView extends PureComponent {
 					warning: strings('drawer.settings_warning_short'),
 					action: this.showSettings
 				},
+			],
+			[	
 				{
 					name: strings('bitg_wallet.my_impact'),
 					icon: this.getMaterialIcon('sword-cross'),
@@ -786,6 +788,8 @@ class DrawerView extends PureComponent {
 					selectedIcon: this.getSelectedMaterialIcon('store'),
 					action: this.showShop
 				},
+			],
+			[
 				{
 					name: strings('bitg_wallet.blockchain_explorer'),
 					icon: this.getIcon('eye'),
