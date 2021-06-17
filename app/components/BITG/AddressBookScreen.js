@@ -117,35 +117,37 @@ const dummy_addresses = [
 	{
         hash: "",
         sender: {
-            name: "asdfasdf",
+            name: "Joe Citizeon",
             address: "uytiuytiuytiuytukjytiu"
         },
         receiver: {
-            name: "SDFASDFASDFasdf",
+            name: "Kristiana",
             address: "Safsdafsdfasdf"
         },
-        send_amount: 0,
+        send_amount: 32.2,
         time: Math.floor(Date.now() / 1000),
         is_expense: true,
         is_my_friend: true,
-        color: getTransactionColor('gdfgdfgdf')
+		color: getTransactionColor('gdffgfsdfggdfgdf'),
+		confirmations:4,
 
     },
     {
         hash: "",
         sender: {
-            name: "qqqer",
+            name: "Caroline",
             address: "uytiuytiuytiuytukjytiu"
         },
         receiver: {
-            name: "bfbfs",
+            name: "Charmaine",
             address: "41234vfg23b4f"
         },
-        send_amount: 0,
+        send_amount: 23.30,
         time: Math.floor(Date.now() / 1000),
-        is_expense: true,
+        is_expense: false,
         is_my_friend: true,
-        color: getTransactionColor('434v3423')
+		color: getTransactionColor('434ree3423'),
+		confirmations:2,
 
 	}
 ];
@@ -201,9 +203,14 @@ function AddressBookScreen(props) {
 		const address =
 			userAddress == itemData.item.receiver.address
 				? itemData.item.sender.address
-                : itemData.item.receiver.address;
+				: itemData.item.receiver.address;
+				
+		const name =
+			userAddress == itemData.item.receiver.address
+				? itemData.item.sender.name
+                : itemData.item.receiver.name;
                 
-        navigation.navigate("AddressDetail", { address: address }) 
+        navigation.navigate("AddressDetail", { address,name ,data:itemData}) 
 
 		// const pushAction = StackActions.push(Routes.DETAIL_ADDRESS_BOOK_SCREEN.TAG, { address: address })
 		// navigation.dispatch(pushAction)
@@ -382,7 +389,7 @@ function AddressBookScreen(props) {
 	);
 }
 
-AddressBookScreen.navigationOptions = ({ navigation }) => getBITGAddNavbarOptions('bitg_wallet.my_wallet', navigation,'address');
+AddressBookScreen.navigationOptions = ({ navigation }) => getBITGAddNavbarOptions('drawer.address_book', navigation,'address');
 
 AddressBookScreen.propTypes = {
 	/**

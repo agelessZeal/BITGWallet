@@ -138,12 +138,17 @@ function SendScreen(props) {
   //   getWalletInfo();
   // }, [state, walletContext.state]);
 
+  useEffect(()=>{
+    let addressData = navigation.getParam('data',null)
+    console.log('send sceen:',addressData)
+  },[])
+
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // setNavigationType(route.params.navigationType);
 
-      let addressData = navigation.getParam('data',null)
-      console.log('send sceen',addressData)
+
     });
   }, [navigation]);
 
