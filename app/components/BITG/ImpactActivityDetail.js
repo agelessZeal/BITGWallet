@@ -216,6 +216,7 @@ class ImpactActivityDetail extends PureComponent {
 
 	onShare = () => {
 
+
 	}
 
 	render() {

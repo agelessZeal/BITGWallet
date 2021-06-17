@@ -99,22 +99,20 @@ const styles = StyleSheet.create({
 		resizeMode: 'contain'
 	},
 	rewardsHistoryButton: {
-		height: 50,
+		height: 30,
 		paddingStart: 20,
 		paddingEnd: 20,
 		borderRadius: 25,
-		marginTop: 30,
 		backgroundColor: colors.transparent,
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderWidth: 2,
+		borderWidth: 1,
 		borderColor: colors.tintColor,
 		alignSelf: 'center'
 	},
 	rewardsHistoryText: {
 		fontSize: 16,
 		color: colors.tintColor,
-		padding: 10,
 		fontWeight: 'bold'
 	},
 	buttonContainer: {
@@ -207,9 +205,14 @@ const styles = StyleSheet.create({
 		fontSize: 13,
 		color: colors.orange
 	},
-	recentText: {
+	historyWrapper:{
 		marginHorizontal: 20,
 		marginTop: 15,
+		flexDirection:'row',
+		justifyContent:'space-between',
+		alignItems:'center'
+	},
+	recentText: {
 		color: colors.green,
 		fontSize: 16,
 		textTransform: 'uppercase'
@@ -349,12 +352,16 @@ class MyImpactDash extends PureComponent {
 	};
 
 	onActivityClick = item => {
-		console.log(item,'as')
 		this.props.navigation.navigate('ImpactActivityDetail',{activity:item})
 	};
 
 	onRefresh = () => {
 		// getArticle()
+	};
+
+
+	goToHistory = () => {
+		this.props.navigation.navigate('ImpactHistory');
 	};
 
 	renderItem = ({ item }) => {
@@ -462,7 +469,12 @@ class MyImpactDash extends PureComponent {
 					</Text>
 				</View>
 
-				<Text style={styles.recentText}>{strings('bitg_wallet.recent_activity')}</Text>
+				<View style={styles.historyWrapper}>
+					<Text style={styles.recentText}>{strings('bitg_wallet.recent_activity')}</Text>
+					<TouchableOpacity style={styles.rewardsHistoryButton} activeOpacity={0.4} onPress={this.goToHistory}>
+						<Text style={styles.rewardsHistoryText}>{strings('bitg_wallet.impact_history')}</Text>
+					</TouchableOpacity> 
+				</View>
 
 				<FlatList
 					refreshControl={<RefreshControl refreshing={loading} onRefresh={this.onRefresh} />}
