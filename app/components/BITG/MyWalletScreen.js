@@ -275,7 +275,7 @@ const initiativeImageSource = require("../../images/ic_vibration_24px.png");
 const shopImageSource = require("../../images/ic_store_mall_directory_24px.png");
 
 function MyWalletScreen({ 
-    	swapsTokens,
+    swapsTokens,
 	accounts,
 	selectedAddress,
 	balances,
@@ -296,8 +296,8 @@ function MyWalletScreen({
     // const walletContext = useContext(WalletContext)
 
     const [availableBalance, setAvailableBalance] = useState({
-        balance: 0.0,
-        exchangeBalance: 0.0
+        balance: 34534.0,
+        exchangeBalance: 2342.0
     });
 
     const [periodDays, setPeriodDays] = useState(30);

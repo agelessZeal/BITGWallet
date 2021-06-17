@@ -166,7 +166,7 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
                                     <Text style={{ color: colors.grey200, fontWeight: 'bold' }}>{`|\n|\n|\n|\n|\n|\n`}</Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
-                                    <Text style={styles.sectionTitle}>{strings('bitg_wallet.send_to')}</Text>
+                                    <Text style={styles.sectionTitle}>{strings('send.title')}</Text>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                                         <View style={styles.credential}>
                                             <Text style={styles.credentialText}>{sendingData.address === undefined ? "" : sendingData.address.charAt(0)}</Text>

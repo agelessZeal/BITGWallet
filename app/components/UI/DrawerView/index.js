@@ -591,7 +591,7 @@ class DrawerView extends PureComponent {
 	};
 
 	showAddressBook = async () => {
-		this.props.navigation.navigate('SettingsView');
+		this.props.navigation.navigate('AddressBook');
 		this.hideDrawer();
 		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_SETTINGS);
 	};

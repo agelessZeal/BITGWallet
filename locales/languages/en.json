@@ -1578,7 +1578,6 @@
 		"previous":"previous",
 		"confirm":"confirm",
 		"next":"next",
-		"send":"Send",
 		"send_title":"Send BITG to anyone",
 		"my_primary_address":"My primary address",
 		"sending_to":"sending to",
@@ -1614,7 +1613,8 @@
 		"email_address":"Email Address",
 		"level":"Level {{level}}",
 		"recent_activity":"Recent Activity",
-		"share_to_social":"Share to social media"
+		"share_to_social":"Share to social media",
+		"no_address":"No address in the book"
 
 
 	}

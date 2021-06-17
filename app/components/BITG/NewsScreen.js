@@ -22,7 +22,7 @@ import { createApolloClient } from './api/createApolloClient';
 
 
 import {getParseDate,extractHostname,capitalizeFirstLetter} from './lib/Helpers'
-import { getBITGNewsNavbarOptions } from '../UI/Navbar';
+import { getBITGAddNavbarOptions } from '../UI/Navbar';
 
 const styles = StyleSheet.create({
     container: {
@@ -163,7 +163,7 @@ const ItemView = ({ itemData, itemClicked }) => (
 )
 
 
-NewsScreen.navigationOptions = ({ navigation }) =>  getBITGNewsNavbarOptions('bitg_wallet.news',navigation);
+NewsScreen.navigationOptions = ({ navigation }) =>  getBITGAddNavbarOptions('bitg_wallet.news',navigation,'news');
 
 NewsScreen.propTypes = {
 	/**

@@ -19,6 +19,7 @@ import { importAccountFromPrivateKey } from '../../../util/address';
 import Device from '../../../util/Device';
 import { isGatewayUrl } from '../../../lib/ens-ipfs/resolver';
 import { getHost } from '../../../util/browser';
+import { func } from 'prop-types';
 
 const { HOMEPAGE_URL } = AppConstants;
 
@@ -736,7 +737,7 @@ export function getBITGWalletNavbarOptions(title, navigation) {
  *
  * @returns {Object} - Corresponding navbar options containing headerTitle, headerTitle and headerTitle
  */
-export function getBITGNewsNavbarOptions(title, navigation) {
+export function getBITGAddNavbarOptions(title, navigation,type) {
 	const onScanSuccess = (data, content) => {
 		if (data.private_key) {
 			Alert.alert(
@@ -779,11 +780,14 @@ export function getBITGNewsNavbarOptions(title, navigation) {
 		trackEvent(ANALYTICS_EVENT_OPTS.COMMON_TAPS_HAMBURGER_MENU);
 	}
 
-	function openQRScanner() {
-		navigation.navigate('QRScanner', {
-			onScanSuccess
-		});
-		trackEvent(ANALYTICS_EVENT_OPTS.WALLET_QR_SCANNER);
+	function openAdd() {
+		if(type){
+			if(type ==='address'){
+				navigation.navigate("");
+			} else if(type === 'news'){
+
+			}
+		}
 	}
 
 	return {
@@ -798,7 +802,7 @@ export function getBITGNewsNavbarOptions(title, navigation) {
 			</TouchableOpacity>
 		),
 		headerRight: (
-			<TouchableOpacity  style={styles.backButton} testID={'hamburger-menu-button-wallet'}>
+			<TouchableOpacity    onPress={openAdd}style={styles.backButton} testID={'hamburger-menu-button-wallet'}>
 				<IonicIcon
 					name={Device.isAndroid() ? 'add' : 'ios-add'}
 					size={Device.isAndroid() ? 24 : 28}

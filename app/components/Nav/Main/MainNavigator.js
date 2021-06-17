@@ -66,6 +66,8 @@ import NetworkIDSetting from '../../BITG/NetworkIDSetting'
 import ImpactActivityDetail from '../../BITG/ImpactActivityDetail'
 import ImpactHistory from '../../BITG/ImpactHistory'
 
+import AddressBookScreen from '../../BITG/AddressBookScreen'
+
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -240,6 +242,18 @@ export default createStackNavigator(
 
 				}
 			)
+		},
+		AddressBookTabHome:{
+			screen:createStackNavigator(
+				{
+					AddressBook: {
+						screen: AddressBookScreen,
+						navigationOptions: {
+							gesturesEnabled: false
+						}
+					}
+				},
+			),
 		},
 		BrowserTabHome:{
 			screen:createStackNavigator(

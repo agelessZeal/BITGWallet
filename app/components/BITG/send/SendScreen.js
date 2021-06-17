@@ -141,6 +141,9 @@ function SendScreen(props) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // setNavigationType(route.params.navigationType);
+
+      let addressData = navigation.getParam('data',null)
+      console.log('send sceen',addressData)
     });
   }, [navigation]);
 
@@ -509,7 +512,7 @@ function SendScreen(props) {
   );
 }
 
-SendScreen.navigationOptions = ({ navigation }) => getBITGWalletNavbarOptions('bitg_wallet.send',navigation);
+SendScreen.navigationOptions = ({ navigation }) => getBITGWalletNavbarOptions('send.title',navigation);
 
 SendScreen.propTypes = {
 	/**
