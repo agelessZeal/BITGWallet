@@ -68,6 +68,7 @@ import ImpactHistory from '../../BITG/ImpactHistory'
 
 import AddressBookScreen from '../../BITG/AddressBookScreen'
 import AddressDetailScreen from '../../BITG/AddressDetailScreen'
+import AddressNewScreen from '../../BITG/AddressNewScreen'
 
 
 const tabImages = {
@@ -254,7 +255,10 @@ export default createStackNavigator(
 						}
 					},
 					AddressDetail :{
-						screen:AddressDetailScreen
+						screen: AddressDetailScreen
+					},
+					AddressNewScreen:{
+						screen: AddressNewScreen
 					}
 				},
 			),

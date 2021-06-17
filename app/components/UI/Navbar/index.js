@@ -783,7 +783,7 @@ export function getBITGAddNavbarOptions(title, navigation,type) {
 	function openAdd() {
 		if(type){
 			if(type ==='address'){
-				navigation.navigate("");
+				navigation.navigate("AddressNewScreen");
 			} else if(type === 'news'){
 
 			}

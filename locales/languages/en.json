@@ -1614,8 +1614,17 @@
 		"level":"Level {{level}}",
 		"recent_activity":"Recent Activity",
 		"share_to_social":"Share to social media",
-		"no_address":"No address in the book"
+		"no_address":"No address in the book",
+		"address_book" :{
+			"title" :"New Contact",
+			"sub_title":"Add to address book",
+			"find_title" :"Find a contact",
+			"find_desc":"search the bitGreem network for someone you know, by nam, wallet address or email",
+			"detail_title":"Enter their details",
+			"identifier":"BitGreen network identifier",
+			"name":"Name(optional, if no network identifier)",
+			"address":"BIGT Addresss"
 
-
+		}
 	}
 }
