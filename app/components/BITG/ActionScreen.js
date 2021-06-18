@@ -104,7 +104,7 @@ function ActionScreen(props) {
     }, []);
 
     const goToService = () => {
-        navigation.navigate("Service")
+        navigation.navigate("ServicesScreen")
     }
 
     const actionButton = (text) => (
