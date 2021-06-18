@@ -1,6 +1,4 @@
-
 import React,{useContext} from 'react';
-
 import { View, Text, StyleSheet, Image, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import {
     TouchableRipple
@@ -26,31 +24,46 @@ const initiatives = [
         id: '1',
         title: 'Folding@Home',
         subTitle: 'START FOLDING',
-        icon: require("../../images/folding-at-home-logo.png")
+        icon: require("../../images/folding-at-home-logo.png"),
+        reverse: require("../../images/folding-at-home-logo.png"),
+        header: require("../../images/folding_header.png"),
+        description:"In such trying times, every way in which we can be of service to others counts. Folding@Home is one simple and effective way to be part of the solution \n\nBy downloading the software and linking up to the Folding@Home network, you volunteer the computing power of your desktop or laptop to a global effort to map out the proteins of the Corona Virus – a crucial step towards finding the vaccine. Folding@Home costs nothing and requires little more than running the software in the background."
     },
     {
         id: '2',
         title: 'Tesla',
         subTitle: 'KEEP CHANGING',
-        icon: require("../../images/tesla-motors-1.png")
+        icon: require("../../images/tesla-motors-1.png"),
+        reverse: require("../../images/tesla_white.png"),
+        header: require("../../images/tesla_header.png"),
+        description:"Tesla stands a beacon of change in the automotive world—and introduced iconic electric vehicles over the past decade. BitGreen supports this innovation and pledges: \n\nWhen you recharge your ride, We recharge the planet'\n\nFor every 2 full charges, we donate BITG, The Nature Conservancy plants a tree."
     },
     {
         id: '3',
         title: 'Earth Day Initiative',
         subTitle: 'EXPLORE',
-        icon: require("../../images/earth-day-initiative.png")
+        icon: require("../../images/earth-day-initiative.png"),
+        reverse :require("../../images/earth-day-initiative-inverse.png"),
+        header: require("../../images/earth_header.png"),
+        description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     },
     {
         id: '4',
         title: 'The Nature Conservancy',
         subTitle: 'EXPLORE',
-        icon: require("../../images/tnc-logo.png")
+        icon: require("../../images/tnc-logo.png"),
+        reverse :require("../../images/tnc_white.png"),
+        header: require("../../images/earth_header.png"),
+        description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     },
     {
         id: '5',
         title: 'Dashboard.Earth',
         subTitle: 'EXPLORE',
-        icon: require("../../images/earch.png")
+        icon: require("../../images/dash_earth.png"),
+        reverse :require("../../images/tnc_white.png"),
+        header: require("../../images/earth_header.png"),
+        description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     },
 ];
 
@@ -149,7 +162,7 @@ function ImpactInitiativesScreen({
     }
 
     const itemClicked = (item) => {
-        // navigation.navigate(Routes.INITIATIVE_DETAIL_SCREEN.TAG, {item: item})
+        navigation.navigate('InitiativeDetail', {item})
     }
 
     return (

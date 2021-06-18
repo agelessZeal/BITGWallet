@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
 	headerContent: {
 		backgroundColor: 'rgba(0,0,0,0.35)',
 		flex: 1,
-		marginTop:15,
 		justifyContent: 'center',
 		alignItems: 'center'
 	},

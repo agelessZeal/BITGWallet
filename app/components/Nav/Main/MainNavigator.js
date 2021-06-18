@@ -65,6 +65,7 @@ import SettingsScreen from '../../BITG/SettingsScreen';
 import NetworkIDSetting from '../../BITG/NetworkIDSetting'
 import ImpactActivityDetail from '../../BITG/ImpactActivityDetail'
 import ImpactHistory from '../../BITG/ImpactHistory'
+import InitiativeDetailScreen from '../../BITG/InitiativeDetailScreen'
 
 import AddressBookScreen from '../../BITG/AddressBookScreen'
 import AddressDetailScreen from '../../BITG/AddressDetailScreen'
@@ -189,6 +190,9 @@ export default createStackNavigator(
 							},
 							ImpactInitiativesScreen:{
 								screen:ImpactInitiativesScreen
+							},
+							InitiativeDetail:{
+								screen:InitiativeDetailScreen
 							}
 						},
 						{
