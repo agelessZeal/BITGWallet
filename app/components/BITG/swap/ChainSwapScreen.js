@@ -31,13 +31,8 @@ import ChainSwapProgress from './ChainSwapProgress';
 import ChainSwapSucess from './ChainSwapSucess';
 import Device from '../../../util/Device';
 import {makeAlert,sleep} from '../../../util/general'
-// import WalletManager from '../../wallet';
 import {createApolloClient} from '../api/createApolloClient';
-// import {showAlert, SATOSHI_CONST, sleep} from '../../lib/Helpers';
-// import {Context as TransactionContext} from '../../lib/context/TransactionsContext';
-// import {Context as WalletContext} from '../../lib/context/WalletContext';
 
-const img_send_source = require('../../../images/img_send.png');
 
 const styles = StyleSheet.create({
   container: {
@@ -54,7 +49,6 @@ const styles = StyleSheet.create({
   },
   viewPager: {
     flex: 1,
-    minHeight:Device.height,
   },
   footerView: {
     height: 40,
@@ -130,13 +124,9 @@ function ChainSwapScreen(props) {
   const [refreshWallet, setRefreshWallet] = useState(false);
   const [loading, setLoading] = useState(false);
   const [myPrimaryAddress, setPrimaryAddress] = useState(props.selectedAddress);
-  const [myBalance, setMyBalance] = useState(300);
+  const [myBalance, setMyBalance] = useState(30034534.34);
   const [page, setPage] = useState(0);
   const viewPager = useRef();
-
-  // useEffect(() => {
-  //   getWalletInfo();
-  // }, [state, walletContext.state]);
 
   useEffect(()=>{
     let addressData = navigation.getParam('data',null)
@@ -147,23 +137,11 @@ function ChainSwapScreen(props) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // setNavigationType(route.params.navigationType);
-
-
     });
   }, [navigation]);
 
   const getWalletInfo = async () => {
-    // try {
-    //   const wallet = WalletManager.getWalletByName('BITGWallet');
-    //   const myAddress = wallet.getKey(0).getAddress();
-    //   const balance = await wallet.getKey(0).getBalance();
-    //   setPrimaryAddress(myAddress);
-    //   setMyBalance((balance.confirmed + balance.unconfirmed) / SATOSHI_CONST);
-    // } catch (error) {
-    //   console.log(error);
-    //   setPrimaryAddress(undefined);
-    //   setMyBalance(undefined);
-    // }
+
   };
 
   const onRefresh = async () => {
@@ -203,162 +181,12 @@ function ChainSwapScreen(props) {
         makeAlert('Please connect to the internet');
 
       } else {
-          console.log('move',props.showAlert)
           var nextPage = page + delta;
-
-          // viewPager.current.setPage(nextPage);
-
-          if (
-            sendingData.address === undefined ||
-            sendingData.address === null ||
-            sendingData.address === ''
-          ) {
-            makeAlert('Please write Recipient');
-
-          } else if (sendingData.address === myPrimaryAddress) {
-            
-            makeAlert("App doesn't support sending coins to your address");
-
-          } else {
-            if (
-              sendingData.amount === undefined ||
-              sendingData.amount === null ||
-              sendingData.amount == 0
-            ) {
-              makeAlert('Please write Amount');
-            } else {
-              if (sendingData.amount > myBalance) {
-                makeAlert(
-                  'You try to send more BITG than you have on your wallet',
-                );
-              } else {
-                if (nextPage == 2) {
-                  if (sendingData.address != undefined) {
-                    // setLoading(true);
-                    // await sleep(1000);
-                    // try {
-                    //   const wallet = WalletManager.getWalletByName(
-                    //     'BITGWallet',
-                    //   );
-                    //   const key = wallet.getKey(0);
-                    //   const hashTrans = await key.sendTransaction(
-                    //     sendingData.address,
-                    //     sendingData.amount * SATOSHI_CONST,
-                    //   );
-                    //   setSendingData({
-                    //     ...sendingData,
-                    //     transactionHash: hashTrans,
-                    //   });
-                      sleep(2000).then(() => {
-                        viewPager.current.setPage(nextPage);
-                      });
-                      
-
-                    // } catch (error) {
-                    //   setLoading(false);
-                    //   showAlert(
-                    //     typeof error.message === 'string' &&
-                    //       error.message.includes('Insufficient funds')
-                    //       ? error.message
-                    //       : 'An error occurred with your transaction!',
-                    //   );
-                    // }
-                  } else {
-                    // showAlert(
-                    //   'You need to enter a valid data to send transactions. Please go to Previous page and enter correct data',
-                    // );
-                  }
-                } else {
-                  viewPager.current.setPage(nextPage);
-                }
-              }
-            }
-          }
+          viewPager.current.setPage(nextPage);
       }
     });
   };
 
-  const newTransaction = async () => {
-    setLoading(false);
-    setClearChildrenState(true);
-    setSendingData({
-      name: undefined,
-      address: undefined,
-      amount: undefined,
-      transactionHash: undefined,
-    });
-    viewPager.current.setPageWithoutAnimation(0);
-    await sleep(2000);
-    setClearChildrenState(false);
-
-    // if (route.params.data === undefined) {
-    //   setClearChildrenState(true);
-    //   setSendingData({
-    //     name: undefined,
-    //     address: undefined,
-    //     amount: undefined,
-    //     transactionHash: undefined,
-    //   });
-    //   viewPager.current.setPageWithoutAnimation(0);
-    //   await sleep(2000);
-    //   setClearChildrenState(false);
-    // } else {
-    //   viewPager.current.setPageWithoutAnimation(0);
-    // }
-  };
-
-  const openTransactionHistory = () => {
-    // navigation.navigate(Routes.TRANSACTION_HISTORY_SCREEN.TAG);
-  };
-
-  const getSendingData = data => {
-
-    let inputValue = data.amount;
-
-    let inputValueConversion, renderableInputValueConversion, hasExchangeRate, comma;
-    // Remove spaces from input
-    
-    if(!inputValue){
-      inputValue = inputValue && inputValue.replace(/\s+/g, '');
-      // Handle semicolon for other languages
-      if (inputValue && inputValue.includes(',')) {
-        comma = true;
-        inputValue = inputValue.replace(',', '.');
-      }
-    }
-
-
-    // const processedInputValue = isDecimal(inputValue) ? handleWeiNumber(inputValue) : '0';
-
-    
-    const amountValue =
-      data.amount === undefined || data.amount === null || data.amount === ''
-        ? undefined
-        : data.amount.indexOf(',') > -1
-        ? data.amount.replace(',', '.')
-        : data.amount;
-    setSendingData({
-      ...data,
-      amount:
-        amountValue === undefined
-          ? undefined
-          : isNaN(inputValue)
-          ? undefined
-          : parseFloat(inputValue),
-    });
-  };
-
-  const getDataFromApi = data => {
-    if (data != undefined) {
-      const hasName =
-        data.name != null && data.name != undefined && data.name != '';
-      setSendingData({
-        ...sendingData,
-        address: data.address,
-        name: hasName ? data.name : data.address,
-      });
-    }
-  };
 
   const setLoaderIndicator = show => {
     setLoading(show);
@@ -368,26 +196,18 @@ function ChainSwapScreen(props) {
     // setTransaction(transactions);
   };
 
+  const next = () => {
+    move(1)
+  }
+
+  const goHome = () => {
+    setLoading(false);
+    viewPager.current.setPageWithoutAnimation(0);
+    navigation.navigate('WalletView')
+  }
+
   return (
     <View style={styles.container}>
-      {/* <ToolBar
-        title={Strings.SEND}
-        iconName={
-          navigationType === undefined || navigationType === ''
-            ? Strings.ICON_MENU
-            : navigationType === 'MainStack'
-            ? Strings.ICON_BACK
-            : Strings.ICON_MENU
-        }
-        onMenuPress={onMenuPress}
-      /> */}
-
-      {page == 0 ? (
-        <Image
-          style={ styles.imgBG }
-          source={img_send_source}
-        />
-      ) : null}
       {myPrimaryAddress === undefined && myBalance === undefined ? (
         <ScrollView
           style={{flex: 1}}
@@ -421,33 +241,30 @@ function ChainSwapScreen(props) {
               key="1"
               currentPage={page}
               myWalletAddress={myPrimaryAddress}
-              getSendingData={getSendingData}
-              // paramsData={
-              //   route.params.data === undefined ? undefined : route.params.data
-              // }
               navigation={navigation}
               clerarChildrenState={clerarChildrenState}
+              next={next}
             />
             <ChainSwapProgress
               key="2"
               currentPage={page}
               myCurrentWalletBalance={myBalance}
-              sendingData={sendingData}
               apolloClient={client}
-              getDataFromApi={getDataFromApi}
               setLoaderIndicator={setLoaderIndicator}
               loaderIndicator={loading}
+              next={next}
             />
             <ChainSwapSucess
               key="3"
-              newTransaction={newTransaction}
+              balance={myBalance}
               currentPage={page}
-              sendingData={sendingData}
-              viewTransactionHistory={openTransactionHistory}
-              // globalState={state}
+              navigation={navigation}
               updateGlobalState={updateTransactionsState}
+              next={next}
+              goHome ={goHome}
             />
           </ViewPager>
+
           {loading == true ? null : (
             <KeyboardAvoidingView
               behavior={Platform.OS === 'ios' ? 'position' : null}>
@@ -495,19 +312,7 @@ function ChainSwapScreen(props) {
                     ]}
                   />
                 </View>
-                {page > 1 ? (
-                  <View style={styles.nextButton} />
-                ) : (
-                  <TouchableRipple
-                    style={styles.nextButton}
-                    onPress={() => move(1)}>
-                    <Text style={styles.nextText}>{` ${
-                      page == 1
-                        ? strings('bitg_wallet.confirm')
-                        : strings('bitg_wallet.next')
-                    }  `}</Text>
-                  </TouchableRipple>
-                )}
+                <View style={styles.nextButton} />
               </View>
             </KeyboardAvoidingView>
           )}
@@ -517,7 +322,7 @@ function ChainSwapScreen(props) {
   );
 }
 
-ChainSwapScreen.navigationOptions = ({ navigation }) => getBITGWalletNavbarOptions('send.title',navigation);
+ChainSwapScreen.navigationOptions = ({ navigation }) => getBITGWalletNavbarOptions('bitg_wallet.chain_swap.title',navigation);
 
 ChainSwapScreen.propTypes = {
 	/**

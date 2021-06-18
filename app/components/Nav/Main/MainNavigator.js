@@ -77,7 +77,7 @@ import ServiceScreen from '../../BITG/ServiceScreen'
 
 import TransactionHistory from '../../BITG/Transactions'
 
-import ChainSwapScreen from '../../BITG/ChainSwapScreen'
+import ChainSwapScreen from '../../BITG/swap/ChainSwapScreen'
 
 
 const tabImages = {
@@ -155,6 +155,9 @@ export default createStackNavigator(
 						{
 							WalletView: {
 								screen: MyWalletScreen
+							},
+							ChainSwap: {
+								screen: ChainSwapScreen,
 							},
 							WalletView2: {
 								screen: Wallet
@@ -284,15 +287,7 @@ export default createStackNavigator(
 				},
 			),
 		},
-		ChainSwapTabHome:{
-			screen:createStackNavigator(
-				{
-					ChainSwap: {
-						screen: ChainSwapScreen,
-					},
-				},
-			),
-		},
+
 		BrowserTabHome:{
 			screen:createStackNavigator(
 				{

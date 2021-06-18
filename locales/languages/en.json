@@ -1632,6 +1632,18 @@
 		"connect_service":"Connect this service",
 		"token_hint":"Enter your authorization token",
 		"any":"Any",
-		"reward":"Reward"
+		"reward":"Reward",
+		"chain_swap" : {
+			"title" :"BitGreen Chain Swap",
+			"confirm" :"Confrim Swap",
+			"start" :"Complete the chain swap",
+			"start_des":"Confirm on the following screen and your BITG wallet balances will automatically be swapped to the new BitGreen chain in the Polkadot ecosystem.",
+			"start_warn":"Note the snapshot date for address balances was block XXX (or around 21 March 2021). For the swap to be successful, you must have held your BITG in this wallet prior to this date.",
+			"old_chain":"Old  Chain",
+			"new_chain":"New Chain(Polkadot)",
+			"success_title":"Swap successful",
+			"sucess_des":"Your BITG balance has been processed on the new chain and will appear shortly.",
+			"return":"Return Home"
+		}
 	}
 }
