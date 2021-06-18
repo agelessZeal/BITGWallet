@@ -75,6 +75,8 @@ import ActionScreen from '../../BITG/ActionScreen'
 import ServicesScreen from '../../BITG/ServicesScreen'
 import ServiceScreen from '../../BITG/ServiceScreen'
 
+import TransactionHistory from '../../BITG/Transactions'
+
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -295,6 +297,9 @@ export default createStackNavigator(
 		TransactionsHome:{
 			screen:createStackNavigator(
 				{
+					TransactionHistory: {
+						screen:TransactionHistory
+					},
 					TransactionsView: {
 						screen: ActivityView
 					}

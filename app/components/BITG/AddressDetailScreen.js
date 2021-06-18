@@ -151,6 +151,8 @@ function AddressDetailScreen(props) {
 	}
 
 	const DetailAddressItem = ({ itemData }) => {
+
+		console.log('addressbook:',itemData)
 		return (
 			<TouchableRipple style={styles.addressItem}>
 				<View style={{ flex: 1, flexDirection: 'row' }}>

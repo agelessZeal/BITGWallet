@@ -344,12 +344,6 @@ function AddressBookScreen(props) {
 
 	return (
 		<View style={styles.container}>
-			{/* <ToolBar
-                title={Strings.ADDRESS_BOOK}
-                iconName={Strings.ICON_MENU}
-                onMenuPress={onMenuPress}
-                hideRightButtons={false}
-                onAddPress={onAddPress} /> */}
 			{loading ? (
 				<ActivityIndicator style={{ alignSelf: 'center' }} size="large" color={colors.tintColor} />
 			) : addressBook.length === 0 ? (
