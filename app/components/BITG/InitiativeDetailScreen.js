@@ -172,12 +172,14 @@ const actions = [
         title: "Action 1",
         image: require("../../images/activity_header.png"),
         header :require("../../images/earth-day-initiative-inverse.png"),
+        description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     },
     {
         key:2,
         title: "Action 2",
         image: require("../../images/activity_header.png"),
         header :require("../../images/earth-day-initiative-inverse.png"),
+        description:"Stands a beacon of change in the automotive world—and introduced iconic electric vehicles over the past decade. BitGreen supports this innovation and pledges: \n\nWhen you recharge your ride, We recharge the planet'\n\nFor every 2 full charges, we donate BITG, The Nature Conservancy plants a tree."
     }
 ];
 
@@ -215,7 +217,7 @@ function InitiativeDetailScreen(props) {
             if (type == 0) { // START FOLDING
                 
             } else if (type == 1) { // CONNECT SERVICE
-                // navigation.navigate(Routes.SERVICES_SCREEN.TAG)
+                navigation.navigate('ServicesScreen')
             }
         }}>
             <Text style={styles.actionButtonText}>{text}</Text>

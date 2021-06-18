@@ -72,6 +72,7 @@ import AddressDetailScreen from '../../BITG/AddressDetailScreen'
 import AddressNewScreen from '../../BITG/AddressNewScreen'
 
 import ActionScreen from '../../BITG/ActionScreen'
+import ServicesScreen from '../../BITG/ServicesScreen'
 
 
 const tabImages = {
@@ -196,8 +197,11 @@ export default createStackNavigator(
 							InitiativeDetail:{
 								screen:InitiativeDetailScreen
 							},
-							ActionScreen :{
+							ActionScreen : {
 								screen:ActionScreen
+							},
+							ServicesScreen: {
+								screen: ServicesScreen
 							}
 						},
 						{

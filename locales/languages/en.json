@@ -1625,6 +1625,8 @@
 			"name":"Name(optional, if no network identifier)",
 			"address":"BIGT Addresss"
 
-		}
+		},
+		"services":"Services",
+		"services_des":"Connect these services"
 	}
 }

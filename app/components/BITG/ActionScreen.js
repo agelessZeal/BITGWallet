@@ -129,7 +129,7 @@ function ActionScreen(props) {
                         marginBottom: 60
                     }]
                 }>
-                    <Text style={styles.bodyText}>{data.text}</Text>
+                    <Text style={styles.bodyText}>{action && action?.description}</Text>
                     {actionButton("CONNECT SERVICE")}
                 </View>
             </ScrollView>
