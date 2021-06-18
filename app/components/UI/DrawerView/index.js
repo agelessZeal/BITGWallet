@@ -755,11 +755,11 @@ class DrawerView extends PureComponent {
 				}
 			],
 			[
-				{
-					name: strings('drawer.share_address'),
-					icon: this.getMaterialIcon('share-variant'),
-					action: this.onShare
-				},
+				// {
+				// 	name: strings('drawer.share_address'),
+				// 	icon: this.getMaterialIcon('share-variant'),
+				// 	action: this.onShare
+				// },
 				{
 					name: strings('drawer.address_book'),
 					icon: this.getIcon('address-book-o'),
