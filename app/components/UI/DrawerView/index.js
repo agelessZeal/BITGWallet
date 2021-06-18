@@ -507,6 +507,12 @@ class DrawerView extends PureComponent {
 		this.trackEvent(ANALYTICS_EVENTS_V2.WALLET_OPENED);
 	};
 
+	showSwap = () => {
+		this.props.navigation.navigate('ChainSwapTabHome');
+		this.hideDrawer();
+		this.trackEvent(ANALYTICS_EVENTS_V2.WALLET_OPENED);
+	};
+
 	goToTransactionHistory = () => {
 		this.props.navigation.navigate('TransactionsHome');
 		this.hideDrawer();
@@ -731,6 +737,13 @@ class DrawerView extends PureComponent {
 					icon: this.getImageIcon('wallet'),
 					selectedIcon: this.getSelectedImageIcon('wallet'),
 					action: this.showWallet,
+					routeNames: ['WalletView', 'Asset', 'AddAsset', 'Collectible', 'CollectibleView']
+				},
+				{
+					name: strings('swaps.swap'),
+					icon: this.getIcon('exchange'),
+					selectedIcon: this.getSelectedIcon('exchange'),
+					action: this.showSwap,
 					routeNames: ['WalletView', 'Asset', 'AddAsset', 'Collectible', 'CollectibleView']
 				},
 				{

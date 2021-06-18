@@ -77,6 +77,8 @@ import ServiceScreen from '../../BITG/ServiceScreen'
 
 import TransactionHistory from '../../BITG/Transactions'
 
+import ChainSwapScreen from '../../BITG/ChainSwapScreen'
+
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -279,6 +281,15 @@ export default createStackNavigator(
 					AddressNewScreen:{
 						screen: AddressNewScreen
 					}
+				},
+			),
+		},
+		ChainSwapTabHome:{
+			screen:createStackNavigator(
+				{
+					ChainSwap: {
+						screen: ChainSwapScreen,
+					},
 				},
 			),
 		},
