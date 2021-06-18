@@ -1627,6 +1627,9 @@
 
 		},
 		"services":"Services",
-		"services_des":"Connect these services"
+		"services_des":"Connect these services",
+		"authorize":"Authorize",
+		"connect_service":"Connect this service",
+		"token_hint":"Enter your authorization token"
 	}
 }

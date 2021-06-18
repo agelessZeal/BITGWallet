@@ -122,9 +122,9 @@ function ServicesScreen(props) {
     }
 
     const itemClicked = (service) => {
-        // navigation.navigate(Routes.SERVICE_SCREEN.TAG, {
-        //     service: service
-        // })
+        navigation.navigate('ServiceScreen', {
+            service
+        })
     }
 
     return (
