@@ -71,6 +71,8 @@ import AddressBookScreen from '../../BITG/AddressBookScreen'
 import AddressDetailScreen from '../../BITG/AddressDetailScreen'
 import AddressNewScreen from '../../BITG/AddressNewScreen'
 
+import ActionScreen from '../../BITG/ActionScreen'
+
 
 const tabImages = {
 	wallet: require('../../../images/ic_bitg.png'),
@@ -193,6 +195,9 @@ export default createStackNavigator(
 							},
 							InitiativeDetail:{
 								screen:InitiativeDetailScreen
+							},
+							ActionScreen :{
+								screen:ActionScreen
 							}
 						},
 						{

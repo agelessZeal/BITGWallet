@@ -169,13 +169,15 @@ const data = {
 const actions = [
     {
         key: 1,
-        title: "Example Action",
+        title: "Action 1",
         image: require("../../images/activity_header.png"),
+        header :require("../../images/earth-day-initiative-inverse.png"),
     },
     {
         key:2,
-        title: "Example Action",
+        title: "Action 2",
         image: require("../../images/activity_header.png"),
+        header :require("../../images/earth-day-initiative-inverse.png"),
     }
 ];
 
@@ -193,11 +195,8 @@ function InitiativeDetailScreen(props) {
     }
 
     useEffect(() => {
-        // const { item } = route.params;
 
         const item = navigation.state.params.item;
-
-        console.log('item:',item)
 
         if (item) {
             setInitiative(item);
@@ -208,9 +207,7 @@ function InitiativeDetailScreen(props) {
 
 
     const actionClicked = (action) => {
-        // navigation.navigate(Routes.ACTION_SCREEN.TAG, {
-        //     action: action
-        // })
+        navigation.navigate('ActionScreen',{action})
     }
 
     const actionButton = (text, type) => (
@@ -268,7 +265,6 @@ function InitiativeDetailScreen(props) {
                     actions.map((action, index) => (
                         <TouchableRipple style={styles.actionItem} onPress={() => actionClicked(action)} key={index}>
                             <ImageBackground source={action.image} imageStyle={{borderRadius:5}} style={styles.actionImage} >
-                                {/* <Image source={action.image} style={styles.actionImage}/> */}
                                 <Text style={styles.actionText}>{action.title}</Text>
                             </ImageBackground>
                         </TouchableRipple>
