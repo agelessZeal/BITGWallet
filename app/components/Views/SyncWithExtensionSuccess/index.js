@@ -177,9 +177,9 @@ class SyncWithExtensionSuccess extends PureComponent {
 						{strings('sync_with_extension_success.sync_complete_1')}{' '}
 						<Text style={styles.bold}>{strings('sync_with_extension_success.sync_complete_2')}</Text>
 					</Text>
-					<TouchableOpacity onPress={this.learnMore} hitSlop={styles.hitSlopLearnMore}>
+					{/* <TouchableOpacity onPress={this.learnMore} hitSlop={styles.hitSlopLearnMore}>
 						<Text style={styles.learnMoreText}>{strings('sync_with_extension_success.learn_more')}</Text>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 					<View style={styles.passwordTipContainer}>
 						<Text style={styles.passwordTipText}>
 							{strings('sync_with_extension_success.password_tip')}

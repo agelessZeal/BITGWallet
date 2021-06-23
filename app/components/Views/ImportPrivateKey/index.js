@@ -212,11 +212,11 @@ export default class ImportPrivateKey extends PureComponent {
 							<View style={styles.dataRow}>
 								<Text style={styles.label}>{strings('import_private_key.description_one')}</Text>
 							</View>
-							<View style={styles.dataRow}>
+							{/* <View style={styles.dataRow}>
 								<Text style={styles.label} onPress={this.learnMore}>
 									{strings('import_private_key.learn_more_here')}
 								</Text>
-							</View>
+							</View> */}
 						</View>
 						<View style={styles.bottom}>
 							<View style={styles.subtitleText}>

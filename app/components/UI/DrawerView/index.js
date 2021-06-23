@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
 		padding: 17
 	},
 	identiconWrapper: {
+		marginTop:50,
 		marginBottom: 12,
 		width: 56,
 		height: 56

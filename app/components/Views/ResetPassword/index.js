@@ -378,7 +378,7 @@ class ResetPassword extends PureComponent {
 
 			this.setState({ loading: false });
 			InteractionManager.runAfterInteractions(() => {
-				this.props.navigation.navigate('SecuritySettings');
+				// this.props.navigation.navigate('SecuritySettings');
 				NotificationManager.showSimpleNotification({
 					status: 'success',
 					duration: 5000,
@@ -569,10 +569,10 @@ class ResetPassword extends PureComponent {
 	};
 
 	learnMore = () => {
-		this.props.navigation.push('Webview', {
-			url: 'https://metamask.zendesk.com/hc/en-us/articles/360039616872-How-can-I-reset-my-password-',
-			title: 'metamask.zendesk.com'
-		});
+		// this.props.navigation.push('Webview', {
+		// 	url: 'https://metamask.zendesk.com/hc/en-us/articles/360039616872-How-can-I-reset-my-password-',
+		// 	title: 'metamask.zendesk.com'
+		// });
 	};
 
 	renderLoader = () => (

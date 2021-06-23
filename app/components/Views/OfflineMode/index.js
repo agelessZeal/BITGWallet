@@ -58,12 +58,12 @@ const OfflineMode = ({ navigation, infuraBlocked }) => {
 	};
 
 	const learnMore = () => {
-		navigation.navigate('SimpleWebview', { url: AppConstants.URLS.CONNECTIVITY_ISSUES });
+		// navigation.navigate('SimpleWebview', { url: AppConstants.URLS.CONNECTIVITY_ISSUES });
 	};
 
 	const action = () => {
 		if (infuraBlocked) {
-			learnMore();
+			// learnMore();
 		} else {
 			tryAgain();
 		}

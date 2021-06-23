@@ -72,7 +72,7 @@ function Onboarding({ setHasOnboarded }) {
 		<View style={styles.screen}>
 			<View style={styles.content}>
 				<View style={styles.images}>
-					<Image source={onboardingDeviceImage} />
+					{/* <Image source={onboardingDeviceImage} /> */}
 					<Text centered primary style={styles.title}>
 						{`${strings('swaps.onboarding.get_the')} `}
 						<Text reset bold>
@@ -93,13 +93,13 @@ function Onboarding({ setHasOnboarded }) {
 					</Text>
 					<Image source={swapsAggregators} style={styles.aggregatorsImage} />
 				</View>
-				<View style={styles.learnMore}>
+				{/* <View style={styles.learnMore}>
 					<TouchableOpacity style={styles.learnMoreLink} onPress={handleReviewAuditsPress}>
 						<Text link centered>
 							{strings('swaps.onboarding.review_audits')}
 						</Text>
 					</TouchableOpacity>
-				</View>
+				</View> */}
 			</View>
 			<View style={styles.actionButtonWrapper}>
 				<StyledButton type="confirm" containerStyle={styles.actionButton} onPress={handleStartSwapping}>
