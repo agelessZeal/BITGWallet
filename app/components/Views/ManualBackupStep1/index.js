@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 	action: {
 		fontSize: 18,
 		marginVertical: 16,
-		color: colors.fontPrimary,
+		color: colors.green,
 		justifyContent: 'center',
 		textAlign: 'center',
 		...fontStyles.bold
@@ -159,7 +159,9 @@ const styles = StyleSheet.create({
 		paddingTop: 0
 	},
 	passwordRequiredContent: {
-		marginBottom: 20
+		marginBottom: 20,
+		justifyContent:'center',
+		alignItems:'center'
 	},
 	content: {
 		alignItems: 'flex-start'
@@ -168,10 +170,10 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		marginTop: 20,
 		marginBottom: 10,
-		color: colors.fontPrimary,
+		color: colors.green,
 		justifyContent: 'center',
-		textAlign: 'left',
-		...fontStyles.normal
+		textAlign: 'center',
+		...fontStyles.normal,
 	},
 	text: {
 		marginBottom: 10,
@@ -194,7 +196,8 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		borderRadius: 5,
 		width: '100%',
-		borderColor: colors.grey000,
+		borderColor: colors.grey050,
+		backgroundColor:colors.grey000,
 		padding: 10,
 		height: 40
 	},

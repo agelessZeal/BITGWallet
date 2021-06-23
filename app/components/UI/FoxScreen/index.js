@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 const bitgImage = require('../../../images/bitg_logo.png'); // eslint-disable-line import/no-commonjs
 
 /**
- * View component that displays the MetaMask fox
+ * View component that displays the BITG fox
  * in the middle of the screen
  */
 export default class FoxScreen extends PureComponent {

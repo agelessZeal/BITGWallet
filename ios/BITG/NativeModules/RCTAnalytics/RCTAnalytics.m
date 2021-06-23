@@ -2,8 +2,8 @@
 //  RCTAnalytics.m
 //  BITG
 //
-//  Created by Alpredo Pan on 02/06/2021.
-//  Copyright © 2021 BITG. All rights reserved.
+//  Created by Bruno Barbieri on 5/31/19.
+//  Copyright © 2019 BITG. All rights reserved.
 //
 
 #import "RCTAnalytics.h"

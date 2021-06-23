@@ -16,7 +16,7 @@ import { colors, fontStyles } from '../../styles/common';
 import { NavigationContext } from 'react-navigation';
 
 import { getBITGWalletNavbarOptions } from '../UI/Navbar';
-import { toFixedFloor} from '../../util/general'
+import { toFixedFloor} from './lib/Helpers'
 
 import {
 	setSwapsHasOnboarded,

@@ -16,8 +16,6 @@ import StyledButton from '../../UI/StyledButton';
 import { getOnboardingNavbarOptions } from '../../UI/Navbar';
 import AsyncStorage from '@react-native-community/async-storage';
 import setOnboardingWizardStep from '../../../actions/wizard';
-// eslint-disable-next-line import/named
-import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import Confetti from '../../UI/Confetti';
 import { ONBOARDING_WIZARD, METRICS_OPT_IN } from '../../../constants/storage';
@@ -63,16 +61,16 @@ const styles = StyleSheet.create({
 	},
 	passwordTipContainer: {
 		padding: 16,
-		backgroundColor: colors.green000,
+		backgroundColor: colors.blue000,
 		borderWidth: 1,
-		borderColor: colors.green200,
+		borderColor: colors.blue200,
 		borderRadius: 8,
 		marginTop: 29
 	},
 	passwordTipText: {
 		fontSize: 12,
 		lineHeight: 17,
-		color: colors.green600
+		color: colors.blue600
 	},
 	learnMoreText: {
 		marginTop: 29,
@@ -140,14 +138,15 @@ class SyncWithExtensionSuccess extends PureComponent {
 		// Get onboarding wizard state
 		const onboardingWizard = await AsyncStorage.getItem(ONBOARDING_WIZARD);
 		// Check if user passed through metrics opt-in screen
-		const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
+		// const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
+		const metricsOptIn =  true;
 		if (!metricsOptIn) {
 			this.props.navigation.navigate('OptinMetrics');
 		} else if (onboardingWizard) {
 			this.props.navigation.navigate('HomeNav');
 		} else {
 			this.props.setOnboardingWizardStep(1);
-			this.props.navigation.navigate('HomeNav', {}, NavigationActions.navigate({ routeName: 'WalletView' }));
+			this.props.navigation.navigate('WalletView');
 		}
 	};
 

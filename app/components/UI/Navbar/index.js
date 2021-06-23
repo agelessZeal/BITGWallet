@@ -19,7 +19,6 @@ import { importAccountFromPrivateKey } from '../../../util/address';
 import Device from '../../../util/Device';
 import { isGatewayUrl } from '../../../lib/ens-ipfs/resolver';
 import { getHost } from '../../../util/browser';
-import { func } from 'prop-types';
 
 const { HOMEPAGE_URL } = AppConstants;
 
@@ -488,7 +487,8 @@ export function getBrowserViewNavbarOptions(navigation) {
 			<View style={styles.browserRightButton}>
 				<AccountRightButton />
 			</View>
-		)
+		),
+		headerStyle:{backgroundColor:colors.green}
 	};
 }
 

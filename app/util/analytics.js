@@ -78,7 +78,7 @@ const NAMES = {
 	SETTINGS_GENERAL: 'General',
 	SETTINGS_ADVANCED: 'Advanced',
 	SETTINGS_SECURITY_AND_PRIVACY: 'Security & Privacy',
-	SETTINGS_ABOUT: 'About MetaMask',
+	SETTINGS_ABOUT: 'About BITG',
 	SETTINGS_EXPERIMENTAL: 'Experimental',
 	// Receive Options
 	RECEIVE_OPTIONS_SHARE_ADDRESS: 'Share address',

@@ -14,7 +14,7 @@ import {
 const privates = new WeakMap();
 const encryptor = new Encryptor();
 const defaultOptions = {
-	service: 'com.bitg',
+	service: 'com.metamask',
 	authenticationPromptTitle: strings('authentication.auth_prompt_title'),
 	authenticationPrompt: { title: strings('authentication.auth_prompt_desc') },
 	authenticationPromptDesc: strings('authentication.auth_prompt_desc'),

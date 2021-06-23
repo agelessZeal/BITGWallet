@@ -1,6 +1,4 @@
-import { Alert } from 'react-native';
-
-export const tlc = str => String(str).toLowerCase();
+export const tlc = str => str?.toLowerCase?.();
 
 /**
  * Fetch that fails after timeout
@@ -37,28 +35,7 @@ export function findRouteNameFromNavigatorState({ routes }) {
 }
 export const capitalize = str => (str && str.charAt(0).toUpperCase() + str.slice(1)) || false;
 
-export const toLowerCaseCompare = (a, b) => tlc(a) === tlc(b);
-
-export const toFixedFloor = (value, decimals = 3) => {
-	let multiplier = Math.pow(10, decimals);
-	let outputString = (Math.floor(value * multiplier) / multiplier).toString();
-	if (value === parseInt(value) && decimals > 0)
-	  outputString += '.';
-	let zeroPadding = decimals === 0 ? 0 : (decimals + 2 - outputString.length)
-	for (let i = 0; i < zeroPadding; i++)
-	  outputString += '0';
-	return outputString;
-  }
-export const makeAlert = (message) => {
-	Alert.alert(
-		"BITG",
-		message,
-		[
-		{
-			text: "OK",
-		}
-		]
-	)
-}
-
-export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+export const toLowerCaseCompare = (a, b) => {
+	if (!a && !b) return false;
+	return tlc(a) === tlc(b);
+};

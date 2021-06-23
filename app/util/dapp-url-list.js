@@ -133,7 +133,7 @@ export default [
 	},
 	{
 		url: 'https://metamask.io/',
-		name: 'MetaMask'
+		name: 'BITG'
 	},
 	{
 		url: 'https://faucet.metamask.io/',

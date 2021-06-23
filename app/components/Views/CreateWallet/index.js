@@ -20,8 +20,7 @@ import { passwordUnset, seedphraseNotBackedUp } from '../../../actions/user';
 import { setLockTime } from '../../../actions/settings';
 import { connect } from 'react-redux';
 import setOnboardingWizardStep from '../../../actions/wizard';
-// eslint-disable-next-line import/named
-import { NavigationActions, withNavigationFocus } from 'react-navigation';
+import { withNavigationFocus } from 'react-navigation';
 import OnboardingScreenWithBg from '../../UI/OnboardingScreenWithBg';
 import Device from '../../../util/Device';
 import {
@@ -133,12 +132,15 @@ class CreateWallet extends PureComponent {
 			// Get onboarding wizard state
 			const onboardingWizard = await AsyncStorage.getItem(ONBOARDING_WIZARD);
 			// Check if user passed through metrics opt-in screen
-			const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
+			// const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
 			// Making sure we reset the flag while going to
 			// the first time flow
 			this.props.passwordUnset();
 			this.props.setLockTime(-1);
 			this.props.seedphraseNotBackedUp();
+
+			const metricsOptIn =  true;
+
 			setTimeout(() => {
 				if (!metricsOptIn) {
 					this.props.navigation.navigate('OptinMetrics');
@@ -146,11 +148,7 @@ class CreateWallet extends PureComponent {
 					this.props.navigation.navigate('HomeNav');
 				} else {
 					this.props.setOnboardingWizardStep(1);
-					this.props.navigation.navigate(
-						'HomeNav',
-						{},
-						NavigationActions.navigate({ routeName: 'WalletView' })
-					);
+					this.props.navigation.navigate('WalletView');
 				}
 			}, 1000);
 		});

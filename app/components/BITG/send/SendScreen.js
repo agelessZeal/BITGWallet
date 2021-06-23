@@ -30,7 +30,7 @@ import SendingToScreen from './SendingToScreen';
 import SendingProgressScreen from './SendingProgressScreen';
 import PaymentSendScreen from './PaymentSendScreen';
 import Device from '../../../util/Device';
-import {makeAlert,sleep} from '../../../util/general'
+import {makeAlert,sleep} from '../lib/Helpers'
 // import WalletManager from '../../wallet';
 import {createApolloClient} from '../api/createApolloClient';
 // import {showAlert, SATOSHI_CONST, sleep} from '../../lib/Helpers';

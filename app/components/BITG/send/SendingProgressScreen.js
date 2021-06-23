@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, Image, ScrollView, Platform, ActivityIndicator 
 
 import { strings } from '../../../../locales/i18n';
 import { colors, fontStyles } from '../../../styles/common';
-import { toFixedFloor} from '../../../util/general'
+import { toFixedFloor} from '../lib/Helpers'
 
 import { NavigationContext } from 'react-navigation';
 import PropTypes from 'prop-types';

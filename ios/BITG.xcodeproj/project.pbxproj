@@ -35,13 +35,13 @@
 		813214A2220E40C7BBB5ED9E /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A783D1CD7D27456796FE2E1B /* Roboto-Bold.ttf */; };
 		887E75FB64A54509A08D6C50 /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E020F42F788744B3BCE17F05 /* Roboto-LightItalic.ttf */; };
 		8DEB44A7E7EF48E1B3298910 /* EuclidCircularB-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE0434C5FB7C4C6F9FEBDCE2 /* EuclidCircularB-Medium.otf */; };
-		AC4CAA505AD43863051231EE /* libPods-BITG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4FB080C91B4BE6D5D7CF290 /* libPods-BITG.a */; };
+		BDC0B23322BFF5D06DA39C68 /* libPods-BITG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8BB0B5B1F0A28F40BCD95F6 /* libPods-BITG.a */; };
 		BF39E5BAE0F34F9091FF6AC0 /* EuclidCircularB-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A8DE9C5BC0714D648276E123 /* EuclidCircularB-Semibold.otf */; };
-		C9F820BE26670EC700BB201F /* RCTAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = C9F820A926670EC700BB201F /* RCTAnalytics.m */; };
-		C9F820BF26670EC700BB201F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9F820AA26670EC700BB201F /* LaunchScreen.xib */; };
-		C9F820C026670EC700BB201F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C9F820AC26670EC700BB201F /* main.m */; };
-		C9F820C126670EC700BB201F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9F820AD26670EC700BB201F /* Images.xcassets */; };
-		C9F820C226670EC700BB201F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C9F820AE26670EC700BB201F /* AppDelegate.m */; };
+		C9A105C1268191C40061BCD3 /* RCTAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A105B9268191C40061BCD3 /* RCTAnalytics.m */; };
+		C9A105C2268191C40061BCD3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9A105BA268191C40061BCD3 /* LaunchScreen.xib */; };
+		C9A105C3268191C40061BCD3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A105BC268191C40061BCD3 /* main.m */; };
+		C9A105C4268191C40061BCD3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9A105BD268191C40061BCD3 /* Images.xcassets */; };
+		C9A105C5268191C40061BCD3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A105BE268191C40061BCD3 /* AppDelegate.m */; };
 		CD13D926E1E84D9ABFE672C0 /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3E2492C67CF345CABD7B8601 /* Roboto-BlackItalic.ttf */; };
 		D171C39A8BD44DBEB6B68480 /* EuclidCircularB-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 42CBA652072F4BE2A8B815C1 /* EuclidCircularB-MediumItalic.otf */; };
 		DC6A024F56DD43E1A83B47B1 /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5FF0FF1DFB74B3C8BB99E09 /* Roboto-MediumItalic.ttf */; };
@@ -142,14 +142,14 @@
 			remoteGlobalIDString = 32D980DD1BE9F11C00FA27E5;
 			remoteInfo = RCTAesForked;
 		};
-		C9F820B326670EC700BB201F /* PBXContainerItemProxy */ = {
+		C9A1059626818F590061BCD3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 153F84C42319B8DA00C19B63 /* BranchSDK.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 5F19B4E124B4F44B00D7D3CB;
 			remoteInfo = "Branch-static";
 		};
-		C9F820B526670EC700BB201F /* PBXContainerItemProxy */ = {
+		C9A1059826818F590061BCD3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 153F84C42319B8DA00C19B63 /* BranchSDK.xcodeproj */;
 			proxyType = 2;
@@ -175,6 +175,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0FE3C8963CC811EEF74D9DFA /* Pods-BITG.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BITG.release.xcconfig"; path = "Target Support Files/Pods-BITG/Pods-BITG.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* BITG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BITG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13EE4910D3BD408A8FCCA5D7 /* EuclidCircularB-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "EuclidCircularB-BoldItalic.otf"; path = "../app/fonts/EuclidCircularB-BoldItalic.otf"; sourceTree = "<group>"; };
 		153C1A742217BCDC0088EFE0 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -189,13 +190,12 @@
 		1F06D56A2D2F41FB9345D16F /* Lottie.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = Lottie.framework; path = System/Library/Frameworks/Lottie.framework; sourceTree = SDKROOT; };
 		278065D027394AD9B2906E38 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A788B9F99DEFCC1C6D8C8EB /* Pods-BITG.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BITG.release.xcconfig"; path = "Target Support Files/Pods-BITG/Pods-BITG.release.xcconfig"; sourceTree = "<group>"; };
+		2E954A1E64D8974A825A6CE3 /* Pods-BITG.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BITG.debug.xcconfig"; path = "Target Support Files/Pods-BITG/Pods-BITG.debug.xcconfig"; sourceTree = "<group>"; };
 		3E2492C67CF345CABD7B8601 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BlackItalic.ttf"; path = "../app/fonts/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
 		42C239E9FAA64BD9A34B8D8A /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		42C6DDE3B80F47AFA9C9D4F5 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		42CBA652072F4BE2A8B815C1 /* EuclidCircularB-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "EuclidCircularB-MediumItalic.otf"; path = "../app/fonts/EuclidCircularB-MediumItalic.otf"; sourceTree = "<group>"; };
 		4379F36F969347758D1A9F96 /* Lottie.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = Lottie.xcodeproj; path = "../node_modules/lottie-ios/Lottie.xcodeproj"; sourceTree = "<group>"; };
-		43CCEB908FD9BD5C36D2C326 /* Pods-BITG.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BITG.debug.xcconfig"; path = "Target Support Files/Pods-BITG/Pods-BITG.debug.xcconfig"; sourceTree = "<group>"; };
 		4444176409EB42CB93AB03C5 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		459C4774EB724F2D8E12F088 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../app/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		4A2D27104599412CA00C35EF /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -218,25 +218,25 @@
 		BB8BA2D3C0354D6090B56A8A /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../app/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		BF485CDA047B4D52852B87F5 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		C752564A28B44392AEE16BD5 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../app/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
-		C9F820A326670EC700BB201F /* BITGDebug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BITGDebug.entitlements; sourceTree = "<group>"; };
-		C9F820A426670EC700BB201F /* BITG.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BITG.entitlements; sourceTree = "<group>"; };
-		C9F820A526670EC700BB201F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		C9F820A826670EC700BB201F /* RCTAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTAnalytics.h; sourceTree = "<group>"; };
-		C9F820A926670EC700BB201F /* RCTAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAnalytics.m; sourceTree = "<group>"; };
-		C9F820AB26670EC700BB201F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		C9F820AC26670EC700BB201F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		C9F820AD26670EC700BB201F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		C9F820AE26670EC700BB201F /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		C9F820AF26670EC700BB201F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C9F820C926670F3F00BB201F /* BITG-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BITG-Bridging-Header.h"; sourceTree = "<group>"; };
+		C9A105B4268191C40061BCD3 /* MetaMaskDebug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MetaMaskDebug.entitlements; sourceTree = "<group>"; };
+		C9A105B5268191C40061BCD3 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C9A105B8268191C40061BCD3 /* RCTAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTAnalytics.h; sourceTree = "<group>"; };
+		C9A105B9268191C40061BCD3 /* RCTAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAnalytics.m; sourceTree = "<group>"; };
+		C9A105BB268191C40061BCD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		C9A105BC268191C40061BCD3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C9A105BD268191C40061BCD3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C9A105BE268191C40061BCD3 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C9A105BF268191C40061BCD3 /* BITG.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BITG.entitlements; sourceTree = "<group>"; };
+		C9A105C0268191C40061BCD3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C9A105CC268191DF0061BCD3 /* BITG-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BITG-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		C9FD3FB1258A41A5A0546C83 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../app/fonts/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
 		CE0434C5FB7C4C6F9FEBDCE2 /* EuclidCircularB-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "EuclidCircularB-Medium.otf"; path = "../app/fonts/EuclidCircularB-Medium.otf"; sourceTree = "<group>"; };
 		CF552F79C77A4184A690513A /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-ThinItalic.ttf"; path = "../app/fonts/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
 		D0CBAE789660472DB719C765 /* libLottie.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libLottie.a; sourceTree = "<group>"; };
-		D4FB080C91B4BE6D5D7CF290 /* libPods-BITG.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BITG.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5FF0FF1DFB74B3C8BB99E09 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-MediumItalic.ttf"; path = "../app/fonts/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
 		D9A37B5BF2914CF1B49EEF80 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Thin.ttf"; path = "../app/fonts/Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		E020F42F788744B3BCE17F05 /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-LightItalic.ttf"; path = "../app/fonts/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
+		E8BB0B5B1F0A28F40BCD95F6 /* libPods-BITG.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BITG.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9629905BA1940ADA4189921 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		EBC2B6371CD846D28B9FAADF /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		EF1C01B7F08047F9B8ADCFBA /* config.json */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = config.json; path = ../app/fonts/config.json; sourceTree = "<group>"; };
@@ -256,7 +256,7 @@
 				15ACC9FC22655C3A0063978B /* Lottie.framework in Frameworks */,
 				15F7795E22A1B7B500B1DF8C /* Mixpanel.framework in Frameworks */,
 				153F84CA2319B8FD00C19B63 /* Branch.framework in Frameworks */,
-				AC4CAA505AD43863051231EE /* libPods-BITG.a in Frameworks */,
+				BDC0B23322BFF5D06DA39C68 /* libPods-BITG.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,8 +267,8 @@
 			isa = PBXGroup;
 			children = (
 				153F84C92319B8DB00C19B63 /* Branch.framework */,
-				C9F820B426670EC700BB201F /* Branch.framework */,
-				C9F820B626670EC700BB201F /* Branch.framework */,
+				C9A1059926818F590061BCD3 /* Branch.framework */,
+				C9A1059726818F590061BCD3 /* Branch.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -313,7 +313,7 @@
 			children = (
 				153C1A742217BCDC0088EFE0 /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
-				D4FB080C91B4BE6D5D7CF290 /* libPods-BITG.a */,
+				E8BB0B5B1F0A28F40BCD95F6 /* libPods-BITG.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -386,17 +386,17 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				C9F820C926670F3F00BB201F /* BITG-Bridging-Header.h */,
 				654378AF243E2ADC00571B9C /* File.swift */,
 				15FDD86021B76461006B7C35 /* release.xcconfig */,
 				15FDD82721B7642B006B7C35 /* debug.xcconfig */,
-				C9F820A226670EC700BB201F /* BITG */,
+				C9A105B3268191C40061BCD3 /* BITG */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				4A27949D046C4516B9653BBB /* Resources */,
 				15A2E5EF2100077400A1F331 /* Recovered References */,
 				AA342D524556DBBE26F5997C /* Pods */,
+				C9A105CC268191DF0061BCD3 /* BITG-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -414,41 +414,41 @@
 		AA342D524556DBBE26F5997C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				43CCEB908FD9BD5C36D2C326 /* Pods-BITG.debug.xcconfig */,
-				3A788B9F99DEFCC1C6D8C8EB /* Pods-BITG.release.xcconfig */,
+				2E954A1E64D8974A825A6CE3 /* Pods-BITG.debug.xcconfig */,
+				0FE3C8963CC811EEF74D9DFA /* Pods-BITG.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		C9F820A226670EC700BB201F /* BITG */ = {
+		C9A105B3268191C40061BCD3 /* BITG */ = {
 			isa = PBXGroup;
 			children = (
-				C9F820A326670EC700BB201F /* BITGDebug.entitlements */,
-				C9F820A426670EC700BB201F /* BITG.entitlements */,
-				C9F820A526670EC700BB201F /* AppDelegate.h */,
-				C9F820A626670EC700BB201F /* NativeModules */,
-				C9F820AA26670EC700BB201F /* LaunchScreen.xib */,
-				C9F820AC26670EC700BB201F /* main.m */,
-				C9F820AD26670EC700BB201F /* Images.xcassets */,
-				C9F820AE26670EC700BB201F /* AppDelegate.m */,
-				C9F820AF26670EC700BB201F /* Info.plist */,
+				C9A105B4268191C40061BCD3 /* MetaMaskDebug.entitlements */,
+				C9A105B5268191C40061BCD3 /* AppDelegate.h */,
+				C9A105B6268191C40061BCD3 /* NativeModules */,
+				C9A105BA268191C40061BCD3 /* LaunchScreen.xib */,
+				C9A105BC268191C40061BCD3 /* main.m */,
+				C9A105BD268191C40061BCD3 /* Images.xcassets */,
+				C9A105BE268191C40061BCD3 /* AppDelegate.m */,
+				C9A105BF268191C40061BCD3 /* BITG.entitlements */,
+				C9A105C0268191C40061BCD3 /* Info.plist */,
 			);
 			path = BITG;
 			sourceTree = "<group>";
 		};
-		C9F820A626670EC700BB201F /* NativeModules */ = {
+		C9A105B6268191C40061BCD3 /* NativeModules */ = {
 			isa = PBXGroup;
 			children = (
-				C9F820A726670EC700BB201F /* RCTAnalytics */,
+				C9A105B7268191C40061BCD3 /* RCTAnalytics */,
 			);
 			path = NativeModules;
 			sourceTree = "<group>";
 		};
-		C9F820A726670EC700BB201F /* RCTAnalytics */ = {
+		C9A105B7268191C40061BCD3 /* RCTAnalytics */ = {
 			isa = PBXGroup;
 			children = (
-				C9F820A826670EC700BB201F /* RCTAnalytics.h */,
-				C9F820A926670EC700BB201F /* RCTAnalytics.m */,
+				C9A105B8268191C40061BCD3 /* RCTAnalytics.h */,
+				C9A105B9268191C40061BCD3 /* RCTAnalytics.m */,
 			);
 			path = RCTAnalytics;
 			sourceTree = "<group>";
@@ -460,15 +460,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BITG" */;
 			buildPhases = (
-				236605427B03DEF79EDE273A /* [CP] Check Pods Manifest.lock */,
-				65E00B0A247EA25400E5AC88 /* Start Packager */,
+				643426F4E4AACA40644771BC /* [CP] Check Pods Manifest.lock */,
 				15FDD86321B76696006B7C35 /* Override xcconfig files */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				15ACCA0022655C3A0063978B /* Embed Frameworks */,
-				9428A1D73EA0EFC6A11E2033 /* [CP] Copy Pods Resources */,
+				D657E0C3149F4CAC015366C5 /* [CP] Embed Pods Frameworks */,
+				CFDDAC7AD9A76A5DDFB772A9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -614,18 +614,18 @@
 			remoteRef = 650F2B9B24DC5FEC00C3B9C4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		C9F820B426670EC700BB201F /* Branch.framework */ = {
+		C9A1059726818F590061BCD3 /* Branch.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Branch.framework;
-			remoteRef = C9F820B326670EC700BB201F /* PBXContainerItemProxy */;
+			remoteRef = C9A1059626818F590061BCD3 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		C9F820B626670EC700BB201F /* Branch.framework */ = {
+		C9A1059926818F590061BCD3 /* Branch.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Branch.framework;
-			remoteRef = C9F820B526670EC700BB201F /* PBXContainerItemProxy */;
+			remoteRef = C9A1059826818F590061BCD3 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -644,14 +644,15 @@
 				2DB27BE39B164356A98A0FB1 /* Roboto-Italic.ttf in Resources */,
 				4CEFC9E34A8D4288BFE2F85A /* Roboto-Light.ttf in Resources */,
 				887E75FB64A54509A08D6C50 /* Roboto-LightItalic.ttf in Resources */,
+				C9A105C4268191C40061BCD3 /* Images.xcassets in Resources */,
 				15AD28A921B7CFD9005DEB23 /* release.xcconfig in Resources */,
 				EF65C42EA15B4774B1947A12 /* Roboto-Medium.ttf in Resources */,
 				DC6A024F56DD43E1A83B47B1 /* Roboto-MediumItalic.ttf in Resources */,
-				C9F820C126670EC700BB201F /* Images.xcassets in Resources */,
 				34CEE49BC79D411687B42FA9 /* Roboto-Regular.ttf in Resources */,
 				7E08FB90F3754D47994208B4 /* Roboto-Thin.ttf in Resources */,
 				7C0226ABD9694AEDBAF3016F /* Roboto-ThinItalic.ttf in Resources */,
 				2A27FC9EEF1F4FD18E658544 /* config.json in Resources */,
+				C9A105C2268191C40061BCD3 /* LaunchScreen.xib in Resources */,
 				FF0F3B13A5354C41913F766D /* EuclidCircularB-Bold.otf in Resources */,
 				E34DE917F6FC4438A6E88402 /* EuclidCircularB-BoldItalic.otf in Resources */,
 				07CBADD9D4B441008304F8D3 /* EuclidCircularB-Light.otf in Resources */,
@@ -659,7 +660,6 @@
 				8DEB44A7E7EF48E1B3298910 /* EuclidCircularB-Medium.otf in Resources */,
 				D171C39A8BD44DBEB6B68480 /* EuclidCircularB-MediumItalic.otf in Resources */,
 				39D0D096A0F340ABAC1A8565 /* EuclidCircularB-Regular.otf in Resources */,
-				C9F820BF26670EC700BB201F /* LaunchScreen.xib in Resources */,
 				2370F9A340CF4ADFBCFB0543 /* EuclidCircularB-RegularItalic.otf in Resources */,
 				BF39E5BAE0F34F9091FF6AC0 /* EuclidCircularB-Semibold.otf in Resources */,
 				373454C575C84C24B0BB24D4 /* EuclidCircularB-SemiboldItalic.otf in Resources */,
@@ -701,7 +701,7 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ -e ../.ios.env ]\nthen\n    cp -rf ../.ios.env debug.xcconfig\n    cp -rf ../.ios.env release.xcconfig\nelse\n    cp -rf ../.ios.env.example debug.xcconfig\n    cp -rf ../.ios.env.example release.xcconfig\nfi\n\n";
 		};
-		236605427B03DEF79EDE273A /* [CP] Check Pods Manifest.lock */ = {
+		643426F4E4AACA40644771BC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -723,26 +723,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		65E00B0A247EA25400E5AC88 /* Start Packager */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Start Packager";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		9428A1D73EA0EFC6A11E2033 /* [CP] Copy Pods Resources */ = {
+		CFDDAC7AD9A76A5DDFB772A9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -790,6 +771,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BITG/Pods-BITG-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D657E0C3149F4CAC015366C5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BITG/Pods-BITG-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BITG/Pods-BITG-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -797,10 +796,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9F820BE26670EC700BB201F /* RCTAnalytics.m in Sources */,
+				C9A105C5268191C40061BCD3 /* AppDelegate.m in Sources */,
+				C9A105C1268191C40061BCD3 /* RCTAnalytics.m in Sources */,
+				C9A105C3268191C40061BCD3 /* main.m in Sources */,
 				654378B0243E2ADC00571B9C /* File.swift in Sources */,
-				C9F820C026670EC700BB201F /* main.m in Sources */,
-				C9F820C226670EC700BB201F /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -825,10 +824,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		C9F820AA26670EC700BB201F /* LaunchScreen.xib */ = {
+		C9A105BA268191C40061BCD3 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				C9F820AB26670EC700BB201F /* Base */,
+				C9A105BB268191C40061BCD3 /* Base */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
@@ -838,7 +837,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43CCEB908FD9BD5C36D2C326 /* Pods-BITG.debug.xcconfig */;
+			baseConfigurationReference = 2E954A1E64D8974A825A6CE3 /* Pods-BITG.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_OPTIMIZATION = time;
@@ -854,7 +853,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(SDKROOT)/Developer/Library/Frameworks",
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -891,9 +889,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.bitg;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.bitg.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = BITG;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development io.metamask.MetaMask";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development io.metamask.BITG";
 				SWIFT_OBJC_BRIDGING_HEADER = "BITG-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -903,7 +901,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A788B9F99DEFCC1C6D8C8EB /* Pods-BITG.release.xcconfig */;
+			baseConfigurationReference = 0FE3C8963CC811EEF74D9DFA /* Pods-BITG.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_OPTIMIZATION = time;
@@ -917,7 +915,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(SDKROOT)/Developer/Library/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -955,9 +952,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.bitg;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.bitg.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = BITG;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.metamask.MetaMask";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.metamask.BITG";
 				SWIFT_OBJC_BRIDGING_HEADER = "BITG-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

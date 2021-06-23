@@ -20,7 +20,7 @@ jobs:
   prep-deps:
     <<: *defaults
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
     steps:
       - checkout
       - run:
@@ -33,7 +33,7 @@ jobs:
   prep-node-deps:
     <<: *defaults
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
     steps:
       - checkout
       - restore_cache: *restore-node-cache
@@ -49,7 +49,7 @@ jobs:
   lint:
     <<: *defaults
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
     steps:
       - checkout
       - attach_workspace:
@@ -60,7 +60,7 @@ jobs:
     <<: *defaults
     parallelism: 3
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
     steps:
       - checkout
       - attach_workspace:
@@ -74,7 +74,7 @@ jobs:
   test-deps:
     <<: *defaults
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
     steps:
       - checkout
       - attach_workspace:
@@ -86,7 +86,7 @@ jobs:
   test-e2e-ios:
     <<: *defaults
     macos:
-      xcode: 12.0.0
+      xcode: 12.5.0
     steps:
       - checkout
       - attach_workspace:
@@ -106,7 +106,7 @@ jobs:
   upload-coverage:
     <<: *defaults
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
     steps:
       - checkout
       - attach_workspace:
@@ -117,7 +117,7 @@ jobs:
   all-tests-pass:
     <<: *defaults
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
     steps:
       - run:
           name:  All Tests Passed
@@ -143,7 +143,7 @@ jobs:
           command: |
               jq 'del(.engines)' package.json > new.json && mv new.json package.json
               node -v
-              BITG_ENVIRONMENT='production' yarn build:android:pre-release:bundle
+              METAMASK_ENVIRONMENT='production' yarn build:android:pre-release:bundle
       - store_artifacts:
           path: android/app/build/outputs/bundle/release
           destination: bundle
@@ -158,7 +158,7 @@ jobs:
           command: yarn build:announce
   publish-pre-release-ios:
     macos:
-      xcode: 12.0.0
+      xcode: 12.5.0
     working_directory:  ~/BITG
     environment:
       FL_OUTPUT_DIR: output
@@ -185,50 +185,25 @@ jobs:
           command: |
               jq 'del(.engines)' package.json > new.json && mv new.json package.json
               node -v
-              BITG_ENVIRONMENT='production' yarn build:ios:pre-release
+              METAMASK_ENVIRONMENT='production' yarn build:ios:pre-release
       - store_artifacts:
           path: sourcemaps/ios
           destination: sourcemaps-ios
+      - store_artifacts:  
+          path: ios/output/gym
+          destination: output
 workflows:
   full_test:
     jobs:
-      - test-deps:
-          requires:
-            - prep-node-deps
       - prep-deps:
           filters:
             branches:
               only:
                 - main
                 - develop
-      - prep-node-deps:
-          filters:
-            branches:
-              ignore:
-                - main
-                - develop
-      - lint:
-          requires:
-            - prep-node-deps
-      - test-unit:
-          requires:
-            - prep-node-deps
-    #   - test-e2e-ios:
-    #       requires:
-    #         - prep-node-deps
-    #         - test-unit
-      - all-tests-pass:
-          requires:
-            - test-deps
-            - lint
-            - test-unit
-    #       - test-e2e-ios
-    #   - upload-coverage:
-    #       requires:
-    #         - test-unit
       - publish-pre-release-ios:
           requires:
             - prep-deps
       - publish-pre-release-android:
           requires:
-            - publish-pre-release-ios
+            - prep-deps

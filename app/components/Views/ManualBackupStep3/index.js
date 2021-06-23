@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 	congratulations: {
 		fontSize: Device.isMediumDevice() ? 28 : 32,
 		marginBottom: 12,
-		color: colors.fontPrimary,
+		color: colors.green,
 		justifyContent: 'center',
 		textAlign: 'center',
 		...fontStyles.bold
@@ -109,11 +109,11 @@ class ManualBackupStep3 extends PureComponent {
 		this.setState(state => ({ showHint: !state.showHint }));
 	};
 
-	learnMore = () =>
-		this.props.navigation.navigate('Webview', {
-			url: 'https://support.metamask.io',
-			title: strings('drawer.metamask_support')
-		});
+	// learnMore = () =>
+	// 	this.props.navigation.navigate('Webview', {
+	// 		url: 'https://support.metamask.io',
+	// 		title: strings('drawer.metamask_support')
+	// 	});
 
 	isHintSeedPhrase = hintText => {
 		const words = this.props.navigation.getParam('words');
@@ -140,7 +140,8 @@ class ManualBackupStep3 extends PureComponent {
 	done = async () => {
 		const onboardingWizard = await AsyncStorage.getItem(ONBOARDING_WIZARD);
 		// Check if user passed through metrics opt-in screen
-		const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
+		// const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
+		const metricsOptIn =  true;
 		if (!metricsOptIn) {
 			this.props.navigation.navigate('OptinMetrics');
 		} else if (onboardingWizard) {
@@ -198,11 +199,11 @@ class ManualBackupStep3 extends PureComponent {
 						<Text style={[styles.baseText, styles.recoverText]}>
 							{strings('manual_backup_step_3.recover')}
 						</Text>
-						<TouchableOpacity onPress={this.learnMore}>
+						{/* <TouchableOpacity onPress={this.learnMore}>
 							<Text style={[styles.baseText, styles.learnText]}>
 								{strings('manual_backup_step_3.learn')}
 							</Text>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 					</View>
 				</ActionView>
 				{Device.isAndroid() && <AndroidBackHandler customBackPress={this.props.navigation.pop} />}

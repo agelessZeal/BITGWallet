@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
 	},
 	// eslint-disable-next-line react-native/no-unused-styles
 	strength_strong: {
-		color: colors.green300
+		color: colors.green
 	},
 	showMatchingPasswords: {
 		position: 'absolute',
@@ -418,7 +418,7 @@ class ChoosePassword extends PureComponent {
 		if (hdKeyring.accounts.includes(selectedAddress)) {
 			PreferencesController.setSelectedAddress(selectedAddress);
 		} else {
-			PreferencesController.setSelectedAddress(hdKeyring[0]);
+			PreferencesController.setSelectedAddress(hdKeyring.accounts[0]);
 		}
 	};
 
@@ -571,7 +571,6 @@ class ChoosePassword extends PureComponent {
 										{strings(`choose_password.${secureTextEntry ? 'show' : 'hide'}`)}
 									</Text>
 									<TextInput
-									    selectionColor={colors.green}
 										style={[styles.input, inputWidth]}
 										value={password}
 										onChangeText={this.onPasswordChange}
@@ -595,7 +594,6 @@ class ChoosePassword extends PureComponent {
 								<View style={styles.field}>
 									<Text style={styles.hintLabel}>{strings('choose_password.confirm_password')}</Text>
 									<TextInput
-									    selectionColor={colors.green}
 										ref={this.confirmPasswordInput}
 										style={[styles.input, inputWidth]}
 										value={confirmPassword}
@@ -610,7 +608,7 @@ class ChoosePassword extends PureComponent {
 									/>
 									<View style={styles.showMatchingPasswords}>
 										{passwordsMatch ? (
-											<Icon name="check" size={16} color={colors.green300} />
+											<Icon name="check" size={16} color={colors.green} />
 										) : null}
 									</View>
 									<Text style={styles.passwordStrengthLabel}>
@@ -623,6 +621,7 @@ class ChoosePassword extends PureComponent {
 										value={isSelected}
 										onValueChange={this.setSelection}
 										style={styles.checkbox}
+										tintColors={{ true: colors.green }}
 										tintColors={{ true: colors.green }}
 										onCheckColor={colors.green}
 										onTintColor={colors.green}
@@ -642,7 +641,7 @@ class ChoosePassword extends PureComponent {
 
 							<View style={styles.ctaWrapper}>
 								<StyledButton
-									type={'green'}
+									type={'blue'}
 									onPress={this.onPressCreate}
 									testID={'submit-button'}
 									disabled={!canSubmit}

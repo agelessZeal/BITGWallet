@@ -41,7 +41,8 @@ const wallet_addEthereumChain = async ({
 		chainName: true,
 		blockExplorerUrls: true,
 		nativeCurrency: true,
-		rpcUrls: true
+		rpcUrls: true,
+		iconUrls: true
 	};
 
 	const extraKeys = Object.keys(params).filter(key => !allowedKeys[key]);
@@ -87,7 +88,7 @@ const wallet_addEthereumChain = async ({
 	const chainIdDecimal = parseInt(_chainId, 16).toString(10);
 
 	if (NetworksChainId[chainIdDecimal]) {
-		throw ethErrors.rpc.invalidParams(`May not specify default MetaMask chain.`);
+		throw ethErrors.rpc.invalidParams(`May not specify default BITG chain.`);
 	}
 
 	const frequentRpcList = PreferencesController.state.frequentRpcList;
@@ -126,7 +127,7 @@ const wallet_addEthereumChain = async ({
 			throw ethErrors.provider.userRejectedRequest();
 		}
 
-		CurrencyRateController.configure({ nativeCurrency: existingNetwork.ticker });
+		CurrencyRateController.setNativeCurrency(existingNetwork.ticker);
 		NetworkController.setRpcTarget(
 			existingNetwork.rpcUrl,
 			chainIdDecimal,
@@ -269,7 +270,7 @@ const wallet_addEthereumChain = async ({
 
 	if (!switchCustomNetworkApprove) throw ethErrors.provider.userRejectedRequest();
 
-	CurrencyRateController.configure({ nativeCurrency: ticker });
+	CurrencyRateController.setNativeCurrency(ticker);
 	NetworkController.setRpcTarget(firstValidRPCUrl, chainIdDecimal, ticker, _chainName);
 
 	res.result = null;

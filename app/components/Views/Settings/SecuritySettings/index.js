@@ -43,6 +43,8 @@ import {
 import CookieManager from '@react-native-community/cookies';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import HintModal from '../../../UI/HintModal';
+import { trackErrorAsAnalytics } from '../../../../util/analyticsV2';
+import SeedPhraseVideo from '../../../UI/SeedPhraseVideo';
 
 const isIos = Device.isIos();
 
@@ -58,6 +60,9 @@ const styles = StyleSheet.create({
 		color: colors.fontPrimary,
 		fontSize: 20,
 		lineHeight: 20
+	},
+	bump: {
+		marginBottom: 10
 	},
 	heading: {
 		fontSize: 24,
@@ -393,8 +398,10 @@ class Settings extends PureComponent {
 		} catch (e) {
 			if (e.message === 'Invalid password') {
 				Alert.alert(strings('app_settings.invalid_password'), strings('app_settings.invalid_password_message'));
+				trackErrorAsAnalytics('SecuritySettings: Invalid password', e?.message);
+			} else {
+				Logger.error(e, 'SecuritySettings:biometrics');
 			}
-			Logger.error(e, 'SecuritySettings:biometrics');
 			this.setState({ [type]: !enabled, loading: false });
 		}
 	};
@@ -499,6 +506,8 @@ class Settings extends PureComponent {
 		);
 	};
 
+	onBack = () => this.props.navigation.goBack();
+
 	render = () => {
 		const { approvedHosts, seedphraseBackedUp, browserHistory, privacyMode, thirdPartyApiMode } = this.props;
 		const {
@@ -525,14 +534,15 @@ class Settings extends PureComponent {
 				<View style={styles.inner}>
 					<Heading first>{strings('app_settings.security_heading')}</Heading>
 					<View style={[styles.setting, styles.firstSetting]}>
-						<Text style={styles.title}>
+						<Text style={[styles.title, styles.bump]}>
 							{!seedphraseBackedUp ? (
 								<>
 									<WarningIcon />{' '}
 								</>
 							) : null}
-							<Text style={styles.title}>{strings('app_settings.protect_title')}</Text>
+							<Text style={[styles.title, styles.bump]}>{strings('app_settings.protect_title')}</Text>
 						</Text>
+						<SeedPhraseVideo onClose={this.onBack} />
 						<Text style={styles.desc}>{strings('app_settings.protect_desc')}</Text>
 						<SettingsNotification isWarning={!seedphraseBackedUp}>
 							<Text

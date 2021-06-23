@@ -87,14 +87,14 @@ const SkipAccountSecurityModal = ({ modalVisible, onConfirm, onCancel, onPress, 
 			<Text style={styles.skipTitle}>{strings('account_backup_step_1.skip_title')}</Text>
 			<View style={styles.skipModalActionButtons}>
 				<CheckBox
-					tintColors={{ true: colors.green }}
-					onCheckColor={colors.green}
-					onTintColor={colors.green}
 					style={styles.skipModalCheckbox}
 					value={skipCheckbox}
 					onValueChange={toggleSkipCheckbox}
 					boxType={'square'}
 					tintColors={{ true: colors.green }}
+					tintColors={{ true: colors.green }}
+					onCheckColor={colors.green}
+					onTintColor={colors.green}
 					testID={'skip-backup-check'}
 				/>
 				<Text onPress={toggleSkipCheckbox} style={styles.skipModalText} testID={'skip-backup-text'}>

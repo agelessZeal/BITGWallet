@@ -43,8 +43,27 @@ export default class Logger {
 		if (__DEV__) {
 			console.warn(DEBUG, error); // eslint-disable-line no-console
 		} else if (metricsOptIn === AGREED) {
-			let exception = error.error || error.message || error.originalError || error;
-			if (!(error instanceof Error)) {
+			let exception = error;
+
+			if (!error) {
+				if (!extra) return console.warn('No error nor extra info provided');
+
+				const typeExtra = typeof extra;
+				switch (typeExtra) {
+					case 'string':
+						exception = new Error(extra);
+						break;
+					case 'object':
+						if (extra.message) {
+							exception = new Error(extra.message);
+						} else {
+							exception = new Error(JSON.stringify(extra));
+						}
+						break;
+					default:
+						exception = new Error('error to capture is not an error instance');
+				}
+			} else if (!(error instanceof Error)) {
 				const type = typeof error;
 				switch (type) {
 					case 'string':
@@ -82,7 +101,7 @@ export default class Logger {
 		// Check if user passed accepted opt-in to metrics
 		const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
 		if (__DEV__) {
-			args.unshift('[MetaMask DEBUG]:');
+			args.unshift('[BITG DEBUG]:');
 			// console.log.apply(null, args); // eslint-disable-line no-console
 		} else if (metricsOptIn === 'agreed') {
 			captureMessage(JSON.stringify(args));

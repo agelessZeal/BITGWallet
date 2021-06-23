@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 	action: {
 		fontSize: 18,
 		marginBottom: 16,
-		color: colors.fontPrimary,
+		color: colors.green,
 		justifyContent: 'center',
 		textAlign: 'center',
 		...fontStyles.bold
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 	},
 	word: {
 		fontSize: 14,
-		color: colors.fontPrimary,
+		color: colors.white,
 		lineHeight: 14,
 		textAlign: 'center'
 	},
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 6,
 		color: colors.fontPrimary,
 		width: 95,
-		backgroundColor: colors.white,
+		backgroundColor: colors.green,
 		borderColor: colors.green,
 		borderWidth: 1,
 		marginBottom: 6,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 14,
 		lineHeight: 14,
-		color: colors.black
+		color: colors.white
 	},
 	words: {
 		flexDirection: 'row',
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
 	confirmedWord: {
 		borderWidth: 1,
 		borderColor: colors.green,
+		backgroundColor:colors.green,
 		borderStyle: 'solid'
 	}
 });

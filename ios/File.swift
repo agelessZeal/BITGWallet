@@ -2,8 +2,8 @@
 //  File.swift
 //  BITG
 //
-//  Created by Alpredo Pan on 02/06/2021.
-//  Copyright © 2021 BITG. All rights reserved.
+//  Created by Andre Pimenta on 08/04/2020.
+//  Copyright © 2020 BITG. All rights reserved.
 //
 
 import Foundation

@@ -38,7 +38,6 @@ import {
 	decodeApproveData
 } from '../../../util/transactions';
 import { BN } from 'ethereumjs-util';
-import { safeToChecksumAddress } from '../../../util/address';
 import Logger from '../../../util/Logger';
 import contractMap from '@metamask/contract-metadata';
 import MessageSign from '../../UI/MessageSign';
@@ -51,14 +50,16 @@ import {
 	showTransactionNotification,
 	hideCurrentNotification,
 	showSimpleNotification,
-	removeNotificationById
+	removeNotificationById,
+	removeNotVisibleNotifications
 } from '../../../actions/notification';
 import { toggleDappTransactionModal, toggleApproveModal } from '../../../actions/modals';
 import AccountApproval from '../../UI/AccountApproval';
 import ProtectYourWalletModal from '../../UI/ProtectYourWalletModal';
 import MainNavigator from './MainNavigator';
 import SkipAccountSecurityModal from '../../UI/SkipAccountSecurityModal';
-import { swapsUtils, util } from '@estebanmino/controllers';
+import { swapsUtils } from '@metamask/swaps-controller';
+import { util } from '@metamask/controllers';
 import SwapsLiveness from '../../UI/Swaps/SwapsLiveness';
 import Analytics from '../../../core/Analytics';
 import { ANALYTICS_EVENT_OPTS } from '../../../util/analytics';
@@ -67,7 +68,8 @@ import { setInfuraAvailabilityBlocked, setInfuraAvailabilityNotBlocked } from '.
 
 const styles = StyleSheet.create({
 	flex: {
-		flex: 1
+		flex: 1,
+		marginTop: Device.isIphone12() ? 20 : 0
 	},
 	loader: {
 		backgroundColor: colors.white,
@@ -104,6 +106,7 @@ const Main = props => {
 	const toggleApproveModal = props.toggleApproveModal;
 	const toggleDappTransactionModal = props.toggleDappTransactionModal;
 	const setEtherTransaction = props.setEtherTransaction;
+	const removeNotVisibleNotifications = props.removeNotVisibleNotifications;
 
 	const usePrevious = value => {
 		const ref = useRef();
@@ -238,12 +241,12 @@ const Main = props => {
 					.div(gasEstimate)
 					.times(100)
 					.toFixed(2)}%`;
-				const quoteVsExecutionRatio = `${util
+				const quoteVsExecutionRatio = `${swapsUtils
 					.calcTokenAmount(tokensReceived || '0x0', swapTransaction.destinationTokenDecimals)
 					.div(swapTransaction.destinationAmount)
 					.times(100)
 					.toFixed(2)}%`;
-				const tokenToAmountReceived = util.calcTokenAmount(
+				const tokenToAmountReceived = swapsUtils.calcTokenAmount(
 					tokensReceived,
 					swapTransaction.destinationToken.decimals
 				);
@@ -310,16 +313,18 @@ const Main = props => {
 		async transactionMeta => {
 			if (transactionMeta.origin === TransactionTypes.MMM) return;
 
-			const to = safeToChecksumAddress(transactionMeta.transaction.to);
+			const to = transactionMeta.transaction.to?.toLowerCase();
 			const { data } = transactionMeta.transaction;
 
 			// if approval data includes metaswap contract
 			// if destination address is metaswap contract
 			if (
-				to === safeToChecksumAddress(swapsUtils.SWAPS_CONTRACT_ADDRESS) ||
-				(data &&
-					data.substr(0, 10) === APPROVE_FUNCTION_SIGNATURE &&
-					decodeApproveData(data).spenderAddress === swapsUtils.SWAPS_CONTRACT_ADDRESS)
+				to &&
+				(to === swapsUtils.getSwapsContractAddress(props.chainId) ||
+					(data &&
+						data.substr(0, 10) === APPROVE_FUNCTION_SIGNATURE &&
+						decodeApproveData(data).spenderAddress?.toLowerCase() ===
+							swapsUtils.getSwapsContractAddress(props.chainId)))
 			) {
 				if (transactionMeta.origin === process.env.MM_FOX_CODE) {
 					autoSign(transactionMeta);
@@ -388,6 +393,7 @@ const Main = props => {
 		},
 		[
 			props.tokens,
+			props.chainId,
 			setEtherTransaction,
 			setTransactionObject,
 			toggleApproveModal,
@@ -411,12 +417,13 @@ const Main = props => {
 			// If the app is now in background, we need to start
 			// the background timer, which is less intense
 			if (backgroundMode.current) {
+				removeNotVisibleNotifications();
 				BackgroundTimer.runBackgroundTimer(async () => {
 					await Engine.refreshTransactionHistory();
 				}, AppConstants.TX_CHECK_BACKGROUND_FREQUENCY);
 			}
 		},
-		[backgroundMode, pollForIncomingTransactions]
+		[backgroundMode, removeNotVisibleNotifications, pollForIncomingTransactions]
 	);
 
 	const initForceReload = () => {
@@ -568,6 +575,19 @@ const Main = props => {
 		}
 	});
 
+	// Remove all notifications that aren't visible
+	useEffect(() => {
+		removeNotVisibleNotifications();
+	}, [removeNotVisibleNotifications]);
+
+	// unapprovedTransaction effect
+	useEffect(() => {
+		Engine.context.TransactionController.hub.on('unapprovedTransaction', onUnapprovedTransaction);
+		return () => {
+			Engine.context.TransactionController.hub.removeListener('unapprovedTransaction', onUnapprovedTransaction);
+		};
+	}, [onUnapprovedTransaction]);
+
 	useEffect(() => {
 		initializeWalletConnect();
 		AppState.addEventListener('change', handleAppStateChange);
@@ -595,8 +615,6 @@ const Main = props => {
 				}
 			}
 		});
-
-		Engine.context.TransactionController.hub.on('unapprovedTransaction', onUnapprovedTransaction);
 
 		Engine.context.MessageManager.hub.on('unapprovedMessage', messageParams =>
 			onUnapprovedMessage(messageParams, 'eth')
@@ -628,7 +646,6 @@ const Main = props => {
 			lockManager.current.stopListening();
 			Engine.context.PersonalMessageManager.hub.removeAllListeners();
 			Engine.context.TypedMessageManager.hub.removeAllListeners();
-			Engine.context.TransactionController.hub.removeListener('unapprovedTransaction', onUnapprovedTransaction);
 			WalletConnect.hub.removeAllListeners();
 			removeConnectionStatusListener.current && removeConnectionStatusListener.current();
 		};
@@ -738,6 +755,10 @@ Main.propTypes = {
 	 */
 	selectedAddress: PropTypes.string,
 	/**
+	 * Chain id
+	 */
+	chainId: PropTypes.string,
+	/**
 	 * Network provider type
 	 */
 	providerType: PropTypes.string,
@@ -748,13 +769,18 @@ Main.propTypes = {
 	/**
 	 * Dispatch infura availability not blocked
 	 */
-	setInfuraAvailabilityNotBlocked: PropTypes.func
+	setInfuraAvailabilityNotBlocked: PropTypes.func,
+	/**
+	 * Remove not visible notifications from state
+	 */
+	removeNotVisibleNotifications: PropTypes.func
 };
 
 const mapStateToProps = state => ({
 	lockTime: state.settings.lockTime,
 	thirdPartyApiMode: state.privacy.thirdPartyApiMode,
 	selectedAddress: state.engine.backgroundState.PreferencesController.selectedAddress,
+	chainId: state.engine.backgroundState.NetworkController.provider.chainId,
 	tokens: state.engine.backgroundState.AssetsController.tokens,
 	isPaymentRequest: state.transaction.paymentRequest,
 	dappTransactionModalVisible: state.modals.dappTransactionModalVisible,
@@ -773,7 +799,8 @@ const mapDispatchToProps = dispatch => ({
 	toggleDappTransactionModal: (show = null) => dispatch(toggleDappTransactionModal(show)),
 	toggleApproveModal: show => dispatch(toggleApproveModal(show)),
 	setInfuraAvailabilityBlocked: () => dispatch(setInfuraAvailabilityBlocked()),
-	setInfuraAvailabilityNotBlocked: () => dispatch(setInfuraAvailabilityNotBlocked())
+	setInfuraAvailabilityNotBlocked: () => dispatch(setInfuraAvailabilityNotBlocked()),
+	removeNotVisibleNotifications: () => dispatch(removeNotVisibleNotifications())
 });
 
 export default connect(

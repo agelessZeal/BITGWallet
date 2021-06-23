@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		height: TICK_DIAMETER + 2 * TRACK_PADDING,
-		backgroundColor: colors.green000,
+		backgroundColor: colors.blue000,
 		borderRadius: TICK_DIAMETER + 2 * TRACK_PADDING,
 		borderWidth: TRACK_PADDING,
-		borderColor: colors.green000
+		borderColor: colors.blue000
 	},
 	tick: {
 		height: TICK_DIAMETER,

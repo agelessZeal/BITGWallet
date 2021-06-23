@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, fontStyles } from '../../../styles/common';
-import { hasBlockExplorer, findBlockExplorerForRpc, getBlockExplorerName } from '../../../util/networks';
+import { hasBlockExplorer, findBlockExplorerForRpc, getBlockExplorerName, isMainNet } from '../../../util/networks';
 import Identicon from '../Identicon';
 import StyledButton from '../StyledButton';
 import AccountList from '../AccountList';
@@ -31,7 +31,6 @@ import AppConstants from '../../../core/AppConstants';
 import { ANALYTICS_EVENT_OPTS } from '../../../util/analytics';
 import URL from 'url-parse';
 import EthereumAddress from '../EthereumAddress';
-import { NavigationActions } from 'react-navigation';
 import { getEther } from '../../../util/transactions';
 import { newAssetTransaction } from '../../../actions/transaction';
 import { protectWalletModalVisible } from '../../../actions/user';
@@ -77,7 +76,6 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.grey000
 	},
 	accountBgOverlay: {
-		paddingTop:50,
 		borderBottomColor: colors.grey100,
 		borderBottomWidth: 1,
 		padding: 17
@@ -259,7 +257,7 @@ const styles = StyleSheet.create({
 	protectWalletButtonWrapper: { marginVertical: 8 }
 });
 
-// const metamask_name = require('../../../images/metamask-name.png'); // eslint-disable-line
+
 const bitg_logo = require('../../../images/bitg_logo.png'); // eslint-disable-line
 const ICON_IMAGES = {
 	wallet: require('../../../images/wallet-icon.png'),
@@ -267,7 +265,7 @@ const ICON_IMAGES = {
 };
 
 /**
- * View component that displays the MetaMask fox
+ * View component that displays the BITG fox
  * in the middle of the screen
  */
 class DrawerView extends PureComponent {
@@ -341,6 +339,10 @@ class DrawerView extends PureComponent {
 		 */
 		wizard: PropTypes.object,
 		/**
+		 * Chain Id
+		 */
+		chainId: PropTypes.string,
+		/**
 		 * Current provider ticker
 		 */
 		ticker: PropTypes.string,
@@ -409,7 +411,7 @@ class DrawerView extends PureComponent {
 			let tokenFound = false;
 
 			this.props.tokens.forEach(token => {
-				if (this.props.tokenBalances[token.address] && !this.props.tokenBalances[token.address].isZero()) {
+				if (this.props.tokenBalances[token.address] && !this.props.tokenBalances[token.address]?.isZero()) {
 					tokenFound = true;
 				}
 			});
@@ -502,7 +504,7 @@ class DrawerView extends PureComponent {
 	};
 
 	showWallet = () => {
-		this.props.navigation.navigate('WalletTabHome');
+		this.props.navigation.navigate('WalletView');
 		this.hideDrawer();
 		this.trackEvent(ANALYTICS_EVENTS_V2.WALLET_OPENED);
 	};
@@ -531,11 +533,7 @@ class DrawerView extends PureComponent {
 		await SecureKeychain.resetGenericPassword();
 		await KeyringController.setLocked();
 		if (!passwordSet) {
-			this.props.navigation.navigate(
-				'OnboardingRootNav',
-				{},
-				NavigationActions.navigate({ routeName: 'Onboarding' })
-			);
+			this.props.navigation.navigate('Onboarding');
 		} else {
 			this.props.navigation.navigate('Login');
 		}
@@ -737,13 +735,14 @@ class DrawerView extends PureComponent {
 					icon: this.getImageIcon('wallet'),
 					selectedIcon: this.getSelectedImageIcon('wallet'),
 					action: this.showWallet,
-					routeNames: ['WalletView', 'Asset', 'AddAsset', 'Collectible', 'CollectibleView']
+					routeNames: ['WalletView', 'Asset', 'AddAsset', 'Collectible']
 				},
 				{
 					name: strings('swaps.swap'),
 					icon: this.getIcon('exchange'),
 					selectedIcon: this.getSelectedIcon('exchange'),
 					action: this.showSwap,
+					routeNames: ['ChainSwap']
 	
 				},
 				{
@@ -751,7 +750,7 @@ class DrawerView extends PureComponent {
 					icon: this.getFeatherIcon('list'),
 					selectedIcon: this.getSelectedFeatherIcon('list'),
 					action: this.goToTransactionHistory,
-					routeNames: ['TransactionsView']
+					routeNames: ['TransactionHistory']
 				}
 			],
 			[
@@ -761,10 +760,11 @@ class DrawerView extends PureComponent {
 				// 	action: this.onShare
 				// },
 				{
-					name: strings('drawer.address_book'),
+					name: strings('bitg_wallet.address_book.drawer'),
 					icon: this.getIcon('address-book-o'),
 					selectedIcon: this.getSelectedIcon('address-book'),
-					action: this.showAddressBook
+					action: this.showAddressBook,
+					routeNames: ['AddressBook']
 				},
 				// {
 				// 	name:
@@ -779,7 +779,8 @@ class DrawerView extends PureComponent {
 					name: strings('drawer.settings'),
 					icon: this.getFeatherIcon('settings'),
 					warning: strings('drawer.settings_warning_short'),
-					action: this.showSettings
+					action: this.showSettings,
+					routeNames: ['SettingsScreen','NetworkIDSetting']
 				},
 			],
 			[	
@@ -787,26 +788,30 @@ class DrawerView extends PureComponent {
 					name: strings('bitg_wallet.my_impact'),
 					icon: this.getMaterialIcon('sword-cross'),
 					selectedIcon: this.getSelectedMaterialIcon('sword-cross'),
-					action: this.showMyImapct
+					action: this.showMyImapct,
+					routeNames: ['MyImpactSignup','MyImpactDash']
 				},
 				{
 					name: strings('bitg_wallet.impact_initiatives'),
 					icon: this.getFeatherIcon('inbox'),
 					selectedIcon: this.getSelectedFeatherIcon('inbox'),
-					action: this.showImpactInitiatives
+					action: this.showImpactInitiatives,
+					routeNames: ['ImpactInitiativesScreen']
 				},
 				{
 					name: strings('bitg_wallet.shop'),
 					icon: this.getMaterialIcon('store'),
 					selectedIcon: this.getSelectedMaterialIcon('store'),
-					action: this.showShop
+					action: this.showShop,
+					routeNames: ['ShopScreen']
 				},
 			],
 			[
 				{
 					name: strings('bitg_wallet.blockchain_explorer'),
 					icon: this.getIcon('eye'),
-					action: this.goToBlockchainExploer
+					action: this.goToBlockchainExploer,
+					
 				},
 				// {
 				// 	name: strings('drawer.help'),
@@ -926,6 +931,7 @@ class DrawerView extends PureComponent {
 			selectedAddress,
 			keyrings,
 			currentCurrency,
+			chainId,
 			ticker,
 			seedphraseBackedUp
 		} = this.props;
@@ -941,6 +947,7 @@ class DrawerView extends PureComponent {
 		this.currentBalance = fiatBalance;
 		const fiatBalanceStr = renderFiat(this.currentBalance, currentCurrency);
 		const currentRoute = findRouteNameFromNavigatorState(this.props.navigation.state);
+
 		return (
 			<View style={styles.wrapper} testID={'drawer-screen'}>
 				<ScrollView>
@@ -972,7 +979,7 @@ class DrawerView extends PureComponent {
 									</Text>
 									<Icon name="caret-down" size={24} style={styles.caretDown} />
 								</View>
-								<Text style={styles.accountBalance}>{fiatBalanceStr}</Text>
+								{isMainNet(chainId) && <Text style={styles.accountBalance}>{fiatBalanceStr}</Text>}
 								<EthereumAddress
 									address={account.address}
 									style={styles.accountAddress}
@@ -993,6 +1000,7 @@ class DrawerView extends PureComponent {
 							type={'rounded-normal'}
 							onPress={this.onSend}
 							containerStyle={[styles.button, styles.leftButton]}
+							testID={'drawer-send-button'}
 						>
 							<View style={styles.buttonContent}>
 								<MaterialIcon
@@ -1161,6 +1169,7 @@ const mapStateToProps = state => ({
 	receiveModalVisible: state.modals.receiveModalVisible,
 	passwordSet: state.user.passwordSet,
 	wizard: state.wizard,
+	chainId: state.engine.backgroundState.NetworkController.provider.chainId,
 	ticker: state.engine.backgroundState.NetworkController.provider.ticker,
 	tokens: state.engine.backgroundState.AssetsController.tokens,
 	tokenBalances: state.engine.backgroundState.TokenBalancesController.contractBalances,

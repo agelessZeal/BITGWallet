@@ -76,7 +76,7 @@ const Entry = props => {
 
 	const animation = useRef(null);
 	const animationName = useRef(null);
-	const opacity = new Animated.Value(1);
+	const opacity = useRef(new Animated.Value(1)).current;
 
 	const onAnimationFinished = useCallback(() => {
 		Animated.timing(opacity, {
@@ -85,7 +85,7 @@ const Entry = props => {
 			useNativeDriver: true,
 			isInteraction: false
 		}).start(() => {
-			if (viewToGo !== 'WalletView' || viewToGo !== 'Onboarding') {
+			if (viewToGo && (viewToGo !== 'WalletView' || viewToGo !== 'Onboarding')) {
 				props.navigation.navigate(viewToGo);
 			} else if (viewToGo === 'Onboarding') {
 				props.navigation.navigate('OnboardingRootNav');
@@ -126,7 +126,8 @@ const Entry = props => {
 				// Get onboarding wizard state
 				const onboardingWizard = await AsyncStorage.getItem(ONBOARDING_WIZARD);
 				// Check if user passed through metrics opt-in screen
-				const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
+				// const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
+				const metricsOptIn =  true;
 				if (!metricsOptIn) {
 					animateAndGoTo('OptinMetrics');
 				} else if (onboardingWizard) {

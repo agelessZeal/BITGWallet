@@ -383,7 +383,7 @@ function AddressBookScreen(props) {
 	);
 }
 
-AddressBookScreen.navigationOptions = ({ navigation }) => getBITGAddNavbarOptions('drawer.address_book', navigation,'address');
+AddressBookScreen.navigationOptions = ({ navigation }) => getBITGAddNavbarOptions('bitg_wallet.address_book.drawer', navigation,'address');
 
 AddressBookScreen.propTypes = {
 	/**

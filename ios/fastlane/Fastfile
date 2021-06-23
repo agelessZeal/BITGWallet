@@ -36,7 +36,7 @@ platform :ios do
       		skip_submission: true,
 			skip_waiting_for_build_processing: true,
       		apple_id: "1438144202",
-      		username: "mobile.admin@metamask.io"
+      		username: "mobile.admin@BITG.io"
 		)
 
 	end

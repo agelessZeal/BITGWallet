@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
 		color: colors.fontPrimary,
 		lineHeight: 20
 	},
-	bigtName: {
+	bitgName: {
 		...fontStyles.normal,
 		fontSize: 20,
 		textAlign: 'center',
@@ -178,7 +178,6 @@ const styles = StyleSheet.create({
 		color:colors.white,
 		
 	}
-	
 });
 
 const keyExtractor = ({ id }) => id;
@@ -615,17 +614,16 @@ class Onboarding extends PureComponent {
 
 				<View style={styles.logoWrapper}>
 					<Image source={require('../../../images/bitg_brand.png')} style={styles.bitgLogo} resizeMethod={'auto'} />
-					<Text style={styles.bigtName}>{strings('onboarding.bitg')}</Text>
+					<Text style={styles.bitgName}>{strings('onboarding.bitg')}</Text>
 				</View>
-
-
 				<View style={styles.createWrapper}>
+
 					<View style={styles.buttonWrapper}>
 						<StyledButton
 							style={styles.button}
 							type={'normal'}
 							onPress={this.onPressCreate}
-							testID={'create-wallet-button'}
+							testID={'onboarding-import-button'}
 						>
 							{strings('onboarding.start_exploring_now')}
 						</StyledButton>
@@ -640,6 +638,7 @@ class Onboarding extends PureComponent {
 							{strings('import_wallet.import_from_seed_button')}
 						</StyledButton>
 					</View>
+
 
 					{/* <View style={styles.buttonWrapper}>
 						<StyledButton

@@ -2,12 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/rexi/Documents/bitgreen/bitg/ios/BITG.xcodeproj">
+      location = "group:BITG.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:BITG.xcodeproj">
    </FileRef>
 </Workspace>

@@ -16,21 +16,30 @@ const style = StyleSheet.create({
 	right: {
 		textAlign: 'right'
 	},
-	bold: fontStyles.bold,
+	red: {
+		color: colors.red
+	},
 	black: {
 		color: colors.black
 	},
+	bold: fontStyles.bold,
 	blue: {
 		color: colors.green
 	},
 	green: {
 		color: colors.green400
 	},
+	grey: {
+		color: colors.grey500
+	},
 	primary: {
 		color: colors.fontPrimary
 	},
 	small: {
 		fontSize: 12
+	},
+	big: {
+		fontSize: 16
 	},
 	upper: {
 		textTransform: 'uppercase'
@@ -42,7 +51,11 @@ const style = StyleSheet.create({
 	modal: {
 		color: colors.fontPrimary,
 		fontSize: 16,
-		lineHeight: 30
+		lineHeight: 22.4 // 1.4 * fontSize
+	},
+	infoModal: {
+		lineHeight: 20,
+		marginVertical: 6
 	},
 	link: {
 		color: colors.green
@@ -66,10 +79,14 @@ const Text = ({
 	green,
 	black,
 	blue,
+	grey,
+	red,
 	primary,
 	small,
+	big,
 	upper,
 	modal,
+	infoModal,
 	disclaimer,
 	link,
 	strikethrough,
@@ -87,11 +104,16 @@ const Text = ({
 			green && style.green,
 			black && style.black,
 			blue && style.blue,
+			grey && style.grey,
+			red && style.red,
+			black && style.black,
 			primary && style.primary,
 			disclaimer && [style.small, style.disclaimer],
 			small && style.small,
+			big && style.big,
 			upper && style.upper,
 			modal && style.modal,
+			infoModal && style.infoModal,
 			link && style.link,
 			strikethrough && style.strikethrough,
 			underline && style.underline,
@@ -110,10 +132,12 @@ Text.defaultProps = {
 	green: false,
 	black: false,
 	blue: false,
+	red: false,
 	primary: false,
 	disclaimer: false,
 	modal: false,
 	small: false,
+	big: undefined,
 	upper: false,
 	link: false,
 	strikethrough: false,
@@ -151,6 +175,14 @@ Text.propTypes = {
 	 */
 	blue: PropTypes.bool,
 	/**
+	 * Makes text grey
+	 */
+	grey: PropTypes.bool,
+	/**
+	 * Makes text red
+	 */
+	red: PropTypes.bool,
+	/**
 	 * Makes text fontPrimary color
 	 */
 	primary: PropTypes.bool,
@@ -165,9 +197,18 @@ Text.propTypes = {
 	 */
 	modal: PropTypes.bool,
 	/**
+	 * Makes text with bigger line height
+	 * Used in modals with information text
+	 */
+	infoModal: PropTypes.bool,
+	/**
 	 * Makes text small
 	 */
 	small: PropTypes.bool,
+	/**
+	 * Makes text big
+	 */
+	big: PropTypes.bool,
 	/**
 	 * Makes text uppercase
 	 */

@@ -75,7 +75,7 @@ export const clearData = async () => {
   AsyncStorage.clear()
 }
 
-export const showAlert = (message) => {
+export const makeAlert = (message) => {
   Alert.alert(
     "BITG",
     message,

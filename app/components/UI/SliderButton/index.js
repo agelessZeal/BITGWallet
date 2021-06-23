@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 	container: {
 		shadowRadius: 8,
 		shadowOpacity: 0.5,
-		shadowColor: colors.green200,
+		shadowColor: colors.blue200,
 		shadowOffset: { width: 0, height: 3 },
 		elevation: 0 // shadow colors not supported on Android. nothing > gray shadow
 	},
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 		height: DIAMETER,
 		borderRadius: DIAMETER,
 		borderWidth: MARGIN,
-		borderColor: colors.green600,
+		borderColor: colors.blue600,
 		backgroundColor: colors.white
 	},
 	trackBack: {
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		borderRadius: DIAMETER,
-		backgroundColor: colors.green700
+		backgroundColor: colors.blue700
 	},
 	trackBackGradient: {
 		position: 'absolute',
@@ -114,7 +114,7 @@ function SliderButton({ incompleteText, completeText, onComplete, disabled }) {
 	const sliderCompletedOpacity = completion.interpolate({ inputRange: [0, 1], outputRange: [1, 0] });
 	const trackFrontBackgroundColor = completion.interpolate({
 		inputRange: [0, 1],
-		outputRange: [colors.green600, colors.success]
+		outputRange: [colors.blue600, colors.success]
 	});
 
 	const startCompleteAnimation = useCallback(() => {

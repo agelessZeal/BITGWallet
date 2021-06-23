@@ -73,7 +73,7 @@ exports[`OnboardingCarousel should render correctly 1`] = `
                 }
                 testID="carousel-screen-one"
               >
-                Welcome to MetaMask
+                Welcome to BITG
               </Text>
               <Text
                 style={
@@ -90,7 +90,7 @@ exports[`OnboardingCarousel should render correctly 1`] = `
                   }
                 }
               >
-                Trusted by millions, MetaMask is a secure wallet making the world of web3 accessible to all.
+                Trusted by millions, BITG is a secure wallet making the world of web3 accessible to all.
               </Text>
             </View>
             <View
@@ -107,7 +107,7 @@ exports[`OnboardingCarousel should render correctly 1`] = `
                 resizeMethod="auto"
                 source={
                   Object {
-                    "testUri": "../../../app/images/onboarding-carousel-1.png",
+                    "testUri": "../../../app/images/bitg.png",
                   }
                 }
                 style={
@@ -187,7 +187,7 @@ exports[`OnboardingCarousel should render correctly 1`] = `
                 resizeMethod="auto"
                 source={
                   Object {
-                    "testUri": "../../../app/images/onboarding-carousel-2.png",
+                    "testUri": "../../../app/images/bitg.png",
                   }
                 }
                 style={
@@ -249,7 +249,7 @@ exports[`OnboardingCarousel should render correctly 1`] = `
                   }
                 }
               >
-                Login with MetaMask and make transactions to invest, earn, play games, sell and more!
+                Login with BITG and make transactions to invest, earn, play games, sell and more!
               </Text>
             </View>
             <View
@@ -266,7 +266,7 @@ exports[`OnboardingCarousel should render correctly 1`] = `
                 resizeMethod="auto"
                 source={
                   Object {
-                    "testUri": "../../../app/images/onboarding-carousel-3.png",
+                    "testUri": "../../../app/images/bitg.png",
                   }
                 }
                 style={

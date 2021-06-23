@@ -39,7 +39,6 @@ import { getPasswordStrengthWord, passwordRequirementsMet } from '../../../util/
 import NotificationManager from '../../../core/NotificationManager';
 import { syncPrefs } from '../../../util/sync';
 
-
 const styles = StyleSheet.create({
 	mainWrapper: {
 		backgroundColor: colors.white,

@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 		marginLeft: 0,
 		marginTop: 16,
 		marginBottom: 16,
-		color: colors.fontPrimary,
+		color: colors.green,
 		justifyContent: 'center',
 		...fontStyles.bold
 	},
@@ -200,10 +200,10 @@ const AccountBackupStep1B = props => {
 
 	const learnMore = () => {
 		setWhySecureWalletModal(false);
-		props.navigation.navigate('Webview', {
-			url: 'https://metamask.zendesk.com/hc/en-us/articles/360015489591-Basic-Safety-Tips',
-			title: strings('drawer.metamask_support')
-		});
+		// props.navigation.navigate('Webview', {
+		// 	url: 'https://metamask.zendesk.com/hc/en-us/articles/360015489591-Basic-Safety-Tips',
+		// 	title: strings('drawer.metamask_support')
+		// });
 	};
 
 	const dismiss = () => null;
@@ -302,13 +302,13 @@ const AccountBackupStep1B = props => {
 							{strings('account_backup_step_1B.why_secure_1')}
 							<Text style={styles.bold}>{strings('account_backup_step_1B.why_secure_2')}</Text>
 						</Text>
-						<TouchableOpacity
+						{/* <TouchableOpacity
 							style={styles.remindLaterButton}
 							onPress={learnMore}
 							hitSlop={{ top: 10, left: 10, bottom: 10, right: 10 }}
 						>
 							<Text style={styles.learnMoreText}>{strings('account_backup_step_1B.learn_more')}</Text>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 					</View>
 				</View>
 			</ActionModal>

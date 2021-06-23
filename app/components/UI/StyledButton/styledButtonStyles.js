@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
 	transparentNoBorder: {
 		backgroundColor: colors.transparent,
 		borderWidth: 0,
+		borderColor: colors.transparent
 	},
 	cancel: {
 		backgroundColor: colors.white,

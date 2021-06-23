@@ -20,7 +20,6 @@ import Wallet from '../../Views/Wallet';
 import Asset from '../../Views/Asset';
 import AddAsset from '../../Views/AddAsset';
 import Collectible from '../../Views/Collectible';
-import CollectibleView from '../../Views/CollectibleView';
 import Send from '../../Views/Send';
 import SendTo from '../../Views/SendFlow/SendTo';
 import RevealPrivateCredential from '../../Views/RevealPrivateCredential';
@@ -74,6 +73,7 @@ import AddressNewScreen from '../../BITG/AddressNewScreen'
 import ActionScreen from '../../BITG/ActionScreen'
 import ServicesScreen from '../../BITG/ServicesScreen'
 import ServiceScreen from '../../BITG/ServiceScreen'
+import GasEducationCarousel from '../../Views/GasEducationCarousel';
 
 import TransactionHistory from '../../BITG/Transactions'
 
@@ -171,9 +171,9 @@ export default createStackNavigator(
 							Collectible: {
 								screen: Collectible
 							},
-							CollectibleView: {
-								screen: CollectibleView
-							},
+							// CollectibleView: {
+							// 	screen: CollectibleView
+							// },
 							RevealPrivateCredentialView: {
 								screen: RevealPrivateCredential
 							}
@@ -260,7 +260,7 @@ export default createStackNavigator(
 					}),
 					showLable:false,
 					activeColor: colors.green,
-					inactiveColor: colors.green300,
+					inactiveColor: colors.green,
 					barStyle: { backgroundColor: colors.grey000 },
 					adaptive:false,
 					shifting:false,
@@ -310,10 +310,13 @@ export default createStackNavigator(
 						screen: ActivityView
 					}
 				},
-			),
+				{
+					defaultNavigationOptions: () => ({
+						tabBarVisible: false
+					})
+				}
+			)
 		},
-		
-		
 		Webview: {
 			screen: createStackNavigator(
 				{
@@ -486,7 +489,8 @@ export default createStackNavigator(
 			screen: createStackNavigator({
 				PaymentMethodSelector: { screen: PaymentMethodSelector },
 				PaymentMethodApplePay: { screen: PaymentMethodApplePay },
-				TransakFlow: { screen: TransakWebView }
+				TransakFlow: { screen: TransakWebView },
+				GasEducationCarousel: { screen: GasEducationCarousel }
 			})
 		},
 		Swaps: {

@@ -28,7 +28,7 @@
 	},
 	"onboarding": {
 		"title": "지갑 설정",
-		"sync_desc": "MetaMask 확장 프로그램 또는 다른 지갑이 이미 있는 경우, 동기화하거나 가져와 기존 자산을 관리하세요.",
+		"sync_desc": "BITG 확장 프로그램 또는 다른 지갑이 이미 있는 경우, 동기화하거나 가져와 기존 자산을 관리하세요.",
 		"create_desc": "첫 번째 지갑을 설정하고 분산되어 있는 앱 탐색을 시작하세요.",
 		"import": "기존 지갑 가져오기 또는 새 지갑 생성",
 		"import_wallet_button": "지갑 동기화 또는 가져오기",
@@ -50,8 +50,8 @@
 		"step2": "암호 생성",
 		"step3": "보안 지갑",
 		"already_have": "이미 지갑이 있나요?",
-		"sync_existing": "브라우저 확장 기능으로 기존 MetaMask 지갑을 동기화하거나 수동으로 가져옵니다.",
-		"scan_title": "MetaMask 확장 프로그램과 동기화하는 방법",
+		"sync_existing": "브라우저 확장 기능으로 기존 BITG 지갑을 동기화하거나 수동으로 가져옵니다.",
+		"scan_title": "BITG 확장 프로그램과 동기화하는 방법",
 		"scan": "스캔",
 		"scan_step_1": "데스크톱에서 확장 프로그램 열기",
 		"scan_step_2": "설정 > 고급으로 이동",
@@ -59,7 +59,7 @@
 		"scan_step_4": "QR 코드를 스캔하여 동기화 시작"
 	},
 	"onboarding_carousel": {
-		"title1": "MetaMask 방문을 환영합니다",
+		"title1": "BITG 방문을 환영합니다",
 		"title2": "디지털 자산 관리",
 		"title3": "web3로 가는 게이트웨이",
 		"subtitle1": "수백만이 믿고 쓰는 MetaMask는 누구나 web3의 세계에 접근하게 해주는 보안 지갑입니다.",
@@ -95,7 +95,7 @@
 			"title": "기본 탐색",
 			"content1": "여기를 탭하여",
 			"content2": "지갑, 브라우저, 거래 내역에 액세스하세요.",
-			"content3": "계정에서 다양한 작업을 수행하고 MetaMask 설정에 액세스할 수 있습니다."
+			"content3": "계정에서 다양한 작업을 수행하고 BITG 설정에 액세스할 수 있습니다."
 		},
 		"step5": {
 			"title": "브라우저 탐색",
@@ -111,14 +111,14 @@
 		"subtitle": "오래 걸리지 않습니다."
 	},
 	"import_wallet": {
-		"title": "이미 MetaMask 사용자인가요?",
+		"title": "이미 BITG 사용자인가요?",
 		"sub_title": "확장 프로그램과 동기화",
 		"sync_help": "확장 프로그램과 지갑 동기화",
 		"sync_help_step_one": "1. 확장 프로그램 열기",
 		"sync_help_step_two": "2. 설정 > 고급으로 이동",
 		"sync_help_step_three": "3. \"모바일과 동기화\" 클릭",
 		"sync_help_step_four": "4. QR 코드를 스캔하여 동기화 시작",
-		"sync_from_browser_extension_button": "MetaMask 확장 프로그램과 동기화",
+		"sync_from_browser_extension_button": "BITG 확장 프로그램과 동기화",
 		"or": "또는",
 		"import_from_seed_button": "시드 구문을 사용하여 가져오기"
 	},
@@ -138,7 +138,7 @@
 	},
 	"choose_password": {
 		"title": "암호 생성",
-		"subtitle": "이 암호는 이 장치에서만 MetaMask 지갑의 잠금을 해제합니다.",
+		"subtitle": "이 암호는 이 장치에서만 BITG 지갑의 잠금을 해제합니다.",
 		"password": "새 암호",
 		"confirm_password": "암호 확인",
 		"create_button": "암호 생성",
@@ -163,7 +163,7 @@
 	},
 	"reset_password": {
 		"title": "암호 변경",
-		"subtitle": "이 암호는 이 장치에서만 MetaMask 지갑의 잠금을 해제합니다.",
+		"subtitle": "이 암호는 이 장치에서만 BITG 지갑의 잠금을 해제합니다.",
 		"password": "새 암호",
 		"confirm_password": "암호 확인",
 		"reset_button": "암호 재설정",
@@ -232,7 +232,7 @@
 		"logout_ok": "예",
 		"logout_cancel": "아니요",
 		"feedback": "피드백",
-		"metamask_support": "MetaMask 지원",
+		"metamask_support": "BITG 지원",
 		"public_address": "공개 주소"
 	},
 	"send": {
@@ -308,7 +308,7 @@
 		"here": "여기",
 		"agree": "동의함",
 		"decline": "동의하지 않음",
-		"description_title": "MetaMask 개선에 참여",
+		"description_title": "BITG 개선에 참여",
 		"description_content_1": "MetaMask는 사용자의 모바일 앱 사용 방식을 더 잘 이해하기 위해 기본 사용 데이터를 수집하고자 합니다. 이 데이터는 제품의 사용 편의성과 사용자 경험을 지속적으로 개선하는 데 사용됩니다.",
 		"description_content_2": "MetaMask에서는...",
 		"action_description_1": "언제든 설정을 통해 옵트아웃이 가능합니다.",
@@ -396,7 +396,7 @@
 		"save_rpc_url": "저장",
 		"invalid_rpc_prefix": "URI에는 적절한 HTTPS 접두사가 필요합니다.",
 		"invalid_rpc_url": "잘못된 RPC URL",
-		"sync_with_extension": "MetaMask 확장 프로그램과 동기화",
+		"sync_with_extension": "BITG 확장 프로그램과 동기화",
 		"sync_with_extension_desc": "모든 확장 계정을 이 장치로 가져옵니다.",
 		"sync": "동기화",
 		"clear_approved_dapps": "승인된 디앱 지우기",
@@ -451,7 +451,7 @@
 		"remove_network_title": "이 네트워크를 제거할까요?",
 		"remove_network": "제거",
 		"cancel_remove_network": "취소",
-		"info_title": "MetaMask 정보",
+		"info_title": "BITG 정보",
 		"experimental_title": "실험용",
 		"experimental_desc": "WalletConnect 등...",
 		"legal_title": "법적",
@@ -471,7 +471,7 @@
 		"clear_history_desc": "전체 탐색 기록을 지우려면 이 옵션을 선택하세요.",
 		"clear_cookies_desc": "브라우저의 쿠키를 지우려면 이 옵션을 선택하세요.",
 		"metametrics_title": "MetaMetrics에 참여",
-		"metametrics_description": "MetaMetrics에 참여하여 MetaMask 개선에 도움을 주세요.",
+		"metametrics_description": "MetaMetrics에 참여하여 BITG 개선에 도움을 주세요.",
 		"third_party_title": "수신 거래 받기",
 		"third_party_description": "타사 API(Etherscan)는 수신 거래를 기록에 표시하는 데 사용됩니다. 해당 서비스에서 데이터를 가져오지 않으려면 설정을 끄세요.",
 		"metametrics_opt_out": "MetaMetrics 옵트아웃",
@@ -518,7 +518,7 @@
 	},
 	"password_reset": {
 		"password_title": "암호",
-		"password_desc": "장치에서 MetaMask 앱의 잠금을 해제할 강력한 암호를 선택하세요. 이 암호를 잊은 경우, 지갑을 다시 가져오려면 시드 구문이 필요합니다.",
+		"password_desc": "장치에서 BITG 앱의 잠금을 해제할 강력한 암호를 선택하세요. 이 암호를 잊은 경우, 지갑을 다시 가져오려면 시드 구문이 필요합니다.",
 		"password_learn_more": "자세히 알아보세요.",
 		"change_password": "암호 변경"
 	},
@@ -548,7 +548,7 @@
 		"ok": "확인",
 		"cancel": "취소",
 		"error": "오류",
-		"attempting_sync_from_wallet_error": "확장 프로그램과 동기화를 시도 중인 것 같습니다. 이를 위해 설정 > 고급 > MetaMask 확장 프로그램과 동기화로 이동"
+		"attempting_sync_from_wallet_error": "확장 프로그램과 동기화를 시도 중인 것 같습니다. 이를 위해 설정 > 고급 > BITG 확장 프로그램과 동기화로 이동"
 	},
 	"action_view": {
 		"cancel": "취소",
@@ -817,7 +817,7 @@
 	"sync_with_extension": {
 		"title": "확장 프로그램에서 데이터 동기화",
 		"short_title": "확장 프로그램과 동기화",
-		"label": "데스크톱 브라우저에서 MetaMask 확장 프로그램을 열고 \"설정\" > \"고급\"으로 이동하여 \"모바일과 동기화\"를 클릭한 다음 암호를 입력하여 QR 코드를 확인합니다.",
+		"label": "데스크톱 브라우저에서 BITG 확장 프로그램을 열고 \"설정\" > \"고급\"으로 이동하여 \"모바일과 동기화\"를 클릭한 다음 암호를 입력하여 QR 코드를 확인합니다.",
 		"button_continue": "계속",
 		"please_wait": "데이터를 동기화하는 동안 기다려주세요...",
 		"error_title": "이런!",
@@ -904,7 +904,7 @@
 		"auth_prompt_title": "인증 필요",
 		"auth_prompt_desc": "MetaMask를 사용하려면 인증하세요.",
 		"fingerprint_prompt_title": "인증 필요",
-		"fingerprint_prompt_desc": "지문을 사용하여 MetaMask 잠금 해제",
+		"fingerprint_prompt_desc": "지문을 사용하여 BITG 잠금 해제",
 		"fingerprint_prompt_cancel": "취소"
 	},
 	"accountApproval": {
@@ -921,7 +921,7 @@
 	},
 	"import_private_key": {
 		"title": "계정 가져오기",
-		"description_one": "가져온 계정은 지갑에서 볼 수 있지만 MetaMask 시드 구문으로 복구할 수 없습니다.",
+		"description_one": "가져온 계정은 지갑에서 볼 수 있지만 BITG 시드 구문으로 복구할 수 없습니다.",
 		"learn_more_here": "여기에서 가져온 계정에 대해 자세히 알아보세요.",
 		"subtitle": "비공개 키 문자열 붙여넣기",
 		"cta_text": "가져오기",
@@ -948,7 +948,7 @@
 		"step_1_description": "암호 생성",
 		"step_2": "Step 2:",
 		"step_2_description": "지갑 시드 구문 저장",
-		"info_text_1": "잠시 시간을 내어 MetaMask 지갑 설정을 완료하세요.",
+		"info_text_1": "잠시 시간을 내어 BITG 지갑 설정을 완료하세요.",
 		"info_text_2": "그러면 본인만 자금에 액세스할 수 있고 장치를 분실할 경우 지갑을 복구할 수 있습니다.",
 		"cta_text": "암호 생성",
 		"creating_password": "암호 생성 중.."
@@ -1094,7 +1094,7 @@
 	"phishing": {
 		"ethereum_phishing_detection": "이더리움 피싱 감지",
 		"ethereum_phishing_detector": "이더리움 피싱 감지기는",
-		"intro": " 현재 MetaMask 도메인 경고 목록에 있습니다. 그래서 MetaMask는 사용 가능한 정보를 기반으로 이 도메인이 현재 보안을 훼손할 수 있다고 판단했으며 보안 기능을 추가하여 사이트에 대한 액세스를 제한했습니다. 이를 재정의하려면, 위험을 감수하고 계속 진행하는 방법이 적힌 이 경고의 나머지 지침을 읽으세요.",
+		"intro": " 현재 BITG 도메인 경고 목록에 있습니다. 그래서 MetaMask는 사용 가능한 정보를 기반으로 이 도메인이 현재 보안을 훼손할 수 있다고 판단했으며 보안 기능을 추가하여 사이트에 대한 액세스를 제한했습니다. 이를 재정의하려면, 위험을 감수하고 계속 진행하는 방법이 적힌 이 경고의 나머지 지침을 읽으세요.",
 		"reasons": "경고 목록에 사이트가 표시되는 이유는 여러 가지이며, 당사의 경고 목록은 널리 사용되는 다른 산업 목록에서 수집한 것입니다. 이러한 이유에는 테스트에서 위험성이 밝혀진 도메인처럼 알려진 사기 또는 보안 위험 등이 있습니다. ",
 		"list_content": "이러한 경고 목록의 도메인에는 노골적인 악성 웹사이트, 악의적 공격자에 의해 손상된 합법적인 웹사이트가 포함될 수 있습니다.",
 		"to_read_more": "이 사이트에 대해 자세히 알아보려면 ",
@@ -1404,7 +1404,7 @@
 	"whats_new": {
 		"title": "최근 소식 보기",
 		"feature_security_settings_title": "개선된 보안 설정",
-		"feature_security_settings_text": "이제 MetaMask 앱 암호를 변경하고 설정 > 보안 및 개인정보 보호에서 지갑 시드 구문을 백업하는 방법을 확인할 수 있습니다.",
+		"feature_security_settings_text": "이제 BITG 앱 암호를 변경하고 설정 > 보안 및 개인정보 보호에서 지갑 시드 구문을 백업하는 방법을 확인할 수 있습니다.",
 		"feature_security_settings_button": "설정에서 보기"
 	}
 }

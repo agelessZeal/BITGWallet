@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 		borderColor: colors.green,
 		borderTopRightRadius: 10,
 		borderTopLeftRadius: 10,
-		backgroundColor: colors.green000
+		backgroundColor: colors.blue000
 	},
 	headerWithPiggy: {
 		paddingLeft: 15 + 32 + 10
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 		height: 0,
 		width: 19,
 		borderTopWidth: 1,
-		borderColor: colors.green000
+		borderColor: colors.blue000
 	},
 	piggyBank: {
 		position: 'absolute',

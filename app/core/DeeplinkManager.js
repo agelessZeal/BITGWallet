@@ -174,7 +174,7 @@ class DeeplinkManager {
 				this.handleBrowserUrl(urlObj.href, browserCallBack);
 				break;
 
-			// Specific to the MetaMask app
+			// Specific to the BITG app
 			// For ex. go to settings
 			case 'metamask':
 				handled();

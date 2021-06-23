@@ -30,7 +30,7 @@ import ChainSwapStart from './ChainSwapStart';
 import ChainSwapProgress from './ChainSwapProgress';
 import ChainSwapSucess from './ChainSwapSucess';
 import Device from '../../../util/Device';
-import {makeAlert,sleep} from '../../../util/general'
+import {makeAlert,sleep} from '../lib/Helpers'
 import {createApolloClient} from '../api/createApolloClient';
 
 

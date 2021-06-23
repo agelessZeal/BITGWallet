@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 8
 	},
 	info: {
-		backgroundColor: colors.green100,
+		backgroundColor: colors.blue100,
 		borderColor: colors.green
 	},
 	warning: {

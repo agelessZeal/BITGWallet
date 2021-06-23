@@ -24,8 +24,6 @@ import { strings } from '../../../../locales/i18n';
 import SecureKeychain from '../../../core/SecureKeychain';
 import AppConstants from '../../../core/AppConstants';
 import setOnboardingWizardStep from '../../../actions/wizard';
-// eslint-disable-next-line import/named
-import { NavigationActions } from 'react-navigation';
 import TermsAndConditions from '../TermsAndConditions';
 import zxcvbn from 'zxcvbn';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -72,10 +70,11 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-end'
 	},
 	fieldCol: {
-		width: '50%'
+		width: '70%'
 	},
 	fieldColRight: {
-		flexDirection: 'row-reverse'
+		flexDirection: 'row-reverse',
+		width: '30%'
 	},
 	label: {
 		color: colors.black,
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
 	},
 	// eslint-disable-next-line react-native/no-unused-styles
 	strength_strong: {
-		color: colors.green300
+		color: colors.green
 	},
 	showMatchingPasswords: {
 		position: 'absolute',
@@ -279,7 +278,7 @@ class ImportFromSeed extends PureComponent {
 				// Get onboarding wizard state
 				const onboardingWizard = await AsyncStorage.getItem(ONBOARDING_WIZARD);
 				// Check if user passed through metrics opt-in screen
-				const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
+				// const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
 				// mark the user as existing so it doesn't see the create password screen again
 				await AsyncStorage.setItem(EXISTING_USER, TRUE);
 				await AsyncStorage.removeItem(SEED_PHRASE_HINTS);
@@ -287,21 +286,16 @@ class ImportFromSeed extends PureComponent {
 				this.props.passwordSet();
 				this.props.setLockTime(AppConstants.DEFAULT_LOCK_TIMEOUT);
 				this.props.seedphraseBackedUp();
+
+				const metricsOptIn =  true;
+
 				if (!metricsOptIn) {
-					this.props.navigation.navigate(
-						'ManualBackupStep3',
-						{},
-						NavigationActions.navigate({ routeName: 'OptinMetrics' })
-					);
+					this.props.navigation.navigate('OptinMetrics');
 				} else if (onboardingWizard) {
 					this.props.navigation.navigate('ManualBackupStep3');
 				} else {
 					this.props.setOnboardingWizardStep(1);
-					this.props.navigation.navigate(
-						'ManualBackupStep3',
-						{},
-						NavigationActions.navigate({ routeName: 'WalletView' })
-					);
+					this.props.navigation.navigate('WalletView');
 				}
 				await importAdditionalAccounts();
 			} catch (error) {
@@ -368,7 +362,7 @@ class ImportFromSeed extends PureComponent {
 						onValueChange={this.updateBiometryChoice}
 						value={this.state.biometryChoice}
 						style={styles.biometrySwitch}
-						trackColor={Device.isIos() ? { true: colors.green300, false: colors.grey300 } : null}
+						trackColor={Device.isIos() ? { true: colors.green, false: colors.grey300 } : null}
 						ios_backgroundColor={colors.grey300}
 					/>
 				</View>
@@ -382,7 +376,7 @@ class ImportFromSeed extends PureComponent {
 					onValueChange={rememberMe => this.setState({ rememberMe })} // eslint-disable-line react/jsx-no-bind
 					value={this.state.rememberMe}
 					style={styles.biometrySwitch}
-					trackColor={Device.isIos() ? { true: colors.green300, false: colors.grey300 } : null}
+					trackColor={Device.isIos() ? { true: colors.green, false: colors.grey300 } : null}
 					ios_backgroundColor={colors.grey300}
 				/>
 			</View>
@@ -554,7 +548,7 @@ class ImportFromSeed extends PureComponent {
 
 							<View style={styles.showMatchingPasswords}>
 								{password !== '' && password === confirmPassword ? (
-									<Icon name="check" size={12} color={colors.green300} />
+									<Icon name="check" size={12} color={colors.green} />
 								) : null}
 							</View>
 							<Text style={styles.passwordStrengthLabel}>
