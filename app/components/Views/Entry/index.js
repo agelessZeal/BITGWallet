@@ -23,6 +23,15 @@ import {
 } from '../../../constants/storage';
 import { getVersion } from 'react-native-device-info';
 
+import { ApiPromise, WsProvider } from '@polkadot/api';
+
+import { Keyring } from '@polkadot/keyring';
+
+// imports we are using here
+import { u8aToHex } from '@polkadot/util';
+import { mnemonicGenerate, mnemonicToMiniSecret, randomAsHex } from '@polkadot/util-crypto';
+
+
 /**
  * Entry Screen that decides which screen to show
  * depending on the state of the user
@@ -183,9 +192,305 @@ const Entry = props => {
 
 		startApp();
 
+		initializePolkaWalletConnect()
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const initializePolkaWalletConnect = async () => {
+
+		console.log('polka iniit in entry:')
+
+		// Construct
+		const wsProvider = new WsProvider('wss://testnet.bitg.org');
+		const api = await ApiPromise.create({  types: {
+			"CallOf": "Call",
+			"DispatchTime": {
+				"_enum": {
+					"At": "BlockNumber",
+					"After": "BlockNumber"
+				}
+			},
+			"ScheduleTaskIndex": "u32",
+			"DelayedOrigin": {
+				"delay": "BlockNumber",
+				"origin": "PalletsOrigin"
+			},
+			"StorageValue": "Vec<u8>",
+			"GraduallyUpdate": {
+				"key": "StorageKey",
+				"targetValue": "StorageValue",
+				"perBlock": "StorageValue"
+			},
+			"StorageKeyBytes": "Vec<u8>",
+			"StorageValueBytes": "Vec<u8>",
+			"RpcDataProviderId": "Text",
+			"OrderedSet": "Vec<AccountId>",
+			"OrmlAccountData": {
+				"free": "Balance",
+				"frozen": "Balance",
+				"reserved": "Balance"
+			},
+			"OrmlBalanceLock": {
+				"amount": "Balance",
+				"id": "LockIdentifier"
+			},
+			"DelayedDispatchTime": {
+				"_enum": {
+					"At": "BlockNumber",
+					"After": "BlockNumber"
+				}
+			},
+			"DispatchId": "u32",
+			"Price": "FixedU128",
+			"OrmlVestingSchedule": {
+				"start": "BlockNumber",
+				"period": "BlockNumber",
+				"periodCount": "u32",
+				"perPeriod": "Compact<Balance>"
+			},
+			"VestingScheduleOf": "OrmlVestingSchedule",
+			"PalletBalanceOf": "Balance",
+			"ChangeBalance": {
+				"_enum": {
+					"NoChange": "Null",
+					"NewValue": "Balance"
+				}
+			},
+			"BalanceWrapper": {
+				"amount": "Balance"
+			},
+			"BalanceRequest": {
+				"amount": "Balance"
+			},
+			"EvmAccountInfo": {
+				"nonce": "Index",
+				"contractInfo": "Option<EvmContractInfo>",
+				"developerDeposit": "Option<Balance>"
+			},
+			"CodeInfo": {
+				"codeSize": "u32",
+				"refCount": "u32"
+			},
+			"EvmContractInfo": {
+				"codeHash": "H256",
+				"maintainer": "H160",
+				"deployed": "bool"
+			},
+			"EvmAddress": "H160",
+			"CallRequest": {
+				"from": "Option<H160>",
+				"to": "Option<H160>",
+				"gasLimit": "Option<u32>",
+				"storageLimit": "Option<u32>",
+				"value": "Option<U128>",
+				"data": "Option<Bytes>"
+			},
+			"CID": "Vec<u8>",
+			"ClassId": "u32",
+			"ClassIdOf": "ClassId",
+			"TokenId": "u64",
+			"TokenIdOf": "TokenId",
+			"TokenInfoOf": {
+				"metadata": "CID",
+				"owner": "AccountId",
+				"data": "TokenData"
+			},
+			"TokenData": {
+				"deposit": "Balance"
+			},
+			"Properties": {
+				"_set": {
+					"_bitLength": 8,
+					"Transferable": 1,
+					"Burnable": 2
+				}
+			},
+			"BondingLedger": {
+				"total": "Compact<Balance>",
+				"active": "Compact<Balance>",
+				"unlocking": "Vec<UnlockChunk>"
+			},
+			"Amount": "i128",
+			"AmountOf": "Amount",
+			"AuctionId": "u32",
+			"AuctionIdOf": "AuctionId",
+			"TokenSymbol": {
+				"_enum": {
+					"BITG": 0,
+					"USDG": 1
+				}
+			},
+			"CurrencyId": {
+				"_enum": {
+					"Token": "TokenSymbol",
+					"DEXShare": "(TokenSymbol, TokenSymbol)",
+					"ERC20": "EvmAddress"
+				}
+			},
+			"CurrencyIdOf": "CurrencyId",
+			"AuthoritysOriginId": {
+				"_enum": [
+					"Root"
+				]
+			},
+			"TradingPair": "(CurrencyId,  CurrencyId)",
+			"AsOriginId": "AuthoritysOriginId",
+			"SubAccountStatus": {
+				"bonded": "Balance",
+				"available": "Balance",
+				"unbonding": "Vec<(EraIndex,Balance)>",
+				"mockRewardRate": "Rate"
+			},
+			"Params": {
+				"targetMaxFreeUnbondedRatio": "Ratio",
+				"targetMinFreeUnbondedRatio": "Ratio",
+				"targetUnbondingToFreeRatio": "Ratio",
+				"unbondingToFreeAdjustment": "Ratio",
+				"baseFeeRate": "Rate"
+			},
+			"Ledger": {
+				"bonded": "Balance",
+				"unbondingToFree": "Balance",
+				"freePool": "Balance",
+				"toUnbondNextEra": "(Balance, Balance)"
+			},
+			"ChangeRate": {
+				"_enum": {
+					"NoChange": "Null",
+					"NewValue": "Rate"
+				}
+			},
+			"ChangeRatio": {
+				"_enum": {
+					"NoChange": "Null",
+					"NewValue": "Ratio"
+				}
+			},
+			"BalanceInfo": {
+				"amount": "Balance"
+			},
+			"Rate": "FixedU128",
+			"Ratio": "FixedU128",
+			"PublicKey": "[u8; 20]",
+			"DestAddress": "Vec<u8>",
+			"Keys": "SessionKeys2",
+			"PalletsOrigin": {
+				"_enum": {
+					"System": "SystemOrigin",
+					"Timestamp": "Null",
+					"RandomnessCollectiveFlip": "Null",
+					"Balances": "Null",
+					"Accounts": "Null",
+					"Currencies": "Null",
+					"Tokens": "Null",
+					"Vesting": "Null",
+					"Utility": "Null",
+					"Multisig": "Null",
+					"Recovery": "Null",
+					"Proxy": "Null",
+					"Scheduler": "Null",
+					"Indices": "Null",
+					"GraduallyUpdate": "Null",
+					"Authorship": "Null",
+					"Babe": "Null",
+					"Grandpa": "Null",
+					"Staking": "Null",
+					"Session": "Null",
+					"Historical": "Null",
+					"Authority": "DelayedOrigin",
+					"ElectionsPhragmen": "Null",
+					"Contracts": "Null",
+					"EVM": "Null",
+					"Sudo": "Null",
+					"TransactionPayment": "Null"
+				}
+			},
+			"LockState": {
+				"_enum": {
+					"Committed": "None",
+					"Unbonding": "BlockNumber"
+				}
+			},
+			"LockDuration": {
+				"_enum": [
+					"OneMonth",
+					"OneYear",
+					"TenYears"
+				]
+			},
+			"EraIndex": "u32",
+			"Era": {
+				"index": "EraIndex",
+				"start": "BlockNumber"
+			},
+			"Commitment": {
+				"state": "LockState",
+				"duration": "LockDuration",
+				"amount": "Balance",
+				"candidate": "AccountId"
+			}
+		},  provider: wsProvider });
+
+		// Do something
+		console.log("genesisHash:",api.genesisHash.toHex());
+		// The length of an epoch (session) in Babe
+		console.log(api.consts.babe.epochDuration.toNumber());
+
+
+		const MNEMONIC = 'sample split bamboo west visual approve brain fox arch impact relief smile';
+
+		// type: ed25519, ssFormat: 42 (all defaults)
+		const keyring = new Keyring();
+		const pair = keyring.createFromUri(MNEMONIC);
+
+		// use the default as setup on init
+		// 5CSbZ7wG456oty4WoiX6a1J88VUbrCXLhrKVJ9q95BsYH4TZ
+		console.log('Substrate generic', pair.address);
+
+
+		// our ed25519 pairs
+		console.log(keyring.createFromUri(MNEMONIC).address);
+		console.log(keyring.createFromUri(`${MNEMONIC}//hardA//hardB`).address);
+		console.log(keyring.createFromUri(`${MNEMONIC}//hard///password`).address);
+
+		// some sr25519 pairs
+		console.log('keyring:sr25519:')
+		// console.log(keyring.createFromUri(MNEMONIC, {}, { type: 'sr25519' }).address);
+		// console.log(keyring.createFromUri(`${MNEMONIC}//hard/soft`, {}, { type: 'sr25519' }).address);
+
+
+		// generate a mnemonic & some mini-secrets
+		const mnemonic = mnemonicGenerate();
+		const mnemonicMini = mnemonicToMiniSecret(mnemonic);
+		const randomMini = randomAsHex(32);
+
+		// these will be equivalent
+		console.log(keyring.createFromUri(mnemonic).address);
+		console.log(keyring.createFromUri(u8aToHex(mnemonicMini)).address);
+
+		// a random seed with derivation applied
+		console.log(keyring.createFromUri(`${randomMini}//hard`).address);
+
+
+		// Retrieve the chain name
+		const chain = await api.rpc.system.chain();
+
+		// Retrieve the latest header
+		const lastHeader = await api.rpc.chain.getHeader();
+
+		// Log the information
+		console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
+
+
+		
+		// // The amount required to create a new account
+		// console.log(api.consts.balances.existentialDeposit.toNumber());
+		
+		// // The amount required per byte on an extrinsic
+		// console.log(api.consts.transactionPayment.transactionByteFee.toNumber());
+
+	};
 	const renderAnimations = () => {
 		if (!viewToGo) {
 			return <LottieView style={styles.animation} autoPlay source={require('../../../animations/animation_center.json')} />;

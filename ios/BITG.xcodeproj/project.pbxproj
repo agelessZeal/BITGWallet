@@ -42,6 +42,7 @@
 		C9A105C3268191C40061BCD3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A105BC268191C40061BCD3 /* main.m */; };
 		C9A105C4268191C40061BCD3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9A105BD268191C40061BCD3 /* Images.xcassets */; };
 		C9A105C5268191C40061BCD3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A105BE268191C40061BCD3 /* AppDelegate.m */; };
+		C9AEB9D5268CB59D00195C3D /* InpageBridgeWeb3.js in Resources */ = {isa = PBXBuildFile; fileRef = C9AEB9D4268CB59D00195C3D /* InpageBridgeWeb3.js */; };
 		CD13D926E1E84D9ABFE672C0 /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3E2492C67CF345CABD7B8601 /* Roboto-BlackItalic.ttf */; };
 		D171C39A8BD44DBEB6B68480 /* EuclidCircularB-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 42CBA652072F4BE2A8B815C1 /* EuclidCircularB-MediumItalic.otf */; };
 		DC6A024F56DD43E1A83B47B1 /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5FF0FF1DFB74B3C8BB99E09 /* Roboto-MediumItalic.ttf */; };
@@ -218,7 +219,6 @@
 		BB8BA2D3C0354D6090B56A8A /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../app/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		BF485CDA047B4D52852B87F5 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		C752564A28B44392AEE16BD5 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../app/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
-		C9A105B4268191C40061BCD3 /* MetaMaskDebug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MetaMaskDebug.entitlements; sourceTree = "<group>"; };
 		C9A105B5268191C40061BCD3 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C9A105B8268191C40061BCD3 /* RCTAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTAnalytics.h; sourceTree = "<group>"; };
 		C9A105B9268191C40061BCD3 /* RCTAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAnalytics.m; sourceTree = "<group>"; };
@@ -229,6 +229,8 @@
 		C9A105BF268191C40061BCD3 /* BITG.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BITG.entitlements; sourceTree = "<group>"; };
 		C9A105C0268191C40061BCD3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C9A105CC268191DF0061BCD3 /* BITG-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BITG-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		C9AEB9D3268CB56100195C3D /* BITGDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BITGDebug.entitlements; sourceTree = "<group>"; };
+		C9AEB9D4268CB59D00195C3D /* InpageBridgeWeb3.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = InpageBridgeWeb3.js; path = ../../app/core/InpageBridgeWeb3.js; sourceTree = "<group>"; };
 		C9FD3FB1258A41A5A0546C83 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../app/fonts/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
 		CE0434C5FB7C4C6F9FEBDCE2 /* EuclidCircularB-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "EuclidCircularB-Medium.otf"; path = "../app/fonts/EuclidCircularB-Medium.otf"; sourceTree = "<group>"; };
 		CF552F79C77A4184A690513A /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-ThinItalic.ttf"; path = "../app/fonts/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
@@ -423,7 +425,8 @@
 		C9A105B3268191C40061BCD3 /* BITG */ = {
 			isa = PBXGroup;
 			children = (
-				C9A105B4268191C40061BCD3 /* MetaMaskDebug.entitlements */,
+				C9AEB9D4268CB59D00195C3D /* InpageBridgeWeb3.js */,
+				C9AEB9D3268CB56100195C3D /* BITGDebug.entitlements */,
 				C9A105B5268191C40061BCD3 /* AppDelegate.h */,
 				C9A105B6268191C40061BCD3 /* NativeModules */,
 				C9A105BA268191C40061BCD3 /* LaunchScreen.xib */,
@@ -659,6 +662,7 @@
 				2CDF19FE9DEE4BF8B07154B1 /* EuclidCircularB-LightItalic.otf in Resources */,
 				8DEB44A7E7EF48E1B3298910 /* EuclidCircularB-Medium.otf in Resources */,
 				D171C39A8BD44DBEB6B68480 /* EuclidCircularB-MediumItalic.otf in Resources */,
+				C9AEB9D5268CB59D00195C3D /* InpageBridgeWeb3.js in Resources */,
 				39D0D096A0F340ABAC1A8565 /* EuclidCircularB-Regular.otf in Resources */,
 				2370F9A340CF4ADFBCFB0543 /* EuclidCircularB-RegularItalic.otf in Resources */,
 				BF39E5BAE0F34F9091FF6AC0 /* EuclidCircularB-Semibold.otf in Resources */,

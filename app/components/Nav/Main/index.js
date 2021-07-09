@@ -66,6 +66,11 @@ import { ANALYTICS_EVENT_OPTS } from '../../../util/analytics';
 import BigNumber from 'bignumber.js';
 import { setInfuraAvailabilityBlocked, setInfuraAvailabilityNotBlocked } from '../../../actions/infuraAvailability';
 
+import { ApiPromise, WsProvider } from '@polkadot/api';
+
+// Import the keyring as required
+import { Keyring } from '@polkadot/api';
+
 const styles = StyleSheet.create({
 	flex: {
 		flex: 1,
@@ -184,6 +189,28 @@ const Main = props => {
 		WalletConnect.init();
 	};
 
+	const initializePolkaWalletConnect = async () => {
+
+		console.log('polka iniit:')
+
+		// Construct
+		const wsProvider = new WsProvider('wss://testnet.bitg.org');
+		const api = await ApiPromise.create({  types: { 
+			AccountInfo: 'AccountInfoWithDualRefCount'
+		  },  provider: wsProvider });
+
+		// Do something
+		console.log("genesisHash:",api.genesisHash.toHex());
+		// The length of an epoch (session) in Babe
+		console.log(api.consts.babe.epochDuration.toNumber());
+		
+		// The amount required to create a new account
+		console.log(api.consts.balances.existentialDeposit.toNumber());
+		
+		// The amount required per byte on an extrinsic
+		console.log(api.consts.transactionPayment.transactionByteFee.toNumber());
+
+	};
 	const trackSwaps = useCallback(
 		async (event, transactionMeta) => {
 			try {
@@ -265,6 +292,9 @@ const Main = props => {
 					Analytics.trackEventWithParameters(event, {});
 					Analytics.trackEventWithParameters(event, parameters, true);
 				});
+
+
+
 			} catch (e) {
 				Logger.error(e, ANALYTICS_EVENT_OPTS.SWAP_TRACKING_FAILED);
 				InteractionManager.runAfterInteractions(() => {
@@ -588,8 +618,9 @@ const Main = props => {
 		};
 	}, [onUnapprovedTransaction]);
 
-	useEffect(() => {
+	useEffect( () => {
 		initializeWalletConnect();
+		initializePolkaWalletConnect()
 		AppState.addEventListener('change', handleAppStateChange);
 		lockManager.current = new LockManager(props.navigation, props.lockTime);
 		PushNotification.configure({

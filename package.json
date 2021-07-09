@@ -77,6 +77,8 @@
     "@metamask/controllers": "^10.1.0",
     "@metamask/etherscan-link": "^2.0.0",
     "@metamask/swaps-controller": "^4.0.0",
+    "@polkadot/api": "^4.17.1",
+    "@polkadot/keyring": "^6.11.1",
     "@react-native-community/async-storage": "1.12.1",
     "@react-native-community/blur": "^3.6.0",
     "@react-native-community/checkbox": "^0.4.2",
