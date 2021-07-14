@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
+		
 		marginBottom: 16
 	},
 	explainBackupContainer: {
@@ -196,6 +197,7 @@ const AccountBackupStep1B = props => {
 
 	const goNext = () => {
 		props.navigation.navigate('ManualBackupStep1', { ...props.navigation.state.params });
+		console.log('AccountBackupStep1B to ManualBackupStep1:',props.navigation.state.params)
 	};
 
 	const learnMore = () => {

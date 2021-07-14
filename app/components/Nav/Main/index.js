@@ -191,24 +191,7 @@ const Main = props => {
 
 	const initializePolkaWalletConnect = async () => {
 
-		console.log('polka iniit:')
 
-		// Construct
-		const wsProvider = new WsProvider('wss://testnet.bitg.org');
-		const api = await ApiPromise.create({  types: { 
-			AccountInfo: 'AccountInfoWithDualRefCount'
-		  },  provider: wsProvider });
-
-		// Do something
-		console.log("genesisHash:",api.genesisHash.toHex());
-		// The length of an epoch (session) in Babe
-		console.log(api.consts.babe.epochDuration.toNumber());
-		
-		// The amount required to create a new account
-		console.log(api.consts.balances.existentialDeposit.toNumber());
-		
-		// The amount required per byte on an extrinsic
-		console.log(api.consts.transactionPayment.transactionByteFee.toNumber());
 
 	};
 	const trackSwaps = useCallback(

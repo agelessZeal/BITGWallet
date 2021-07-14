@@ -449,6 +449,7 @@ class Onboarding extends PureComponent {
 		try {
 			await AsyncStorage.removeItem(NEXT_MAKER_REMINDER);
 			await Engine.resetState();
+			console.log('Onboarding finish  Sync:')
 			await Engine.sync({
 				...this.dataToSync,
 				seed: this.seedWords,

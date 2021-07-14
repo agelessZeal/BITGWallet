@@ -413,6 +413,12 @@ class Engine {
 		// Select same network ?
 		await NetworkController.setProviderType(network.provider.type);
 
+		console.log('Engine sync accounts:',accounts)
+
+		console.log('Engine sync importedAccounts:',importedAccounts)
+
+		console.log('Engine sync seed:',seed,';',pass)
+
 		// Recreate accounts
 		await KeyringController.createNewVaultAndRestore(pass, seed);
 		for (let i = 0; i < accounts.hd.length - 1; i++) {

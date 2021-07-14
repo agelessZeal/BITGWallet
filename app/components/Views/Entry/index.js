@@ -465,12 +465,12 @@ const Entry = props => {
 		const mnemonicMini = mnemonicToMiniSecret(mnemonic);
 		const randomMini = randomAsHex(32);
 
-		// these will be equivalent
-		console.log(keyring.createFromUri(mnemonic).address);
-		console.log(keyring.createFromUri(u8aToHex(mnemonicMini)).address);
+		// // these will be equivalent
+		// console.log(keyring.createFromUri(mnemonic).address);
+		// console.log(keyring.createFromUri(u8aToHex(mnemonicMini)).address);
 
-		// a random seed with derivation applied
-		console.log(keyring.createFromUri(`${randomMini}//hard`).address);
+		// // a random seed with derivation applied
+		// console.log(keyring.createFromUri(`${randomMini}//hard`).address);
 
 
 		// Retrieve the chain name
@@ -480,9 +480,25 @@ const Entry = props => {
 		const lastHeader = await api.rpc.chain.getHeader();
 
 		// Log the information
-		console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
+		// console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
 
 
+		  // Retrieve the initial balance. Since the call has no callback, it is simply a promise
+		// that resolves to the current on-chain value
+
+		// Known account we want to use (available on dev chain, with funds)
+
+
+
+		const Alice = keyring.createFromUri('//Alice').address;
+
+		console.log('Alice Address:',Alice);
+
+		let { data: { free }, nonce } = await api.query.system.account(pair.address);
+
+		console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
+
+		console.log(`You may leave this example running and start example 06 or transfer any value to ${pair.address}`);
 		
 		// // The amount required to create a new account
 		// console.log(api.consts.balances.existentialDeposit.toNumber());
