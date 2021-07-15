@@ -450,24 +450,27 @@ const Entry = props => {
 		// 5CSbZ7wG456oty4WoiX6a1J88VUbrCXLhrKVJ9q95BsYH4TZ
 		console.log('Substrate generic:', pair.address);
 
+		console.log('kerying:',keyring)
 
-		// our ed25519 pairs
+
+		// // our ed25519 pairs
 		// console.log(keyring.createFromUri(MNEMONIC).address);
 		// console.log(keyring.createFromUri(`${MNEMONIC}//hardA//hardB`).address);
 		// console.log(keyring.createFromUri(`${MNEMONIC}//hard///password`).address);
 
 
 		// // generate a mnemonic & some mini-secrets
-		// const mnemonic = mnemonicGenerate();
-		// const mnemonicMini = mnemonicToMiniSecret(mnemonic);
-		// const randomMini = randomAsHex(32);
+		const mnemonic = mnemonicGenerate();
+		const mnemonicMini = mnemonicToMiniSecret(mnemonic);
+		const randomMini = randomAsHex(32);
 
-		// // these will be equivalent
-		// console.log(keyring.createFromUri(mnemonic).address);
-		// console.log(keyring.createFromUri(u8aToHex(mnemonicMini)).address);
+		// these will be equivalent
+		console.log(keyring.createFromUri(mnemonic).address);
+		console.log(keyring.createFromUri(u8aToHex(mnemonicMini)).address);
 
-		// // a random seed with derivation applied
-		// console.log(keyring.createFromUri(`${randomMini}//hard`).address);
+		console.log('mnemonic:',mnemonic,":",u8aToHex(mnemonicMini),':',randomMini)
+		// a random seed with derivation applied
+		console.log(keyring.createFromUri(`${randomMini}//hard`).address);
 
 
 		// // Retrieve the chain name

@@ -193,19 +193,19 @@ const Main = props => {
 
 		if(props.api){
 
-			console.log('ref polka api')
+			// console.log('ref polka api')
 			
-			const MNEMONIC = 'sample split bamboo west visual approve brain fox arch impact relief smile';
+			// const MNEMONIC = 'sample split bamboo west visual approve brain fox arch impact relief smile';
 
-			// type: ed25519, ssFormat: 42 (all defaults)
-			const keyring = new Keyring();
-			const pair = keyring.createFromUri(MNEMONIC);
+			// // type: ed25519, ssFormat: 42 (all defaults)
+			// const keyring = new Keyring();
+			// const pair = keyring.createFromUri(MNEMONIC);
 
-			let { data: { free }, nonce } = await props.api.query.system.account(pair.address);
+			// let { data: { free }, nonce } = await props.api.query.system.account(pair.address);
 	
-			console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
+			// console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
 	
-			console.log(`You may leave this example running and start example 06 or transfer any value to ${pair.address}`);
+			// console.log(`You may leave this example running and start example 06 or transfer any value to ${pair.address}`);
 			
 
 		}
