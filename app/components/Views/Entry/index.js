@@ -12,6 +12,7 @@ import { colors } from '../../../styles/common';
 import Logger from '../../../util/Logger';
 import Device from '../../../util/Device';
 import { recreateVaultWithSamePassword } from '../../../core/Vault';
+import {setPolkaApi}  from '../../../actions/api'
 import {
 	EXISTING_USER,
 	ONBOARDING_WIZARD,
@@ -437,6 +438,7 @@ const Entry = props => {
 		// The length of an epoch (session) in Babe
 		console.log(api.consts.babe.epochDuration.toNumber());
 
+		props.setPolkaApi(api);
 
 		const MNEMONIC = 'sample split bamboo west visual approve brain fox arch impact relief smile';
 
@@ -556,11 +558,14 @@ Entry.propTypes = {
 	/**
 	 * Dispatch set onboarding wizard step
 	 */
-	setOnboardingWizardStep: PropTypes.func
+	setOnboardingWizardStep: PropTypes.func,
+
+	setPolkaApi: PropTypes.func
 };
 
 const mapDispatchToProps = dispatch => ({
-	setOnboardingWizardStep: step => dispatch(setOnboardingWizardStep(step))
+	setOnboardingWizardStep: step => dispatch(setOnboardingWizardStep(step)),
+	setPolkaApi: api => dispatch(setPolkaApi(api))
 });
 
 const mapStateToProps = state => ({

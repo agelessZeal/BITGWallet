@@ -34,7 +34,7 @@ import NotificationManager from './NotificationManager';
 import contractMap from '@metamask/contract-metadata';
 import Logger from '../util/Logger';
 import { LAST_INCOMING_TX_BLOCK_INFO } from '../constants/storage';
-import { MM_INFURA_PROJECT_ID} from '../constants/constant'
+import { MM_INFURA_PROJECT_ID } from '../constants/constant'
 
 const NON_EMPTY = 'NON_EMPTY';
 
@@ -52,7 +52,7 @@ class Engine {
 	datamodel;
 
 	/**
-	 * Object containing the info for the latest incoming tx block
+	 * Object containing the info for the latest incoming ∂tx block
 	 * for each address and network
 	 */
 	lastIncomingTxBlockInfo;
@@ -61,13 +61,18 @@ class Engine {
 	 * Creates a CoreController instance
 	 */
 	constructor(initialState = {}) {
+
+		console.log('Engine constructor initial state:', initialState)
+
 		if (!Engine.instance) {
+
 			const preferencesController = new PreferencesController(
 				{},
 				{
 					ipfsGateway: AppConstants.IPFS_DEFAULT_GATEWAY_URL
 				}
 			);
+
 			const networkController = new NetworkController({
 				infuraProjectId: MM_INFURA_PROJECT_ID || NON_EMPTY,
 				providerConfig: {
@@ -413,11 +418,11 @@ class Engine {
 		// Select same network ?
 		await NetworkController.setProviderType(network.provider.type);
 
-		console.log('Engine sync accounts:',accounts)
+		console.log('Engine sync accounts:', accounts)
 
-		console.log('Engine sync importedAccounts:',importedAccounts)
+		console.log('Engine sync importedAccounts:', importedAccounts)
 
-		console.log('Engine sync seed:',seed,';',pass)
+		console.log('Engine sync seed:', seed, ';', pass)
 
 		// Recreate accounts
 		await KeyringController.createNewVaultAndRestore(pass, seed);
@@ -447,12 +452,12 @@ class Engine {
 					chainId !== `0x1`
 						? preferences.accountTokens[address][chainId]
 						: preferences.accountTokens[address][chainId]
-								.filter(({ address }) =>
-									contractMap[toChecksumAddress(address)]
-										? contractMap[toChecksumAddress(address)].erc20
-										: true
-								)
-								.map(token => ({ ...token, address: toChecksumAddress(token.address) }));
+							.filter(({ address }) =>
+								contractMap[toChecksumAddress(address)]
+									? contractMap[toChecksumAddress(address)].erc20
+									: true
+							)
+							.map(token => ({ ...token, address: toChecksumAddress(token.address) }));
 			});
 		});
 		await AssetsController.update({ allTokens });

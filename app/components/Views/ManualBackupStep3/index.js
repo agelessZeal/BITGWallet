@@ -99,6 +99,7 @@ class ManualBackupStep3 extends PureComponent {
 		const currentSeedphraseHints = await AsyncStorage.getItem(SEED_PHRASE_HINTS);
 		const parsedHints = currentSeedphraseHints && JSON.parse(currentSeedphraseHints);
 		const manualBackup = parsedHints?.manualBackup;
+		console.log('manualBack in backup3:',manualBackup)
 		this.setState({
 			hintText: manualBackup
 		});

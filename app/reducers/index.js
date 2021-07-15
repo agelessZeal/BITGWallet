@@ -15,6 +15,7 @@ import swapsReducer from './swaps';
 import notificationReducer from './notification';
 import infuraAvailabilityReducer from './infuraAvailability';
 import collectiblesReducer from './collectibles';
+import apiReducer from './api'
 import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
@@ -34,7 +35,8 @@ const rootReducer = combineReducers({
 	notification: notificationReducer,
 	swaps: swapsReducer,
 	fiatOrders,
-	infuraAvailability: infuraAvailabilityReducer
+	infuraAvailability: infuraAvailabilityReducer,
+	polka:apiReducer
 });
 
 export default rootReducer;

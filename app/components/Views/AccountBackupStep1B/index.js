@@ -196,8 +196,9 @@ const AccountBackupStep1B = props => {
 	const [showWhatIsSeedphraseModal, setWhatIsSeedphraseModal] = useState(false);
 
 	const goNext = () => {
-		props.navigation.navigate('ManualBackupStep1', { ...props.navigation.state.params });
 		console.log('AccountBackupStep1B to ManualBackupStep1:',props.navigation.state.params)
+		props.navigation.navigate('ManualBackupStep1', { ...props.navigation.state.params });
+
 	};
 
 	const learnMore = () => {

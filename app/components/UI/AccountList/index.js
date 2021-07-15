@@ -161,6 +161,8 @@ class AccountList extends PureComponent {
 		const { PreferencesController } = Engine.context;
 		const { keyrings } = this.props;
 
+		console.log('onAccountChange: keyrings:',keyrings)
+
 		requestAnimationFrame(async () => {
 			try {
 				this.mounted && this.setState({ selectedAccountIndex: newIndex });

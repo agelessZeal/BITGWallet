@@ -287,6 +287,8 @@ class ChoosePassword extends PureComponent {
 		const { KeyringController } = Engine.context;
 		await Engine.resetState();
 		await KeyringController.createNewVaultAndKeychain(password);
+		console.log('createNewVaultAndKeychain in choosePassword:',password)
+
 		this.keyringControllerPasswordSet = true;
 	};
 
@@ -366,6 +368,8 @@ class ChoosePassword extends PureComponent {
 		const { KeyringController, PreferencesController } = Engine.context;
 		const seedPhrase = await this.getSeedPhrase();
 
+		console.log('recreateVault in choosePassword:',password,seedPhrase)
+
 		let importedAccounts = [];
 		try {
 			const keychainPassword = this.keyringControllerPasswordSet ? this.state.password : '';
@@ -378,6 +382,7 @@ class ChoosePassword extends PureComponent {
 				const simpleKeyringAccounts = await Promise.all(
 					simpleKeyring.accounts.map(account => KeyringController.exportAccount(keychainPassword, account))
 				);
+				console.log('recreateVault in choosePassword: simpleKeyringAccounts:',simpleKeyringAccounts)
 				importedAccounts = [...importedAccounts, ...simpleKeyringAccounts];
 			}
 		} catch (e) {
@@ -409,6 +414,8 @@ class ChoosePassword extends PureComponent {
 			Logger.error(e, 'error while trying to import accounts on recreate vault');
 		}
 
+		console.log('recreateVault:hdKeyring:',hdKeyring)
+
 		// Reset preferencesControllerState
 		preferencesControllerState = PreferencesController.state;
 
@@ -432,6 +439,7 @@ class ChoosePassword extends PureComponent {
 		const { password } = this.state;
 		const keychainPassword = this.keyringControllerPasswordSet ? password : '';
 		const mnemonic = await KeyringController.exportSeedPhrase(keychainPassword);
+		console.log('ChoosePassword: getSeedPhrase: mnemonic:',mnemonic)
 		return JSON.stringify(mnemonic).replace(/"/g, '');
 	};
 
