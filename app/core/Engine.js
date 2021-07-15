@@ -62,7 +62,7 @@ class Engine {
 	 */
 	constructor(initialState = {}) {
 
-		console.log('Engine constructor initial state:', initialState)
+		// console.log('Engine constructor initial state:', initialState)
 
 		if (!Engine.instance) {
 

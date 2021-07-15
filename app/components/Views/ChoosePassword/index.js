@@ -318,6 +318,7 @@ class ChoosePassword extends PureComponent {
 				await AsyncStorage.setItem(EXISTING_USER, TRUE);
 				await AsyncStorage.removeItem(SEED_PHRASE_HINTS);
 			} else {
+				console.log('choosepassword onPressCreate:',password)
 				await this.recreateVault(password);
 			}
 
@@ -365,6 +366,8 @@ class ChoosePassword extends PureComponent {
 	 * @param password - Password to recreate and set the vault with
 	 */
 	recreateVault = async password => {
+		console.log('choosepassword recreateVault:',password)
+
 		const { KeyringController, PreferencesController } = Engine.context;
 		const seedPhrase = await this.getSeedPhrase();
 
@@ -438,6 +441,7 @@ class ChoosePassword extends PureComponent {
 		const { KeyringController } = Engine.context;
 		const { password } = this.state;
 		const keychainPassword = this.keyringControllerPasswordSet ? password : '';
+		console.log('ChoosePassword: getSeedPhrase: keychainPassword:',keychainPassword)
 		const mnemonic = await KeyringController.exportSeedPhrase(keychainPassword);
 		console.log('ChoosePassword: getSeedPhrase: mnemonic:',mnemonic)
 		return JSON.stringify(mnemonic).replace(/"/g, '');

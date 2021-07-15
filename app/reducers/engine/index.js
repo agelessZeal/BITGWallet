@@ -9,8 +9,6 @@ const initialState = {
 let engineInitialized = false;
 
 function initalizeEngine(state = {}) {
-	
-	console.log('initalizeEngine:',state)
 
 	Engine.init(state);
 

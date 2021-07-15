@@ -448,24 +448,19 @@ const Entry = props => {
 
 		// use the default as setup on init
 		// 5CSbZ7wG456oty4WoiX6a1J88VUbrCXLhrKVJ9q95BsYH4TZ
-		console.log('Substrate generic', pair.address);
+		console.log('Substrate generic:', pair.address);
 
 
 		// our ed25519 pairs
-		console.log(keyring.createFromUri(MNEMONIC).address);
-		console.log(keyring.createFromUri(`${MNEMONIC}//hardA//hardB`).address);
-		console.log(keyring.createFromUri(`${MNEMONIC}//hard///password`).address);
-
-		// some sr25519 pairs
-		console.log('keyring:sr25519:')
-		// console.log(keyring.createFromUri(MNEMONIC, {}, { type: 'sr25519' }).address);
-		// console.log(keyring.createFromUri(`${MNEMONIC}//hard/soft`, {}, { type: 'sr25519' }).address);
+		// console.log(keyring.createFromUri(MNEMONIC).address);
+		// console.log(keyring.createFromUri(`${MNEMONIC}//hardA//hardB`).address);
+		// console.log(keyring.createFromUri(`${MNEMONIC}//hard///password`).address);
 
 
-		// generate a mnemonic & some mini-secrets
-		const mnemonic = mnemonicGenerate();
-		const mnemonicMini = mnemonicToMiniSecret(mnemonic);
-		const randomMini = randomAsHex(32);
+		// // generate a mnemonic & some mini-secrets
+		// const mnemonic = mnemonicGenerate();
+		// const mnemonicMini = mnemonicToMiniSecret(mnemonic);
+		// const randomMini = randomAsHex(32);
 
 		// // these will be equivalent
 		// console.log(keyring.createFromUri(mnemonic).address);
@@ -475,11 +470,11 @@ const Entry = props => {
 		// console.log(keyring.createFromUri(`${randomMini}//hard`).address);
 
 
-		// Retrieve the chain name
-		const chain = await api.rpc.system.chain();
+		// // Retrieve the chain name
+		// const chain = await api.rpc.system.chain();
 
-		// Retrieve the latest header
-		const lastHeader = await api.rpc.chain.getHeader();
+		// // Retrieve the latest header
+		// const lastHeader = await api.rpc.chain.getHeader();
 
 		// Log the information
 		// console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
@@ -492,15 +487,15 @@ const Entry = props => {
 
 
 
-		const Alice = keyring.createFromUri('//Alice').address;
+		// const Alice = keyring.createFromUri('//Alice').address;
 
-		console.log('Alice Address:',Alice);
+		// console.log('Alice Address:',Alice);
 
-		let { data: { free }, nonce } = await api.query.system.account(pair.address);
+		// let { data: { free }, nonce } = await api.query.system.account(pair.address);
 
-		console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
+		// console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
 
-		console.log(`You may leave this example running and start example 06 or transfer any value to ${pair.address}`);
+		// console.log(`You may leave this example running and start example 06 or transfer any value to ${pair.address}`);
 		
 		// // The amount required to create a new account
 		// console.log(api.consts.balances.existentialDeposit.toNumber());
