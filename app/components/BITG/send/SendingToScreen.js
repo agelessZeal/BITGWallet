@@ -100,20 +100,24 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginEnd: 5,
     marginBottom: 5,
+    fontSize:18,
+    
   },
   amountInput: {
     padding: 10,
     marginEnd: 5,
+    marginTop: 5,
     marginBottom: 5,
+    fontSize:18,
     alignItems: 'center',
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
   },
   amountWrapper: {
     marginTop: 5,
     backgroundColor: colors.light_gray,
     borderRadius: 5,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   icon: {
     width: 40,
@@ -305,7 +309,8 @@ function SendingToScreen({
     navigation.navigate('QRScanner', {
       onScanSuccess: meta => {
         if (meta.target_address) {
-          this.onToSelectedAddressChange(meta.target_address);
+          console.log('onScallSuccessL',meta.target_address)
+          // this.onToSelectedAddressChange(meta.target_address);
         }
       }
     });
@@ -343,12 +348,6 @@ function SendingToScreen({
 
   const amountBITGFieldChanged = inputValue => {
     
-    // getSendingData({ ...sendingData, amount: text.trim() });
-    // balanceInputChange({ ...sendingData, amount: inputValue.trim() });
-
-    // const { contractExchangeRates, conversionRate, currentCurrency, chainId, ticker } = this.props;
-
-
 		let inputValueConversion, renderableInputValueConversion, hasExchangeRate, comma;
 		// Remove spaces from input
 		inputValue = inputValue && inputValue.replace(/\s+/g, '');
@@ -357,12 +356,9 @@ function SendingToScreen({
 			comma = true;
 			inputValue = inputValue.replace(',', '.');
 		}
-	
+  
     const processedInputValue = isDecimal(inputValue) ? handleWeiNumber(inputValue) : '0';
-    
-    console.log('processedInputValue',processedInputValue)
 
-    
     hasExchangeRate = !!conversionRate ;
     
     inputValueConversion = `${weiToFiatNumber(toWei(processedInputValue), conversionRate)}`;
@@ -375,9 +371,7 @@ function SendingToScreen({
 		if (comma) inputValue = inputValue && inputValue.replace('.', ',');
 		inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
     
-    console.log('balance inputValue',inputValue,renderableInputValueConversion,inputValueConversion)
-
-    setSendingData({ ...sendingData, amount: inputValue,fiat:inputValueConversion });
+    setSendingData({ ...sendingData, amount: fromWei(toWei(processedInputValue)),fiat:inputValueConversion });
 
     // this.setState({
 		// 	inputValue,
@@ -392,11 +386,8 @@ function SendingToScreen({
   };
 
   const amountFiatFieldChanged = inputValue => {
-    setSendingData({ ...sendingData, fiat: inputValue.trim() });
-    // fiatInputChange({ ...sendingData, fiat: inputValue.trim() });
 
-
-		let inputValueConversion, renderableInputValueConversion, hasExchangeRate, comma;
+    let inputValueConversion, renderableInputValueConversion, hasExchangeRate, comma;
 		// Remove spaces from input
 		inputValue = inputValue && inputValue.replace(/\s+/g, '');
 		// Handle semicolon for other languages
@@ -408,18 +399,15 @@ function SendingToScreen({
 		const processedInputValue = isDecimal(inputValue) ? handleWeiNumber(inputValue) : '0';
     
     hasExchangeRate = !!conversionRate ;
-    console.log('processedInputValue',processedInputValue,fiatNumberToWei(processedInputValue, conversionRate))
-
-    // inputValueConversion = `${renderFromWei(fiatNumberToWei(processedInputValue, conversionRate))}`;
     
-    // renderableInputValueConversion = `${inputValueConversion} BITG`;
-
-		// if (comma) inputValue = inputValue && inputValue.replace('.', ',');
-    // inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
+    inputValueConversion = `${renderFromWei(fiatNumberToWei(processedInputValue, conversionRate))}`;
     
-    // console.log('inputValue',inputValue,renderableInputValueConversion,inputValueConversion)
+    renderableInputValueConversion = `${inputValueConversion} BITG`;
 
-    // setSendingData({ ...sendingData, fiat: inputValue,amount:inputValueConversion });
+		if (comma) inputValue = inputValue && inputValue.replace('.', ',');
+    inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
+    
+    setSendingData({ ...sendingData, fiat: fromWei(toWei(processedInputValue)),amount:inputValueConversion });
     
     // this.setState({
 		// 	inputValue,
@@ -489,7 +477,6 @@ function SendingToScreen({
           <TextInput
             style={styles.sendingInput}
             placeholder={strings('bitg_wallet.send_address_hint')}
-            inpu
             placeholderTextColor={colors.grey500}
             editable={editable}
             onChangeText={searchFieldChanged}
@@ -535,7 +522,6 @@ function SendingToScreen({
           />
 
           <TextInput
-
             style={styles.amountInput}
             placeholder={`BITG ${strings('bitg_wallet.amount')}`}
             placeholderTextColor={colors.grey500}

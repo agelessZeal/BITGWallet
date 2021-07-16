@@ -234,10 +234,11 @@ function SendScreen({
         makeAlert('Please connect to the internet');
 
       } else {
-          console.log('move',showAlert)
+          // console.log('move',showAlert)
           var nextPage = page + delta;
 
           // viewPager.current.setPage(nextPage);
+          console.log('sending data:',sendingData)
 
           if (
             sendingData.address === undefined ||
@@ -345,55 +346,13 @@ function SendScreen({
 
   const getSendingData = data => {
 
-    let inputValue = data.amount;
-
-    let inputValueConversion, renderableInputValueConversion, hasExchangeRate, comma;
-    // Remove spaces from input
+    console.log('getSendingData:',data)
     
-    if(!inputValue){
-      inputValue = inputValue && inputValue.replace(/\s+/g, '');
-      // Handle semicolon for other languages
-      if (inputValue && inputValue.includes(',')) {
-        comma = true;
-        inputValue = inputValue.replace(',', '.');
-      }
-    }
-
-
-    // const processedInputValue = isDecimal(inputValue) ? handleWeiNumber(inputValue) : '0';
-
-    console.log('input:',data)
-    const amountValue =
-      data.amount === undefined || data.amount === null || data.amount === ''
-        ? undefined
-        : data.amount.indexOf(',') > -1
-        ? data.amount.replace(',', '.')
-        : data.amount;
-    
-    const balanceFiat = weiToFiatNumber(amountValue, conversionRate);
-
     setSendingData({
       ...data,
-      amount:
-        amountValue === undefined
-          ? undefined
-          : isNaN(inputValue)
-          ? undefined
-          : parseFloat(inputValue),
-       fiat:balanceFiat   
     });
   };
 
-  const balanceInputChange = (data) => {
-
-  }
-
-  const fiatInputChange = (data) => {
-
-
-    //fiatNumberToWei
-
-  }
 
   const getDataFromApi = data => {
     if (data != undefined) {
@@ -417,18 +376,6 @@ function SendScreen({
 
   return (
     <View style={styles.container}>
-      {/* <ToolBar
-        title={Strings.SEND}
-        iconName={
-          navigationType === undefined || navigationType === ''
-            ? Strings.ICON_MENU
-            : navigationType === 'MainStack'
-            ? Strings.ICON_BACK
-            : Strings.ICON_MENU
-        }
-        onMenuPress={onMenuPress}
-      /> */}
-
       {page == 0 ? (
         <Image
           style={ styles.imgBG }
@@ -476,8 +423,6 @@ function SendScreen({
               clerarChildrenState={clerarChildrenState}
               currentCurrency={currentCurrency}
               conversionRate={conversionRate}
-              balanceInputChange={balanceInputChange}
-              fiatInputChange={fiatInputChange}
             />
             <SendingProgressScreen
               key="2"

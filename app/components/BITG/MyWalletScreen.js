@@ -1,4 +1,4 @@
-import React,{useEffect,useCallback,useState,useContext} from 'react';
+import React, { useEffect, useCallback, useState, useContext } from 'react';
 import { View, Text, StyleSheet, Image, Platform, TouchableOpacity, ScrollView, Dimensions, RefreshControl } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,16 +16,16 @@ import { colors, fontStyles } from '../../styles/common';
 import { NavigationContext } from 'react-navigation';
 
 import { getBITGWalletNavbarOptions } from '../UI/Navbar';
-import { toFixedFloor} from './lib/Helpers'
+import { toFixedFloor } from './lib/Helpers'
 
 import { renderFromWei, weiToFiat, hexToBN } from '../../util/number';
 
 import {
-	setSwapsHasOnboarded,
-	setSwapsLiveness,
-	swapsHasOnboardedSelector,
-	swapsTokensWithBalanceSelector,
-	swapsTopAssetsSelector
+    setSwapsHasOnboarded,
+    setSwapsLiveness,
+    swapsHasOnboardedSelector,
+    swapsTokensWithBalanceSelector,
+    swapsTopAssetsSelector
 } from '../../reducers/swaps';
 
 const styles = StyleSheet.create({
@@ -60,14 +60,14 @@ const styles = StyleSheet.create({
     },
     balanceText: {
         color: colors.grey400,
-        fontSize:12,
+        fontSize: 12,
         marginStart: 20
     },
     bitgContainer: {
         flexDirection: 'row',
     },
     usdContainer: {
-        paddingStart:20,
+        paddingStart: 20,
         flexDirection: 'row',
     },
     bitgText: {
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         marginTop: 10,
-        marginBottom:10,
+        marginBottom: 10,
     },
     latestFromBitgButton: {
         height: 70,
@@ -195,80 +195,80 @@ const styles = StyleSheet.create({
         color: colors.redColor,
         textAlign: 'center'
     },
-    buttonContainer:{
-        marginHorizontal:20,
+    buttonContainer: {
+        marginHorizontal: 20,
     },
-    buttonWrapper:{
-        width:'30%',
-        borderRadius:5,
-        backgroundColor:colors.green,
-        height:90,
-        justifyContent:'center',
-        alignItems:'center'
+    buttonWrapper: {
+        width: '30%',
+        borderRadius: 5,
+        backgroundColor: colors.green,
+        height: 90,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    buttonVibWrapper:{
-        width:'30%',
-        borderRadius:5,
-        backgroundColor:colors.orange,
-        height:90,
-        justifyContent:'center',
-        alignItems:'center'
+    buttonVibWrapper: {
+        width: '30%',
+        borderRadius: 5,
+        backgroundColor: colors.orange,
+        height: 90,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    buttonShopWrapper:{
-        width:'30%',
-        borderRadius:5,
-        backgroundColor:colors.blue,
-        height:90,
-        justifyContent:'center',
-        alignItems:'center'
+    buttonShopWrapper: {
+        width: '30%',
+        borderRadius: 5,
+        backgroundColor: colors.blue,
+        height: 90,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    buttonImage:{
-        resizeMode:'contain',
+    buttonImage: {
+        resizeMode: 'contain',
         width: 30,
-        height:30,
+        height: 30,
     },
-    buttonText:{
-        marginTop:10,
-        color:colors.white
+    buttonText: {
+        marginTop: 10,
+        color: colors.white
     },
-    impactWrapper:{
-        width:'100%',
-        paddingHorizontal:20,
-        paddingVertical:10,
-        backgroundColor:colors.grey000
+    impactWrapper: {
+        width: '100%',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: colors.grey000
     },
-    impactItem:{
-        width:'100%',
-        borderRadius:5,
-        backgroundColor:colors.white,
-        padding:10,
-        flexDirection:'row',
-        justifyContent:'space-around',
-        alignItems:'center',
-        marginTop:10,
-        borderColor:colors.grey050,
-        borderWidth:1,
-        borderRadius:5,
+    impactItem: {
+        width: '100%',
+        borderRadius: 5,
+        backgroundColor: colors.white,
+        padding: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginTop: 10,
+        borderColor: colors.grey050,
+        borderWidth: 1,
+        borderRadius: 5,
     },
-    impactItemClose:{
-        position:'absolute',
-        right:6,
-        top:6,
+    impactItemClose: {
+        position: 'absolute',
+        right: 6,
+        top: 6,
     },
-    impactItemStar:{
-        tintColor:colors.blue,
-        width:25,
-        height:25,
+    impactItemStar: {
+        tintColor: colors.blue,
+        width: 25,
+        height: 25,
     },
-    impactItemTitle:{
-        minWidth:'70%',
-        justifyContent:'space-around'
+    impactItemTitle: {
+        minWidth: '70%',
+        justifyContent: 'space-around'
     },
-    impactText1:{
-        color:colors.grey200
+    impactText1: {
+        color: colors.grey200
     },
-    impactText2:{
-        color:colors.black
+    impactText2: {
+        color: colors.black
     },
 })
 
@@ -277,22 +277,22 @@ const impactImageSource = require("../../images/ic_stars_24px.png");
 const initiativeImageSource = require("../../images/ic_vibration_24px.png");
 const shopImageSource = require("../../images/ic_store_mall_directory_24px.png");
 
-function MyWalletScreen({ 
+function MyWalletScreen({
     swapsTokens,
-	accounts,
-	selectedAddress,
-	balances,
-	tokensWithBalance,
-	tokensTopAssets,
-	conversionRate,
-	tokenExchangeRates,
-	currentCurrency,
-	userHasOnboarded,
-	setHasOnboarded,
-	setLiveness }) {
+    accounts,
+    selectedAddress,
+    balances,
+    tokensWithBalance,
+    tokensTopAssets,
+    conversionRate,
+    tokenExchangeRates,
+    currentCurrency,
+    userHasOnboarded,
+    setHasOnboarded,
+    setLiveness }) {
 
     const navigation = useContext(NavigationContext);
-	const initialSource = navigation.getParam('sourceToken', "SWAPS_ETH_ADDRESS");
+    const initialSource = navigation.getParam('sourceToken', "SWAPS_ETH_ADDRESS");
 
     const [loading, setLoading] = useState(false);
     // const { state } = useContext(TransactionContext)
@@ -303,43 +303,65 @@ function MyWalletScreen({
         balanceFiat: 0
     });
 
-    useEffect(()=>{
+    useEffect(() => {
 
         // console.log('MyWalletScreen:selectedAddress:',selectedAddress)
         // console.log('MyWalletScreen:accounts:',accounts)
-        try{
+        try {
             const balance = renderFromWei(accounts[selectedAddress].balance);
             const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
-       
+
             // console.log('MyWalletScreen:balance:',balance)
             // console.log('MyWalletScreen:balanceFiat:',balanceFiat)
             // console.log('MyWalletScreen:conversionRate:',conversionRate)
             // console.log('MyWalletScreen:balances:',balances)
-    
+
             setAvailableBalance({
                 balance,
                 balanceFiat
             })
-		} catch (e){
-            console.log('calc balance error:',e)
+        } catch (e) {
+            console.log('calc balance error:', e)
         }
-     },[])
+    }, [])
+
+    useEffect(() => {
+        try {
+            const balance = renderFromWei(accounts[selectedAddress].balance);
+            const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
+
+            // console.log('MyWalletScreen:balance:',balance)
+            // console.log('MyWalletScreen:balanceFiat:',balanceFiat)
+            // console.log('MyWalletScreen:conversionRate:',conversionRate)
+            // console.log('MyWalletScreen:balances:',balances)
+
+            setAvailableBalance({
+                balance,
+                balanceFiat
+            })
+        } catch (e) {
+            console.log('calc balance error:', e)
+        }
+    },
+        [
+            accounts[selectedAddress].balance
+        ])
 
 
 
     const [periodDays, setPeriodDays] = useState(30);
-    const [graphData, setGraphData] = useState([34, 80,22,165,2]);
+    const [graphData, setGraphData] = useState([34, 80, 22, 165, 2]);
     const [income, setIncome] = useState(0);
     const [expense, setExpense] = useState(0);
 
     const [impactData, setImpactData] = useState([{
-        title:'Name',
-        time:'5 min ago',
-        content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
-    },{
-        title:'Name s',
-        time:'1 hour ago',
-        content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
+        title: 'Name',
+        time: '5 min ago',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
+    }, {
+        title: 'Name s',
+        time: '1 hour ago',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
     }]);
 
     // useEffect(() => {
@@ -348,7 +370,7 @@ function MyWalletScreen({
 
     const getWalletInfo = async () => {
 
-        setGraphData([Math.random()*100,Math.random()*100,Math.random()*100,Math.random()*100])
+        setGraphData([Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100])
 
         // try {
         //     const wallet = WalletManager.getWalletByName('BITGWallet');
@@ -447,15 +469,15 @@ function MyWalletScreen({
 
 
     const goToShopViews = () => {
-		navigation.navigate('ShopScreen');
-	}
+        navigation.navigate('ShopScreen');
+    }
 
-	const goToInitiativesViews = () => {
-		navigation.navigate('ImpactInitiativesScreen');
+    const goToInitiativesViews = () => {
+        navigation.navigate('ImpactInitiativesScreen');
     }
 
     const goToMyImpactViews = () => {
-		navigation.navigate('MyImpactDash');
+        navigation.navigate('MyImpactDash');
     }
 
 
@@ -502,9 +524,9 @@ function MyWalletScreen({
                                 </View>
                                 <View style={styles.impactWrapper}>
                                     {
-                                        impactData.map((item,index)=>(
-                                            <View  key={index} style={styles.impactItem}>
-                                                <Image source={impactImageSource} style={styles.impactItemStar}/>
+                                        impactData.map((item, index) => (
+                                            <View key={index} style={styles.impactItem}>
+                                                <Image source={impactImageSource} style={styles.impactItemStar} />
                                                 <TouchableOpacity style={styles.impactItemTitle}>
                                                     <Text style={styles.impactText1}>
                                                         {`${item.title}  ${item.time}`}
@@ -514,9 +536,9 @@ function MyWalletScreen({
                                                     </Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity style={styles.impactItemClose}>
-                                                  <MaterialIcons name="close" size={14} color={colors.grey300} />
+                                                    <MaterialIcons name="close" size={14} color={colors.grey300} />
                                                 </TouchableOpacity>
-                                                
+
                                             </View>
                                         ))
                                     }
@@ -559,7 +581,7 @@ function MyWalletScreen({
                                         withHorizontalLines={false}
                                         withVerticalLabels={false}
                                         withHorizontalLabels={false}
-                                        fromZero={true} 
+                                        fromZero={true}
                                         bezier
                                     />
                                 </View>
@@ -592,18 +614,18 @@ function MyWalletScreen({
                         </ScrollView>
                         <View style={styles.buttonContainer}>
                             <View style={styles.sendReceiveContainer}>
-                                <TouchableOpacity style={styles.buttonWrapper}  onPress={goToMyImpactViews}>
-                                    <Image  source={impactImageSource} style={styles.buttonImage}/>
+                                <TouchableOpacity style={styles.buttonWrapper} onPress={goToMyImpactViews}>
+                                    <Image source={impactImageSource} style={styles.buttonImage} />
                                     <Text style={styles.buttonText}>{strings('bitg_wallet.my_impact')}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.buttonVibWrapper} onPress={goToInitiativesViews}>
-                                    <Image  source={initiativeImageSource} style={styles.buttonImage}/>
+                                    <Image source={initiativeImageSource} style={styles.buttonImage} />
                                     <Text style={styles.buttonText}>{strings('bitg_wallet.initiatives')}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.buttonShopWrapper} onPress={goToShopViews}>
-                                    <Image  source={shopImageSource} style={styles.buttonImage}/>
+                                    <Image source={shopImageSource} style={styles.buttonImage} />
                                     <Text style={styles.buttonText}>{strings('bitg_wallet.shop')}</Text>
                                 </TouchableOpacity>
 
@@ -616,61 +638,61 @@ function MyWalletScreen({
     );
 }
 
-MyWalletScreen.navigationOptions = ({ navigation }) => getBITGWalletNavbarOptions('bitg_wallet.my_wallet',navigation);
+MyWalletScreen.navigationOptions = ({ navigation }) => getBITGWalletNavbarOptions('bitg_wallet.my_wallet', navigation);
 
 MyWalletScreen.propTypes = {
-	swapsTokens: PropTypes.arrayOf(PropTypes.object),
-	/**
-	 * Map of accounts to information objects including balances
-	 */
-	accounts: PropTypes.object,
-	/**
-	 * A string that represents the selected address
-	 */
-	selectedAddress: PropTypes.string,
-	/**
-	 * An object containing token balances for current account and network in the format address => balance
-	 */
-	balances: PropTypes.object,
-	/**
-	 * ETH to current currency conversion rate
-	 */
-	conversionRate: PropTypes.number,
-	/**
-	 * Currency code of the currently-active currency
-	 */
-	currentCurrency: PropTypes.string,
-	/**
-	 * An object containing token exchange rates in the format address => exchangeRate
-	 */
-	tokenExchangeRates: PropTypes.object,
+    swapsTokens: PropTypes.arrayOf(PropTypes.object),
+    /**
+     * Map of accounts to information objects including balances
+     */
+    accounts: PropTypes.object,
+    /**
+     * A string that represents the selected address
+     */
+    selectedAddress: PropTypes.string,
+    /**
+     * An object containing token balances for current account and network in the format address => balance
+     */
+    balances: PropTypes.object,
+    /**
+     * ETH to current currency conversion rate
+     */
+    conversionRate: PropTypes.number,
+    /**
+     * Currency code of the currently-active currency
+     */
+    currentCurrency: PropTypes.string,
+    /**
+     * An object containing token exchange rates in the format address => exchangeRate
+     */
+    tokenExchangeRates: PropTypes.object,
 
-	/**
-	 * Function to set hasOnboarded
-	 */
-	setHasOnboarded: PropTypes.func,
-	/**
-	 * Function to set liveness
-	 */
-	setLiveness: PropTypes.func
+    /**
+     * Function to set hasOnboarded
+     */
+    setHasOnboarded: PropTypes.func,
+    /**
+     * Function to set liveness
+     */
+    setLiveness: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-	swapsTokens: state.engine.backgroundState.SwapsController.tokens,
-	accounts: state.engine.backgroundState.AccountTrackerController.accounts,
-	selectedAddress: state.engine.backgroundState.PreferencesController.selectedAddress,
-	balances: state.engine.backgroundState.TokenBalancesController.contractBalances,
-	conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
-	tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
-	currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
+    swapsTokens: state.engine.backgroundState.SwapsController.tokens,
+    accounts: state.engine.backgroundState.AccountTrackerController.accounts,
+    selectedAddress: state.engine.backgroundState.PreferencesController.selectedAddress,
+    balances: state.engine.backgroundState.TokenBalancesController.contractBalances,
+    conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
+    tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
+    currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
 });
 
 const mapDispatchToProps = dispatch => ({
-	setHasOnboarded: hasOnboarded => dispatch(setSwapsHasOnboarded(hasOnboarded)),
-	setLiveness: liveness => dispatch(setSwapsLiveness(liveness))
+    setHasOnboarded: hasOnboarded => dispatch(setSwapsHasOnboarded(hasOnboarded)),
+    setLiveness: liveness => dispatch(setSwapsLiveness(liveness))
 });
 
 export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(MyWalletScreen);
