@@ -25,7 +25,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { getEmptyHeaderOptions, getBITGWalletNavbarOptions } from '../../UI/Navbar';
-
+import { renderFromWei, weiToFiat, hexToBN } from '../../../util/number';
 import SendingToScreen from './SendingToScreen';
 import SendingProgressScreen from './SendingProgressScreen';
 import PaymentSendScreen from './PaymentSendScreen';
@@ -109,7 +109,16 @@ const styles = StyleSheet.create({
 });
 
 
-function SendScreen(props) {
+function SendScreen({
+  swapsTokens,
+	accounts,
+	selectedAddress,
+	balances,
+	conversionRate,
+	tokenExchangeRates,
+  currentCurrency,
+  showAlert
+}) {
 
   const navigation = useContext(NavigationContext);
 
@@ -126,10 +135,39 @@ function SendScreen(props) {
     transactionHash: undefined,
   });
 
+  const [availableBalance, setAvailableBalance] = useState({
+    balance: 0,
+    balanceFiat: 0
+});
+
+  useEffect(()=>{
+
+    console.log('SendScreen:selectedAddress:',selectedAddress)
+    console.log('SendScreen:accounts:',accounts)
+    try{
+        const balance = renderFromWei(accounts[selectedAddress].balance);
+        const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
+   
+        console.log('SendScreen:balance:',balance)
+        console.log('SendScreen:balanceFiat:',balanceFiat)
+        console.log('SendScreen:conversionRate:',conversionRate)
+        console.log('SendScreen:balances:',balances)
+
+        setAvailableBalance({
+            balance,
+            balanceFiat
+        })
+        setMyBalance(balance);
+} catch (e){
+        console.log('calc balance error:',e)
+    }
+ },[])
+
+
   const [clerarChildrenState, setClearChildrenState] = useState(false);
   const [refreshWallet, setRefreshWallet] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [myPrimaryAddress, setPrimaryAddress] = useState(props.selectedAddress);
+  const [myPrimaryAddress, setPrimaryAddress] = useState(selectedAddress);
   const [myBalance, setMyBalance] = useState(300);
   const [page, setPage] = useState(0);
   const viewPager = useRef();
@@ -203,7 +241,7 @@ function SendScreen(props) {
         makeAlert('Please connect to the internet');
 
       } else {
-          console.log('move',props.showAlert)
+          console.log('move',showAlert)
           var nextPage = page + delta;
 
           // viewPager.current.setPage(nextPage);

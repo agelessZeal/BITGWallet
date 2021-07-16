@@ -18,6 +18,8 @@ import { NavigationContext } from 'react-navigation';
 import { getBITGWalletNavbarOptions } from '../UI/Navbar';
 import { toFixedFloor} from './lib/Helpers'
 
+import { renderFromWei, weiToFiat, hexToBN } from '../../util/number';
+
 import {
 	setSwapsHasOnboarded,
 	setSwapsLiveness,
@@ -43,8 +45,8 @@ const styles = StyleSheet.create({
         resizeMode: "contain"
     },
     bitgSmallImage: {
-        width: 18,
-        height: 18,
+        width: 25,
+        height: 25,
         marginStart: 20,
         marginBottom: 10,
         resizeMode: "contain",
@@ -62,10 +64,11 @@ const styles = StyleSheet.create({
         marginStart: 20
     },
     bitgContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     usdContainer: {
-        flexDirection: 'row'
+        paddingStart:20,
+        flexDirection: 'row',
     },
     bitgText: {
         fontSize: 35,
@@ -296,9 +299,33 @@ function MyWalletScreen({
     // const walletContext = useContext(WalletContext)
 
     const [availableBalance, setAvailableBalance] = useState({
-        balance: 34534.0,
-        exchangeBalance: 2342.0
+        balance: 0,
+        balanceFiat: 0
     });
+
+    useEffect(()=>{
+
+        console.log('MyWalletScreen:selectedAddress:',selectedAddress)
+        console.log('MyWalletScreen:accounts:',accounts)
+        try{
+            const balance = renderFromWei(accounts[selectedAddress].balance);
+            const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
+       
+            console.log('MyWalletScreen:balance:',balance)
+            console.log('MyWalletScreen:balanceFiat:',balanceFiat)
+            console.log('MyWalletScreen:conversionRate:',conversionRate)
+            console.log('MyWalletScreen:balances:',balances)
+    
+            setAvailableBalance({
+                balance,
+                balanceFiat
+            })
+		} catch (e){
+            console.log('calc balance error:',e)
+        }
+     },[])
+
+
 
     const [periodDays, setPeriodDays] = useState(30);
     const [graphData, setGraphData] = useState([34, 80,22,165,2]);
@@ -459,14 +486,14 @@ function MyWalletScreen({
                                                 source={bitgImageSource}
                                                 tintColor={Platform === 'ios' ? undefined : colors.blackColor}
                                             />
-                                            <Text style={styles.bitgText}>{toFixedFloor(availableBalance?.balance, 3)}</Text>
+                                            <Text style={styles.bitgText}>{availableBalance?.balance}</Text>
                                             <TouchableRipple style={styles.bitgButton}>
                                                 <Text style={{ fontSize: 18, marginBottom: 5 }}>{strings('bitg_wallet.bitg_symbol')}</Text>
                                             </TouchableRipple>
                                         </View>
                                         <View style={styles.usdContainer}>
-                                            <Feather style={styles.usdSmallImage} name="dollar-sign" size={18} color={colors.grey} />
-                                            <Text style={styles.usdText}>{toFixedFloor(availableBalance?.exchangeBalance, 3)}</Text>
+                                            {/* <Feather style={styles.usdSmallImage} name="dollar-sign" size={18} color={colors.grey} /> */}
+                                            <Text style={styles.usdText}>{availableBalance?.balanceFiat}</Text>
                                             <View style={styles.usdButton}>
                                                 <Text style={{ fontSize: 18, marginBottom: 6 }}>{strings('bitg_wallet.usd_symbol')}</Text>
                                             </View>

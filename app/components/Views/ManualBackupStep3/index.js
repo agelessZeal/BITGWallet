@@ -141,8 +141,9 @@ class ManualBackupStep3 extends PureComponent {
 	done = async () => {
 		const onboardingWizard = await AsyncStorage.getItem(ONBOARDING_WIZARD);
 		// Check if user passed through metrics opt-in screen
-		// const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
-		const metricsOptIn =  true;
+		const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
+		// const metricsOptIn =  true;
+		console.log('backup3 done:metricsOptIn',metricsOptIn)
 		if (!metricsOptIn) {
 			this.props.navigation.navigate('OptinMetrics');
 		} else if (onboardingWizard) {
