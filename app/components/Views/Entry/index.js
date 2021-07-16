@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	animation: {
-		width: 110,
-		height: 110,
+		width: 180,
+		height: 180,
 		alignSelf: 'center',
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -512,7 +512,7 @@ const Entry = props => {
 	};
 	const renderAnimations = () => {
 		if (!viewToGo) {
-			return <LottieView style={styles.animation} autoPlay source={require('../../../animations/animation_center.json')} />;
+			return <LottieView style={styles.animation} resizeMode='cover' autoPlay source={require('../../../animations/animation_center.json')} />;
 		}
 
 		return (
@@ -523,6 +523,7 @@ const Entry = props => {
 					loop={false}
 					source={require('../../../animations/animation_center.json')}
 					onAnimationFinish={onAnimationFinished}
+					resizeMode='cover'
 				/>
 				{/* <LottieView
 					ref={animationName}

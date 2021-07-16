@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	animation: {
-		width: 110,
-		height: 110,
+		width: 180,
+		height: 180,
 		alignSelf: 'center',
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -156,6 +156,7 @@ class LockScreen extends PureComponent {
 					ref={animation => {
 						this.firstAnimation = animation;
 					}}
+					resizeMode='cover'
 					style={styles.animation}
 					source={require('../../../animations/animation_center.json')}
 				/>
@@ -171,6 +172,7 @@ class LockScreen extends PureComponent {
 					}}
 					style={styles.animation}
 					loop={false}
+					resizeMode='cover'
 					source={require('../../../animations/animation_center.json')}
 					onAnimationFinish={this.onAnimationFinished}
 				/>

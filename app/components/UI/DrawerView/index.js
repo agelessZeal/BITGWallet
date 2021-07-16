@@ -41,6 +41,7 @@ import InvalidCustomNetworkAlert from '../InvalidCustomNetworkAlert';
 import { RPC } from '../../../constants/network';
 import { findBottomTabRouteNameFromNavigatorState, findRouteNameFromNavigatorState } from '../../../util/general';
 import { ANALYTICS_EVENTS_V2 } from '../../../util/analyticsV2';
+import { renderShortAddress } from '../../../util/address';
 
 const styles = StyleSheet.create({
 	wrapper: {

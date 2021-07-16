@@ -305,16 +305,16 @@ function MyWalletScreen({
 
     useEffect(()=>{
 
-        console.log('MyWalletScreen:selectedAddress:',selectedAddress)
-        console.log('MyWalletScreen:accounts:',accounts)
+        // console.log('MyWalletScreen:selectedAddress:',selectedAddress)
+        // console.log('MyWalletScreen:accounts:',accounts)
         try{
             const balance = renderFromWei(accounts[selectedAddress].balance);
             const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
        
-            console.log('MyWalletScreen:balance:',balance)
-            console.log('MyWalletScreen:balanceFiat:',balanceFiat)
-            console.log('MyWalletScreen:conversionRate:',conversionRate)
-            console.log('MyWalletScreen:balances:',balances)
+            // console.log('MyWalletScreen:balance:',balance)
+            // console.log('MyWalletScreen:balanceFiat:',balanceFiat)
+            // console.log('MyWalletScreen:conversionRate:',conversionRate)
+            // console.log('MyWalletScreen:balances:',balances)
     
             setAvailableBalance({
                 balance,

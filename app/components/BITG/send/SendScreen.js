@@ -25,7 +25,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { getEmptyHeaderOptions, getBITGWalletNavbarOptions } from '../../UI/Navbar';
-import { renderFromWei, weiToFiat, hexToBN } from '../../../util/number';
+import { renderFromWei, weiToFiat, hexToBN ,weiToFiatNumber,fiatNumberToWei} from '../../../util/number';
 import SendingToScreen from './SendingToScreen';
 import SendingProgressScreen from './SendingProgressScreen';
 import PaymentSendScreen from './PaymentSendScreen';
@@ -142,17 +142,10 @@ function SendScreen({
 
   useEffect(()=>{
 
-    console.log('SendScreen:selectedAddress:',selectedAddress)
-    console.log('SendScreen:accounts:',accounts)
     try{
         const balance = renderFromWei(accounts[selectedAddress].balance);
         const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
    
-        console.log('SendScreen:balance:',balance)
-        console.log('SendScreen:balanceFiat:',balanceFiat)
-        console.log('SendScreen:conversionRate:',conversionRate)
-        console.log('SendScreen:balances:',balances)
-
         setAvailableBalance({
             balance,
             balanceFiat
@@ -349,6 +342,7 @@ function SendScreen({
     // navigation.navigate(Routes.TRANSACTION_HISTORY_SCREEN.TAG);
   };
 
+
   const getSendingData = data => {
 
     let inputValue = data.amount;
@@ -368,13 +362,16 @@ function SendScreen({
 
     // const processedInputValue = isDecimal(inputValue) ? handleWeiNumber(inputValue) : '0';
 
-    
+    console.log('input:',data)
     const amountValue =
       data.amount === undefined || data.amount === null || data.amount === ''
         ? undefined
         : data.amount.indexOf(',') > -1
         ? data.amount.replace(',', '.')
         : data.amount;
+    
+    const balanceFiat = weiToFiatNumber(amountValue, conversionRate);
+
     setSendingData({
       ...data,
       amount:
@@ -383,8 +380,20 @@ function SendScreen({
           : isNaN(inputValue)
           ? undefined
           : parseFloat(inputValue),
+       fiat:balanceFiat   
     });
   };
+
+  const balanceInputChange = (data) => {
+
+  }
+
+  const fiatInputChange = (data) => {
+
+
+    //fiatNumberToWei
+
+  }
 
   const getDataFromApi = data => {
     if (data != undefined) {
@@ -465,6 +474,10 @@ function SendScreen({
               // }
               navigation={navigation}
               clerarChildrenState={clerarChildrenState}
+              currentCurrency={currentCurrency}
+              conversionRate={conversionRate}
+              balanceInputChange={balanceInputChange}
+              fiatInputChange={fiatInputChange}
             />
             <SendingProgressScreen
               key="2"

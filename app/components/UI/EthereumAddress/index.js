@@ -45,12 +45,17 @@ class EthereumAddress extends PureComponent {
 	formatAddress(rawAddress, type) {
 		let formattedAddress = rawAddress;
 
-		if (isValidAddress(rawAddress)) {
-			if (type && type === 'short') {
-				formattedAddress = renderShortAddress(rawAddress);
-			} else {
-				formattedAddress = renderFullAddress(rawAddress);
-			}
+		// if (isValidAddress(rawAddress)) {
+		// 	if (type && type === 'short') {
+		// 		formattedAddress = renderShortAddress(rawAddress);
+		// 	} else {
+		// 		formattedAddress = renderFullAddress(rawAddress);
+		// 	}
+		// }
+		if (type && type === 'short') {
+			formattedAddress = renderShortAddress(rawAddress);
+		} else {
+			formattedAddress = renderFullAddress(rawAddress);
 		}
 		return formattedAddress;
 	}
@@ -72,6 +77,7 @@ class EthereumAddress extends PureComponent {
 	formatAndResolveIfNeeded() {
 		const { address, type } = this.props;
 		const formattedAddress = this.formatAddress(address, type);
+		console.log('formattedAddress:',formattedAddress)
 		this.setState({ address: formattedAddress, ensName: null });
 		this.doReverseLookup();
 	}
