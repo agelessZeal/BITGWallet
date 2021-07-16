@@ -1,0 +1,54 @@
+{
+  "name": "eth-query",
+  "version": "2.1.2",
+  "description": "like web3 but for minimalists",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "json-rpc-random-id": "^1.0.0",
+    "xtend": "^4.0.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethereumjs/eth-query.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ethereumjs/eth-query/issues"
+  },
+  "homepage": "https://github.com/ethereumjs/eth-query#readme",
+  "react-native": {
+    "crypto": "react-native-crypto",
+    "net": "react-native-tcp",
+    "http": "@tradle/react-native-http",
+    "https": "https-browserify",
+    "os": "react-native-os",
+    "fs": "react-native-level-fs",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify",
+    "vm": "vm-browserify"
+  },
+  "browser": {
+    "crypto": "react-native-crypto",
+    "net": "react-native-tcp",
+    "http": "@tradle/react-native-http",
+    "https": "https-browserify",
+    "os": "react-native-os",
+    "fs": "react-native-level-fs",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify",
+    "vm": "vm-browserify"
+  }
+}

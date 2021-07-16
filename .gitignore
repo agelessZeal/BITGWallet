@@ -39,7 +39,7 @@ android/app/_build*
 android/app/google-services.json
 
 # node.js
-node_modules/
+#node_modules/
 npm-debug.log
 yarn-error.log
 
