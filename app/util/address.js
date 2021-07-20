@@ -3,9 +3,26 @@ import Engine from '../core/Engine';
 import AppConstants from '../core/AppConstants';
 import { strings } from '../../locales/i18n';
 import { tlc } from '../util/general';
+import { decodeAddress, encodeAddress } from'@polkadot/keyring';
+import { hexToU8a, isHex } from'@polkadot/util';
 
 const { supportedTLDs } = AppConstants;
 
+export function isValidAddressPolkadotAddress(address){
+	try {
+	  encodeAddress(
+		isHex(address)
+		  ? hexToU8a(address)
+		  : decodeAddress(address)
+	  );
+  
+	  return true;
+	} catch (error) {
+	  return false;
+	}
+  };
+
+  
 /**
  * Returns full checksummed address
  *
@@ -15,6 +32,8 @@ const { supportedTLDs } = AppConstants;
 export function renderFullAddress(address) {
 	return address ? toChecksumAddress(address) : strings('transactions.tx_details_not_available');
 }
+
+
 
 /**
  * Returns short address format
