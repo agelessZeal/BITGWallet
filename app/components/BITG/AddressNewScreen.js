@@ -18,6 +18,8 @@ import { colors, fontStyles } from '../../styles/common';
 import { getEmptyHeaderOptions } from '../UI/Navbar';
 
 import { NavigationContext } from 'react-navigation';
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -27,6 +29,7 @@ import ToolBar from './ToolBar';
 
 import { GET_ARTICLES } from './api/queries/user';
 import { createApolloClient } from './api/createApolloClient';
+import {isValidAddressPolkadotAddress} from '../../util/address'
 
 const styles = StyleSheet.create({
 	container: {
@@ -34,11 +37,11 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white
 	},
 	headerContainer: {
-        backgroundColor: colors.darkTintColor,
+		backgroundColor: colors.darkTintColor,
 		justifyContent: 'center',
 		alignItems: 'center',
-        height: 200,
-        marginBottom:30,
+		height: 200,
+		marginBottom: 30,
 	},
 	titleText: {
 		fontSize: 30,
@@ -54,8 +57,8 @@ const styles = StyleSheet.create({
 	},
 	inputTextTitle: {
 		fontSize: 16,
-        color: colors.tintColor,
-        textTransform:'uppercase'
+		color: colors.tintColor,
+		textTransform: 'uppercase'
 	},
 	text: {
 		fontSize: 14,
@@ -68,7 +71,29 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.light_gray,
 		fontSize: 16,
 		padding: 10,
-		color: colors.blackColor
+		color: colors.blackColor,
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	selectWrapper: {
+		flex: 1,
+		backgroundColor: colors.light_gray,
+		paddingHorizontal: 10,
+		minHeight: 52,
+		flexDirection: 'row',
+		marginVertical: 8
+	},
+
+	inputWrapper: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	textInput: {
+		...fontStyles.normal,
+		paddingLeft: 0,
+		paddingRight: 8,
+		width: '100%'
 	},
 	submitButton: {
 		height: 50,
@@ -92,7 +117,21 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 		flexDirection: 'row',
 		alignItems: 'center'
-	}
+	},
+	scanIcon: {
+		flexDirection: 'column',
+		alignItems: 'center'
+	},
+	iconOpaque: {
+		color: colors.grey500
+	},
+	iconHighlighted: {
+		color: colors.green
+	},
+	iconWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
 });
 
 function AddressNewScreen(props) {
@@ -220,6 +259,33 @@ function AddressNewScreen(props) {
 		]);
 	};
 
+	const onSaveToAddressBook = () => {
+		const { network } = this.props;
+		const { toSelectedAddress, alias } = this.state;
+		const { AddressBookController } = Engine.context;
+		AddressBookController.set(toSelectedAddress, alias, network);
+		this.toggleAddToAddressBookModal();
+		this.setState({ toSelectedAddressName: alias, addToAddressToAddressBook: false, alias: undefined });
+	};
+
+	const onScan = () => {
+		navigation.navigate('QRScanner', {
+			onScanSuccess: meta => {
+				if (meta.target_address) {
+					console.log('scan address:',meta.target_address)
+					const isValid = isValidAddressPolkadotAddress(meta.target_address)
+					if(isValid){
+
+						setUserInfo({ ...userInfo, bitgAddress: meta.target_address });
+					}else{
+						showAlert('Invalid Address:')
+					}
+					// this.onToSelectedAddressChange(meta.target_address);
+				}
+			}
+		});
+	};
+
 	const onMenuPress = () => {
 		navigation.pop();
 	};
@@ -227,10 +293,10 @@ function AddressNewScreen(props) {
 	return (
 		<View style={styles.container}>
 			<ToolBar background={colors.transparent} iconName="arrow-back" onMenuPress={onMenuPress} />
-            <View style={styles.headerContainer}>
-                <Text style={styles.titleText}>{strings('address_book.add_contact_title')}</Text>
-                <Text style={styles.subTitleText}>{strings('address_book.add_to_address_book')}</Text>
-            </View>
+			<View style={styles.headerContainer}>
+				<Text style={styles.titleText}>{strings('address_book.add_contact_title')}</Text>
+				<Text style={styles.subTitleText}>{strings('address_book.add_to_address_book')}</Text>
+			</View>
 
 			<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : null}>
 				<ScrollView style={{ flex: 1 }}>
@@ -255,40 +321,67 @@ function AddressNewScreen(props) {
 								color={colors.tintColor}
 							/>
 						) : (
-							<View style={{ flex: 1 }}>
-								<Text style={[styles.inputTextTitle, { marginTop: 40 }]}>
-									{strings('bitg_wallet.address_book.detail_title')}
-								</Text>
+								<View style={{ flex: 1 }}>
+									<Text style={[styles.inputTextTitle, { marginTop: 40 }]}>
+										{strings('bitg_wallet.address_book.detail_title')}
+									</Text>
 
-								<TextInput
-									style={[styles.input, { marginTop: 20 }]}
-									placeholder={strings('bitg_wallet.address_book.identifier')}
-									placeholderTextColor={colors.grey400}
-									editable={false}
-									defaultValue={userInfo.network}
-								/>
+									<TextInput
+										style={[styles.input, { marginTop: 20 }]}
+										placeholder={strings('bitg_wallet.address_book.identifier')}
+										placeholderTextColor={colors.grey400}
+										editable={false}
+										defaultValue={userInfo.network}
+									/>
 
-								<TextInput
-									style={[styles.input, { marginTop: 10 }]}
-									placeholder={strings('bitg_wallet.address_book.name')}
-									placeholderTextColor={colors.grey400}
-									defaultValue={userInfo.username}
-									onChangeText={text => nameChanged(text)}
-								/>
+									<TextInput
+										style={[styles.input, { marginTop: 10 }]}
+										placeholder={strings('bitg_wallet.address_book.name')}
+										placeholderTextColor={colors.grey400}
+										defaultValue={userInfo.username}
+										onChangeText={text => nameChanged(text)}
+									/>
 
-								<TextInput
-									style={[styles.input, { marginTop: 10 }]}
-									placeholder={strings('bitg_wallet.address_book.address')}
-									placeholderTextColor={colors.grey400}
-									defaultValue={userInfo.bitgAddress}
-									onChangeText={text => addressChanged(text)}
-								/>
+									<View style={styles.selectWrapper}>
+										<View style={styles.inputWrapper}>
+											<TextInput
+												autoCapitalize="none"
+												autoCorrect={false}
+												onChangeText={text => addressChanged(text)}
+												placeholder={strings('bitg_wallet.address_book.address')}
+												placeholderTextColor={colors.grey400}
+												spellCheck={false}
+												style={styles.textInput}
+												numberOfLines={1}
+												// onFocus={onInputFocus}
+												// onBlur={onInputBlur}
+												// onSubmitEditing={onSubmit}
+												value={userInfo.bitgAddress}
+												defaultValue={userInfo.bitgAddress}
+												testID={'txn-to-address-input'}
+											/>
 
-								<TouchableOpacity style={styles.submitButton} activeOpacity={0.5} onPress={addContact}>
-									<Text style={styles.textButtons}>{strings('address_book.add_contact')}</Text>
-								</TouchableOpacity>
-							</View>
-						)}
+										</View>
+
+
+
+
+										<TouchableOpacity onPress={onScan} style={styles.iconWrapper}>
+											<AntIcon
+												name="scan1"
+												size={20}
+												style={[styles.scanIcon, styles.iconHighlighted]}
+											/>
+										</TouchableOpacity>
+									</View>
+
+
+
+									<TouchableOpacity style={styles.submitButton} activeOpacity={0.5} onPress={addContact}>
+										<Text style={styles.textButtons}>{strings('address_book.add_contact')}</Text>
+									</TouchableOpacity>
+								</View>
+							)}
 					</View>
 				</ScrollView>
 			</KeyboardAvoidingView>
