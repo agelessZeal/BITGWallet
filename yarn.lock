@@ -11422,10 +11422,10 @@ react-native-cli@2.0.1:
     prompt "^0.2.14"
     semver "^5.0.3"
 
-react-native-confetti-cannon@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-confetti-cannon/-/react-native-confetti-cannon-1.5.0.tgz#8d3c306f785481d8fec48a83195cc908f7550652"
-  integrity sha512-5Z/s6G6cUU8aMJTgBCvladzjEJAgTPbEmu5kYfeWbigu0ru8XAeLzMYN9JDLfAoGkF3WRqW5roOFXaM5L2oIfA==
+react-native-confetti-cannon@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-confetti-cannon/-/react-native-confetti-cannon-1.5.2.tgz#ca1a05edd2a64b080ea8b6238c49277908e1f123"
+  integrity sha512-IZuWjlW7QsdxEGNnvpD6W+7iKCCQhnd5BvuNvMtirU7Nxm8WS2N6LPGMBz1ZYDuusG+GRZkoXXTNCdoAAGpCTg==
 
 react-native-confetti@^0.1.0:
   version "0.1.0"
