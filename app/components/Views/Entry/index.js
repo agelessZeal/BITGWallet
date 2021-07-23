@@ -443,11 +443,11 @@ const Entry = props => {
 		const { AccountTrackerController } = Engine.context;
 		AccountTrackerController.setPolkaApi(api);
 
-		const MNEMONIC = 'sample split bamboo west visual approve brain fox arch impact relief smile';
+		// const MNEMONIC = 'sample split bamboo west visual approve brain fox arch impact relief smile';
 
-		// type: ed25519, ssFormat: 42 (all defaults)
-		const keyring = new Keyring();
-		const pair = keyring.createFromUri(MNEMONIC);
+		// // type: ed25519, ssFormat: 42 (all defaults)
+		// const keyring = new Keyring();
+		// const pair = keyring.createFromUri(MNEMONIC);
 
 		// use the default as setup on init
 		// 5CSbZ7wG456oty4WoiX6a1J88VUbrCXLhrKVJ9q95BsYH4TZ
@@ -462,16 +462,16 @@ const Entry = props => {
 		// console.log(keyring.createFromUri(`${MNEMONIC}//hard///password`).address);
 
 
-		// // generate a mnemonic & some mini-secrets
-		const mnemonic = mnemonicGenerate();
-		const mnemonicMini = mnemonicToMiniSecret(mnemonic);
-		const randomMini = randomAsHex(32);
+		// // // generate a mnemonic & some mini-secrets
+		// const mnemonic = mnemonicGenerate();
+		// const mnemonicMini = mnemonicToMiniSecret(mnemonic);
+		// const randomMini = randomAsHex(32);
 
-		// // these will be equivalent
-		// console.log(keyring.createFromUri(mnemonic).address);
+		// // // these will be equivalent
+		// // console.log(keyring.createFromUri(mnemonic).address);
 		
 
-		console.log('entry mnemonic:',mnemonic,":",u8aToHex(mnemonicMini),':',randomMini)
+		// console.log('entry mnemonic:',mnemonic,":",u8aToHex(mnemonicMini),':',randomMini)
 		// a random seed with derivation applied
 		// console.log(keyring.createFromUri(`${randomMini}//hard`).address);
 
