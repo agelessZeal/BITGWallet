@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useContext } from 'react';
+import React, { useEffect, useCallback, useState, useContext,useMemo } from 'react';
 import { View, Text, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { TouchableRipple, IconButton } from 'react-native-paper';
@@ -17,6 +17,8 @@ import { getUserTransactions, setUserTransactions, getTransactionColor } from '.
 // import { Context as TransactionContext } from '../lib/context/TransactionsContext'
 
 import { NavigationContext } from 'react-navigation';
+
+import Engine from '../../core/Engine';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -113,8 +115,32 @@ const styles = StyleSheet.create({
 		marginStart: 20,
 		marginEnd: 20,
 		textAlign: 'center'
+	},
+	labelElementWrapper: {
+		backgroundColor: colors.grey000,
+		flexDirection: 'row',
+		alignItems: 'center',
+		borderBottomWidth: 1,
+		borderBottomColor: colors.grey050,
+		padding: 8
+	},
+	labelElementInitialText: {
+		textTransform: 'uppercase'
+	},
+	labelElementText: {
+		...fontStyles.normal,
+		fontSize: 12,
+		marginHorizontal: 8,
+		color: colors.grey600
 	}
 });
+
+const LabelElement = label => (
+	<View key={label} style={styles.labelElementWrapper}>
+		<Text style={[styles.labelElementText, label.length > 1 ? {} : styles.labelElementInitialText]}>{label}</Text>
+	</View>
+);
+
 
 const dummy_addresses = [
 	{
@@ -165,10 +191,6 @@ function AddressBookScreen(props) {
 	const [userAddress, setUserAddress] = useState(props.selectedAddress);
 	const [filteredAddressBook, setFilteredAddressBook] = useState(dummy_addresses);
 
-	// myAccountsOpened: false,
-	// processedAddressBookList: undefined,
-	// processedRecentsList: undefined,
-	// contactElements: []
 	const [myAccountsOpened, setMyAccountsOpened] = useState(false);
 
 	const [processedAddressBookList, setProcessedAddressBookList] = useState(undefined);
@@ -176,19 +198,18 @@ function AddressBookScreen(props) {
 	const [processedRecentsList, setProcessedRecentsList] = useState(undefined);
 
 	const [contactElements, setContactElements] = useState([])
+	const [totalAddress,setTotalAddress] = useState(0);
 
 	let networkAddressBook = {};
-	let fuse;
-	
-	useEffect(()=>{
+	// let fuse;
 
+	const fuse = useMemo(() => {
 		const { addressBook, network } = props;
-		console.log(' addressBook, network :', addressBook, network )
 		networkAddressBook = addressBook[network] || {};
 		const networkAddressBookList = Object.keys(networkAddressBook).map(
 			address => networkAddressBook[address]
 		);
-		fuse = new Fuse(networkAddressBookList, {
+		const searchedFuse = new Fuse(networkAddressBookList, {
 			shouldSort: true,
 			threshold: 0.45,
 			location: 0,
@@ -197,32 +218,39 @@ function AddressBookScreen(props) {
 			minMatchCharLength: 1,
 			keys: [{ name: 'name', weight: 0.5 }, { name: 'address', weight: 0.5 }]
 		});
+		return searchedFuse;
+	}, [props.addressBook]);
 
-		console.log('networkAddressBookList:',networkAddressBookList)
+	useEffect(() => {
 
-		getRecentAddresses();
+		const { addressBook, network } = props;
+		networkAddressBook = addressBook[network] || {};
+		const networkAddressBookList = Object.keys(networkAddressBook).map(
+			address => networkAddressBook[address]
+		);
+		// getRecentAddresses();
+		setTotalAddress(networkAddressBookList)
 
 		parseAddressBook(networkAddressBookList);
 
-	},[])
+	}, [props.addressBook])
 
-	useEffect(()=>{
+	const search = text => {
+		const formattedQuery = text.toLowerCase().trim();
 
 		const { network, addressBook, reloadAddressList } = props;
 
 		let networkAddressBookList;
-		if (props.inputSearch) {
-			networkAddressBookList = fuse.search(props.inputSearch);
+		if (formattedQuery) {
+			networkAddressBookList = fuse.search(formattedQuery);
 		} else {
 			const { addressBook } = props;
 			const networkAddressBook = addressBook[network] || {};
 			networkAddressBookList = Object.keys(networkAddressBook).map(address => networkAddressBook[address]);
 		}
-		getRecentAddresses(props.inputSearch);
+		// getRecentAddresses(formattedQuery);
 		parseAddressBook(networkAddressBookList);
-		console.log('useEffect update')
-
-	},[props.reloadAddressList,props.addressBook,props.inputSearch])
+	};
 
 
 	const openMyAccounts = () => {
@@ -300,7 +328,7 @@ function AddressBookScreen(props) {
 				});
 			});
 
-			setContactElements(contactElements)
+		setContactElements(contactElements)
 	};
 
 	const renderMyAccounts = () => {
@@ -315,122 +343,46 @@ function AddressBookScreen(props) {
 				<Text style={[styles.messageText, styles.messageLeft]}>{strings('address_book.between_account')}</Text>
 			</TouchableOpacity>
 		) : (
-			<View>
-				{Object.keys(identities).map(address => (
-					<AddressElement
-						key={address}
-						address={address}
-						name={identities[address].name}
-						onAccountPress={onAccountPress}
-						onAccountLongPress={onAccountLongPress}
-						testID={'account-identity'}
-					/>
-				))}
-			</View>
-		);
-	};
-
-	const elementKeyExtractor = element => {
-		if (typeof element === 'string') return element;
-		return element.address + element.name;
-	};
-
-
-	// useEffect(() => {
-	//     if (!state.fromSameComponent) {
-	//         (async () => {
-	//             setLoading(true)
-	//             try {
-	//                 // const wallet = WalletManager.getWalletByName("BITGWallet");
-	//                 // const key = wallet.getKey(0);
-	//                 // const transactions = await getUserTransactions()
-	//                 // const address = key.getAddress()
-	//                 // if (transactions != undefined && transactions != null) {
-	//                 //     const transactionsParse = JSON.parse(transactions)
-	//                 //         .filter(item => item.is_my_friend === true)
-	//                 //         .reduce((r, a) => {
-	//                 //             r[a.is_expense ? a.receiver.address : a.sender.address] = [...r[a.is_expense ? a.receiver.address : a.sender.address] || [], a];
-	//                 //             return r;
-	//                 //         }, {})
-	//                 //     setUserAddress(address)
-	//                 //     setAddressBook(Object.values(transactionsParse))
-	//                 //     setFilteredAddressBook(Object.values(transactionsParse))
-	//                 // }
-	//             } catch (error) {
-	//                 console.log(error);
-	//             }
-	//             setLoading(false)
-	//         })();
-	//     }
-	// }, [state]);
-
-	const onMenuPress = () => {
-		navigation.toggleDrawer();
-	};
-
-	const onAddPress = () => {
-		// const pushAction = StackActions.push(Routes.NEW_CONTACT_SCREEN.TAG)
-		// navigation.dispatch(pushAction)
+				<View>
+					{Object.keys(identities).map(address => (
+						<AddressElement
+							key={address}
+							address={address}
+							name={identities[address].name}
+							onAccountPress={onAccountPress}
+							onAccountLongPress={onAccountLongPress}
+							testID={'account-identity'}
+						/>
+					))}
+				</View>
+			);
 	};
 
 	const onItemPressed = (itemData, userAddress) => {
-		const address =
-			userAddress == itemData.item.receiver.address
-				? itemData.item.sender.address
-				: itemData.item.receiver.address;
 
-		const name =
-			userAddress == itemData.item.receiver.address
-				? itemData.item.sender.name
-				: itemData.item.receiver.name;
-
-		navigation.navigate("AddressDetail", { address, name, data: itemData })
+		const address = itemData.item.address
+		const name = itemData.item.name
+        const element =  itemData.item;
+		navigation.navigate("AddressDetail", { address,data: element })
 	};
 
-	const onItemSendPressed = (itemData, userAddress) => {
-		const address =
-			userAddress == itemData.item.receiver.address
-				? itemData.item.sender.address
-				: itemData.item.receiver.address;
-		const name =
-			userAddress == itemData.item.receiver.address
-				? itemData.item.sender.name
-				: itemData.item.receiver.name;
-
+	const onItemSendPressed = (itemData, userAddress) => {r
+		const address = itemData.item.address
+		const name = itemData.item.name
 		navigation.navigate("SendView", { data: { address: address, name: name } })
 	};
 
 	const onItemDeletePressed = async (itemData, userAddress) => {
-		const index = addressBook.indexOf(itemData.item);
-		if (index > -1) {
-			addressBook.splice(index, 1);
-		}
-		setAddressBook(Object.values(addressBook));
-		setFilteredAddressBook(Object.values(addressBook));
+		// const index = addressBook.indexOf(itemData.item);
+		// if (index > -1) {
+		// 	addressBook.splice(index, 1);
+		// }
+		// setAddressBook(Object.values(addressBook));
+		// setFilteredAddressBook(Object.values(addressBook));
 
-		try {
-			// const transactions = await getUserTransactions()
-			// const transactionsParse = JSON.parse(transactions)
-			// for (let tItem of transactionsParse) {
-			//     for (let dItem of itemData.item) {
-			//         if (tItem.hash === dItem.hash) {
-			//             tItem.is_my_friend = false
-			//         }
-			//     }
-			// }
-			// setUserTransactions(JSON.stringify(transactionsParse))
-			// setTransaction(transactionsParse, true)
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	const search = text => {
-		const formattedQuery = text.toLowerCase().trim();
-		const data = addressBook.filter(item => {
-			return contains(item, formattedQuery);
-		});
-		setFilteredAddressBook(data);
+	    const { AddressBookController } = Engine.context;
+		const { network } = props;
+		AddressBookController.delete(network, itemData.item.address);
 	};
 
 	const contains = (item, query) => {
@@ -445,27 +397,55 @@ function AddressBookScreen(props) {
 		return false;
 	};
 
+
+	const elementKeyExtractor = element => {
+		if (typeof element === 'string') return element;
+		return element.address + element.name;
+	};
+
+	const renderElement = ({ item: element }) => {
+		const { onAccountPress, onAccountLongPress } = this.props;
+		if (typeof element === 'string') {
+			return LabelElement(element);
+		}
+		return (
+			<AddressElement
+				address={element.address}
+				name={element.name}
+				onAccountPress={onAccountPress}
+				onAccountLongPress={onAccountLongPress}
+			/>
+		);
+	};
+
+
 	const RenderItem = ({ itemPressed, itemData, userAddress }) => {
+
+		if (typeof itemData.item === 'string') {
+			return LabelElement(itemData.item);
+		}
+
+		const color = getTransactionColor(itemData.item.name);
 
 		return (
 			<TouchableRipple onPress={() => itemPressed(itemData, userAddress)}>
 				<View style={styles.renderItem}>
-					<View style={[styles.credential, { backgroundColor: itemData.item.color }]}>
+					<View style={[styles.credential, { backgroundColor: color }]}>
 						<Text style={styles.credentialText}>
-							{userAddress == itemData.item.receiver.address
-								? itemData.item.sender.name.charAt(0)
-								: itemData.item.receiver.name.charAt(0)}
+							{userAddress == itemData.item.address
+								? itemData.item.name.charAt(0)
+								: itemData.item.name.charAt(0)}
 						</Text>
 					</View>
 					<View style={styles.renderTextContainer}>
 						<Text style={styles.renderTextTitle} numberOfLines={1}>
-							{userAddress == itemData.item.receiver.address
-								? itemData.item.sender.name === 'No Name'
-									? itemData.item.sender.address
-									: itemData.item.sender.name
-								: itemData.item.receiver.name === 'No Name'
-									? itemData.item.receiver.address
-									: itemData.item.receiver.name}
+							{userAddress == itemData.item.address
+								? itemData.item.name === 'No Name'
+									? itemData.item.address
+									: itemData.item.name
+								: itemData.item.name === 'No Name'
+									? itemData.item.address
+									: itemData.item.name}
 						</Text>
 						<Text style={styles.renderTextSubTitle}>{itemHistory(itemData)}</Text>
 					</View>
@@ -490,16 +470,21 @@ function AddressBookScreen(props) {
 		return historyText;
 	};
 
-	const HiddenItem = ({ itemData, userAddress, sendPressed, deletePressed }) => (
-		<View style={styles.hiddenItem}>
-			<TouchableRipple style={styles.sendButton} onPress={() => sendPressed(itemData, userAddress)}>
-				<Text style={styles.sendText}>{strings('wallet.send_button')}</Text>
-			</TouchableRipple>
-			<TouchableRipple style={styles.deleteButton} onPress={() => deletePressed(itemData, userAddress)}>
-				<IconButton icon="close" size={30} color={colors.white} />
-			</TouchableRipple>
-		</View>
-	);
+	const HiddenItem = ({ itemData, userAddress, sendPressed, deletePressed }) => {
+		if (typeof itemData.item === 'string') {
+			return LabelElement(itemData.item);
+		}
+		return (
+			<View style={styles.hiddenItem}>
+				<TouchableRipple style={styles.sendButton} onPress={() => sendPressed(itemData, userAddress)}>
+					<Text style={styles.sendText}>{strings('wallet.send_button')}</Text>
+				</TouchableRipple>
+				<TouchableRipple style={styles.deleteButton} onPress={() => deletePressed(itemData, userAddress)}>
+					<IconButton icon="close" size={30} color={colors.white} />
+				</TouchableRipple>
+			</View>
+		)
+	};
 
 	const isToday = timeStamp => {
 		var date = new Date(timeStamp);
@@ -515,7 +500,7 @@ function AddressBookScreen(props) {
 		<View style={styles.container}>
 			{loading ? (
 				<ActivityIndicator style={{ alignSelf: 'center' }} size="large" color={colors.tintColor} />
-			) : addressBook.length === 0 ? (
+			) : totalAddress.length === 0 ? (
 				<Text style={styles.emptyAddressBookText}>{strings('bitg_wallet.no_address')}</Text>
 			) : (
 						<View style={{ flex: 1 }}>
@@ -529,7 +514,7 @@ function AddressBookScreen(props) {
 								/>
 							</View>
 							<SwipeListView
-								data={filteredAddressBook}
+								data={contactElements}
 								useFlatList={true}
 								keyExtractor={(item, index) => index.toString()}
 								renderItem={(data, rowMap) => (
@@ -581,8 +566,8 @@ AddressBookScreen.propTypes = {
 	tokenExchangeRates: PropTypes.object,
 
 	/**
-     * List of accounts from the PreferencesController
-    */
+	 * List of accounts from the PreferencesController
+	*/
 	identities: PropTypes.object,
 	/**
 	 * Map representing the address book

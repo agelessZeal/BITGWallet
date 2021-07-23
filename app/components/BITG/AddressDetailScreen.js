@@ -318,8 +318,11 @@ const mapStateToProps = state => ({
 	selectedAddress: state.engine.backgroundState.PreferencesController.selectedAddress,
 	balances: state.engine.backgroundState.TokenBalancesController.contractBalances,
 	conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
-	tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
 	currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
+	addressBook: state.engine.backgroundState.AddressBookController.addressBook,
+	identities: state.engine.backgroundState.PreferencesController.identities,
+	network: state.engine.backgroundState.NetworkController.network,
+	transactions: state.engine.backgroundState.TransactionController.transactions
 	
 });
 

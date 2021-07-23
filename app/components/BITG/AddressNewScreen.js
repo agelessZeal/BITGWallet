@@ -203,16 +203,15 @@ function AddressNewScreen(props) {
 			
 			if (userInfo.bitgAddress != undefined) {
 				const isValid =  isValidAddressPolkadotAddress(userInfo.bitgAddress)
-				if(!isValid){
+				if(isValid){
 					const network = props.network
 					const { AddressBookController } = Engine.context;
-					let response = AddressBookController.set(userInfo.bitgAddress, userInfo.username, network);
-					console.log('response',response)
+					let response = AddressBookController.set(userInfo.bitgAddress, userInfo.username, network,userInfo.memo);
 					if(response){
 						// showSuccessfullyAlert(userInfo.username)
 						props.showAlert({
 							isVisible: true,
-							autodismiss: 5000,
+							autodismiss: 2000,
 							content: 'clipboard-alert',
 							data: { msg: 'Added to the contract'}
 						});
@@ -223,7 +222,7 @@ function AddressNewScreen(props) {
 				}else{
 					props.showAlert({
 						isVisible: true,
-						autodismiss: 5000,
+						autodismiss: 3000,
 						content: 'clipboard-alert',
 						data: { msg: 'Invalid Address'}
 					});
@@ -232,7 +231,7 @@ function AddressNewScreen(props) {
 			} else {
 				props.showAlert({
 					isVisible: true,
-					autodismiss: 5000,
+					autodismiss: 3000,
 					content: 'clipboard-alert',
 					data: { msg: 'Please enter at least BIT Address manually!'}
 				});
@@ -241,7 +240,7 @@ function AddressNewScreen(props) {
 			setLoaderVisible(false);
 			props.showAlert({
 				isVisible: true,
-				autodismiss: 5000,
+				autodismiss: 3000,
 				content: '',
 				data: { msg: 'We have a problem with servers, plese try later again!'}
 			});
