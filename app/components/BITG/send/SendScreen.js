@@ -157,7 +157,7 @@ function SendScreen({
  },[])
 
 
-  const [clerarChildrenState, setClearChildrenState] = useState(false);
+  const [clearChildrenState, setClearChildrenState] = useState(false);
   const [refreshWallet, setRefreshWallet] = useState(false);
   const [loading, setLoading] = useState(false);
   const [myPrimaryAddress, setPrimaryAddress] = useState(selectedAddress);
@@ -414,15 +414,9 @@ function SendScreen({
             <SendingToScreen
               key="1"
               currentPage={page}
-              myWalletAddress={myPrimaryAddress}
               getSendingData={getSendingData}
-              // paramsData={
-              //   route.params.data === undefined ? undefined : route.params.data
-              // }
               navigation={navigation}
-              clerarChildrenState={clerarChildrenState}
-              currentCurrency={currentCurrency}
-              conversionRate={conversionRate}
+              clearChildrenState={clearChildrenState}
             />
             <SendingProgressScreen
               key="2"

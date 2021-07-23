@@ -18,7 +18,7 @@ import { NavigationContext } from 'react-navigation';
 import { getBITGWalletNavbarOptions } from '../UI/Navbar';
 import { toFixedFloor } from './lib/Helpers'
 
-import { renderFromWei, weiToFiat, hexToBN } from '../../util/number';
+import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol } from '../../util/number';
 
 import {
     setSwapsHasOnboarded,
@@ -303,39 +303,43 @@ function MyWalletScreen({
         balanceFiat: 0
     });
 
+    // useEffect(() => {
+
+    //     console.log('MyWalletScreen:selectedAddress:',selectedAddress)
+    //     // console.log('MyWalletScreen:accounts:',accounts)
+    //     try {
+    //         const balance = renderFromWei(accounts[selectedAddress].balance);
+    //         const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
+
+    //         // console.log('MyWalletScreen:balance:',balance)
+    //         // console.log('MyWalletScreen:balanceFiat:',balanceFiat)
+    //         // console.log('MyWalletScreen:conversionRate:',conversionRate)
+    //         // console.log('MyWalletScreen:balances:',balances)
+
+    //         setAvailableBalance({
+    //             balance,
+    //             balanceFiat
+    //         })
+    //     } catch (e) {
+    //         console.log('calc balance error:', e)
+    //     }
+    // }, [])
+
     useEffect(() => {
-
-        console.log('MyWalletScreen:selectedAddress:',selectedAddress)
-        // console.log('MyWalletScreen:accounts:',accounts)
-        try {
-            const balance = renderFromWei(accounts[selectedAddress].balance);
-            const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
-
-            // console.log('MyWalletScreen:balance:',balance)
-            // console.log('MyWalletScreen:balanceFiat:',balanceFiat)
-            // console.log('MyWalletScreen:conversionRate:',conversionRate)
-            // console.log('MyWalletScreen:balances:',balances)
-
-            setAvailableBalance({
-                balance,
-                balanceFiat
-            })
-        } catch (e) {
-            console.log('calc balance error:', e)
-        }
-    }, [])
-
-    useEffect(() => {
         try {
 
+           
             if( accounts && accounts[selectedAddress] && accounts[selectedAddress].balance){
                 const balance = renderFromWei(accounts[selectedAddress].balance);
-                const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
+                let balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
     
                 // console.log('MyWalletScreen:balance:',balance)
                 // console.log('MyWalletScreen:balanceFiat:',balanceFiat)
                 // console.log('MyWalletScreen:conversionRate:',conversionRate)
                 // console.log('MyWalletScreen:balances:',balances)
+                if(balance === '0'){
+                    balanceFiat = getCurrencySymbol(currentCurrency) + ' 0'
+                }
     
                 setAvailableBalance({
                     balance,

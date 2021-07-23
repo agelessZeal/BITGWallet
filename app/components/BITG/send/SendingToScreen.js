@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image, Platform, TextInput, TouchableOpacity, } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableRipple } from 'react-native-paper';
@@ -17,28 +17,35 @@ import { renderShortAddress } from '../../../util/address';
 import { getEmptyHeaderOptions, getBITGWalletNavbarOptions } from '../../UI/Navbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// import { renderFromWei, weiToFiat, hexToBN ,weiToFiatNumber,fiatNumberToWei} from '../../../util/number';
+import Modal from 'react-native-modal';
+
+import AddressList from '../../Views/SendFlow/AddressList';
+import AccountList from '../../UI/AccountList';
+
+import { isValidAddress, toChecksumAddress } from 'ethereumjs-util';
 
 import {
-	renderFromTokenMinimalUnit,
-	balanceToFiat,
-	renderFromWei,
-	weiToFiat,
-	fromWei,
-	toWei,
-	isDecimal,
-	toTokenMinimalUnit,
-	fiatNumberToWei,
-	fiatNumberToTokenMinimalUnit,
-	weiToFiatNumber,
-	balanceToFiatNumber,
-	getCurrencySymbol,
-	handleWeiNumber,
-	fromTokenMinimalUnitString,
-	toHexadecimal
+  renderFromTokenMinimalUnit,
+  balanceToFiat,
+  renderFromWei,
+  weiToFiat,
+  fromWei,
+  toWei,
+  isDecimal,
+  toTokenMinimalUnit,
+  fiatNumberToWei,
+  fiatNumberToTokenMinimalUnit,
+  weiToFiatNumber,
+  balanceToFiatNumber,
+  getCurrencySymbol,
+  handleWeiNumber,
+  fromTokenMinimalUnitString,
+  toHexadecimal
 } from '../../../util/number';
 
 // import QRCodeScreen from '../QRCodeScreen';
+
+const dummy = () => true;
 
 const walletImageSource = require('../../../images/ic_wallet.png');
 const address_book_source = require('../../../images/ic_address_book.png');
@@ -100,15 +107,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginEnd: 5,
     marginBottom: 5,
-    fontSize:18,
-    
+    fontSize: 18,
+
   },
   amountInput: {
     padding: 10,
     marginEnd: 5,
     marginTop: 5,
     marginBottom: 5,
-    fontSize:18,
+    fontSize: 18,
     alignItems: 'center',
     textAlignVertical: 'center',
   },
@@ -134,78 +141,102 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   inputCurrencyText: {
-		...fontStyles.normal,
-		fontWeight: fontStyles.light.fontWeight,
-		color: colors.grey500,
-		fontSize: 30,
-    marginLeft:10,
-		paddingVertical: Device.isIos() ? 0 : 8,
-		justifyContent: 'center',
-		alignItems: 'center',
-		textTransform: 'uppercase'
-	},
+    ...fontStyles.normal,
+    fontWeight: fontStyles.light.fontWeight,
+    color: colors.grey500,
+    fontSize: 30,
+    marginLeft: 10,
+    paddingVertical: Device.isIos() ? 0 : 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textTransform: 'uppercase'
+  },
 });
 
-function SendingToScreen({
-  myWalletAddress,
-  getSendingData,
-  paramsData,
-  currentPage,
-  navigation,
-  clerarChildrenState,
-  currentCurrency,
-  balanceInputChange,
-  fiatInputChange,
-  conversionRate
-}) {
+class SendingToScreen extends PureComponent {
 
-  const [sendingData, setSendingData] = useState({
-    name: undefined,
-    address: undefined,
+  static propTypes = {
+    /**
+     * Navigation object required to push
+     * the Asset detail view
+     */
+    navigation: PropTypes.object,
+    /**
+     * ETH to current currency conversion rate
+     */
+    conversionRate: PropTypes.number,
+    /**
+     * Currency code of the currently-active currency
+     */
+    currentCurrency: PropTypes.string,
+    /**
+     * Object containing token balances in the format address => balance
+     */
+    tokenBalances: PropTypes.object,
+    /**
+     * Object containing token exchange rates in the format address => exchangeRate
+     */
+    tokenExchangeRates: PropTypes.object,
+    /**
+     * Array of transactions
+     */
+    transactions: PropTypes.array,
+    /**
+     * Primary currency, either ETH or Fiat
+     */
+    primaryCurrency: PropTypes.string,
+
+    currentPage: PropTypes.number,
+
+    getSendingData: PropTypes.func,
+
+    clearChildrenState: PropTypes.bool
+  };
+
+  state = {
+    loading: false,
+    error: null,
     amount: undefined,
-    fiat: undefined
-  });
+    fiat: undefined,
+    address: null,
+    name: null,
+    showModalAddress: false,
+    showModalAccount: false,
+    editable: false,
+    searchText:'',
 
-  const [modalVisibilityQrCode, setVisibilityModalQrCode] = useState(
-    false,
-  );
-  const [
-    modalVisibilityAddressBook,
-    setVisibilityModalAddressBook,
-  ] = useState(false);
-  const [editable, setEditable] = useState(false);
+    addressError: undefined,
+    balanceIsZero: false,
+    fromAccountModalVisible: false,
+    fromAddressModalVisible: false,
+    addToAddressBookModalVisible: false,
+    fromSelectedAddress: this.props.selectedAddress,
+    fromAccountName: this.props.identities[this.props.selectedAddress].name,
+    fromAccountBalance: undefined,
+    toSelectedAddress: undefined,
+    toSelectedAddressName: undefined,
+    toSelectedAddressReady: false,
+    toEnsName: undefined,
+    addToAddressToAddressBook: false,
+    alias: undefined,
+    confusableCollection: [],
+    inputWidth: { width: '99%' }
 
-  useEffect(() => {
-    if (paramsData != undefined) {
-      setSendingData({
-        name: paramsData.name,
-        address: paramsData.address,
-        amount: undefined,
-      });
-    }
-    setEditable(true);
-  }, []);
+  };
 
-  useEffect(() => {
-    if (sendingData) {
-      getSendingData(sendingData);
-    }
-  }, [sendingData]);
 
-  useEffect(() => {
-    if (clerarChildrenState) {
-      setSendingData({
-        name: undefined,
-        address: undefined,
-        amount: undefined,
-      });
-    }
-  }, [clerarChildrenState]);
+  addressToInputRef = React.createRef();
+
+  componentDidMount() {
+    const pass_activity = this.props.navigation.getParam('activity', null);
+  }
+
 
   onToSelectedAddressChange = async toSelectedAddress => {
     const { AssetsContractController } = Engine.context;
     const { addressBook, network, identities, providerType } = this.props;
     const networkAddressBook = addressBook[network] || {};
+    console.log('onToSelectedAddressChange:',toSelectedAddress)
     let addressError, toAddressName, toEnsName, errorContinue, isOnlyWarning;
     let [addToAddressToAddressBook, toSelectedAddressReady] = [false, false];
     if (isValidAddress(toSelectedAddress)) {
@@ -288,6 +319,84 @@ function SendingToScreen({
     });
   };
 
+  toggleFromAccountModal = () => {
+		const { fromAccountModalVisible } = this.state;
+		this.setState({ fromAccountModalVisible: !fromAccountModalVisible });
+	};
+
+	toggleFromAddressBookModal = () => {
+		const { fromAddressModalVisible } = this.state;
+		this.setState({ fromAddressModalVisible: !fromAddressModalVisible });
+	};
+
+	onAccountChange = async accountAddress => {
+		const { identities, ticker, accounts } = this.props;
+		const { name } = identities[accountAddress];
+		const { PreferencesController } = Engine.context;
+		const fromAccountBalance = `${renderFromWei(accounts[accountAddress].balance)} ${getTicker(ticker)}`;
+		// const ens = await doENSReverseLookup(accountAddress);
+		// const fromAccountName = ens || name;
+		// PreferencesController.setSelectedAddress(accountAddress);
+		// // If new account doesn't have the asset
+		// this.props.setSelectedAsset(getEther(ticker));
+		// this.setState({
+		// 	fromAccountName,
+		// 	fromAccountBalance,
+		// 	fromSelectedAddress: accountAddress,
+		// 	balanceIsZero: hexToBN(accounts[accountAddress].balance).isZero()
+		// });
+		// this.toggleFromAccountModal();
+  };
+  
+
+  renderFromAccountModal = () => {
+    const { identities, keyrings, ticker } = this.props;
+    const { fromAccountModalVisible, fromSelectedAddress } = this.state;
+    return (
+      <Modal
+        isVisible={fromAccountModalVisible}
+        style={styles.bottomModal}
+        onBackdropPress={this.toggleFromAccountModal}
+        onBackButtonPress={this.toggleFromAccountModal}
+        onSwipeComplete={this.toggleFromAccountModal}
+        swipeDirection={'down'}
+        propagateSwipe
+      >
+        <AccountList
+          enableAccountsAddition={false}
+          identities={identities}
+          selectedAddress={fromSelectedAddress}
+          keyrings={keyrings}
+          onAccountChange={this.onAccountChange}
+          ticker={ticker}
+        />
+      </Modal>
+    );
+  };
+  renderFromAddressModal = () => {
+    const { identities, keyrings, ticker } = this.props;
+    const { fromAddressModalVisible, fromSelectedAddress ,toSelectedAddress} = this.state;
+    return (
+      <Modal
+        isVisible={fromAddressModalVisible}
+        style={styles.bottomModal}
+        onBackdropPress={this.toggleFromAddressBookModal}
+        onBackButtonPress={this.toggleFromAddressBookModal}
+        onSwipeComplete={this.toggleFromAddressBookModal}
+        swipeDirection={'down'}
+        propagateSwipe
+      >
+        <AddressList
+          inputSearch={toSelectedAddress}
+          onAccountPress={this.onToSelectedAddressChange}
+          onAccountLongPress={dummy}
+        />
+      </Modal>
+    )
+  }
+
+
+
   validateToAddress = async () => {
     const { toSelectedAddress } = this.state;
     const { network } = this.props;
@@ -305,62 +414,56 @@ function SendingToScreen({
   };
 
 
-  const onScan = () => {
-    navigation.navigate('QRScanner', {
+  onScan = () => {
+    this.props.navigation.navigate('QRScanner', {
       onScanSuccess: meta => {
         if (meta.target_address) {
-          console.log('onScallSuccessL',meta.target_address)
+          console.log('onScallSuccessL', meta.target_address)
           // this.onToSelectedAddressChange(meta.target_address);
         }
       }
     });
   };
 
-  const openOrCloseQrCodeModal = visibility => {
+  openOrCloseQrCodeModal = visibility => {
     if (!visibility) {
       global.isRequestForPermission = false;
-
     }
-    onScan();
-    // check(
-    //   Platform.select({
-    //     android: PERMISSIONS.ANDROID.CAMERA,
-    //     ios: PERMISSIONS.IOS.CAMERA,
-    //   }),
-    // )
-    //   .then(result => {
-    //     if (result != RESULTS.GRANTED && visibility) {
-    //       global.isRequestForPermission = true;
-    //     }
-    //   })
-    //   .catch(error => {});
-    setVisibilityModalQrCode(visibility);
+    if (visibility) {
+      this.onScan();
+    }
   };
 
-  const openOrCloseAddressBookModal = visibility => {
-    setVisibilityModalAddressBook(visibility);
+  openOrCloseAddressBookModal = visibility => {
+
+    this.setState({
+      showModalAddress: visibility,
+      fromAddressModalVisible:visibility
+    })
+  }
+
+  searchFieldChanged = text => {
+    this.setState({
+      searchText:text
+    })
   };
 
-  const searchFieldChanged = text => {
-    setSendingData({ ...sendingData, address: text.trim() });
-    getSendingData({ ...sendingData, address: text.trim() });
-  };
+  amountBITGFieldChanged = inputValue => {
+    const { conversionRate, currentCurrency } = this.props;
 
-  const amountBITGFieldChanged = inputValue => {
-    
-		let inputValueConversion, renderableInputValueConversion, hasExchangeRate, comma;
-		// Remove spaces from input
-		inputValue = inputValue && inputValue.replace(/\s+/g, '');
-		// Handle semicolon for other languages
-		if (inputValue && inputValue.includes(',')) {
-			comma = true;
-			inputValue = inputValue.replace(',', '.');
-		}
-  
+    let inputValueConversion, renderableInputValueConversion, hasExchangeRate, comma;
+    // Remove spaces from input
+    inputValue = inputValue && inputValue.replace(/\s+/g, '');
+    // Handle semicolon for other languages
+    if (inputValue && inputValue.includes(',')) {
+      comma = true;
+      inputValue = inputValue.replace(',', '.');
+    }
+
     const processedInputValue = isDecimal(inputValue) ? handleWeiNumber(inputValue) : '0';
 
-    hasExchangeRate = !!conversionRate ;
-    
+    hasExchangeRate = !!conversionRate;
+
     inputValueConversion = `${weiToFiatNumber(toWei(processedInputValue), conversionRate)}`;
     renderableInputValueConversion = `${weiToFiat(
       toWei(processedInputValue),
@@ -368,215 +471,221 @@ function SendingToScreen({
       currentCurrency
     )}`;
 
-		if (comma) inputValue = inputValue && inputValue.replace('.', ',');
-		inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
-    
-    setSendingData({ ...sendingData, amount: fromWei(toWei(processedInputValue)),fiat:inputValueConversion });
+    if (comma) inputValue = inputValue && inputValue.replace('.', ',');
+    inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
 
-    // this.setState({
-		// 	inputValue,
-		// 	inputValueConversion,
-		// 	renderableInputValueConversion,
-		// 	amountError: undefined,
-		// 	hasExchangeRate,
-		// 	maxFiatInput: false
-    // });
-    
+    this.setState({
+      amount: fromWei(toWei(processedInputValue)),
+      fiat: inputValueConversion
+    })
+
+    this.props.getSendingData({
+      fiat: inputValueConversion,
+      amount: fromWei(toWei(processedInputValue)),
+    })
 
   };
 
-  const amountFiatFieldChanged = inputValue => {
+  amountFiatFieldChanged = inputValue => {
+    const { conversionRate, currentCurrency } = this.props;
 
     let inputValueConversion, renderableInputValueConversion, hasExchangeRate, comma;
-		// Remove spaces from input
-		inputValue = inputValue && inputValue.replace(/\s+/g, '');
-		// Handle semicolon for other languages
-		if (inputValue && inputValue.includes(',')) {
-			comma = true;
-			inputValue = inputValue.replace(',', '.');
-		}
+    // Remove spaces from input
+    inputValue = inputValue && inputValue.replace(/\s+/g, '');
+    // Handle semicolon for other languages
+    if (inputValue && inputValue.includes(',')) {
+      comma = true;
+      inputValue = inputValue.replace(',', '.');
+    }
 
-		const processedInputValue = isDecimal(inputValue) ? handleWeiNumber(inputValue) : '0';
-    
-    hasExchangeRate = !!conversionRate ;
-    
+    const processedInputValue = isDecimal(inputValue) ? handleWeiNumber(inputValue) : '0';
+
+    hasExchangeRate = !!conversionRate;
+
     inputValueConversion = `${renderFromWei(fiatNumberToWei(processedInputValue, conversionRate))}`;
-    
+
     renderableInputValueConversion = `${inputValueConversion} BITG`;
 
-		if (comma) inputValue = inputValue && inputValue.replace('.', ',');
+    if (comma) inputValue = inputValue && inputValue.replace('.', ',');
     inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
-    
-    setSendingData({ ...sendingData, fiat: fromWei(toWei(processedInputValue)),amount:inputValueConversion });
-    
-    // this.setState({
-		// 	inputValue,
-		// 	inputValueConversion,
-		// 	renderableInputValueConversion,
-		// 	amountError: undefined,
-		// 	hasExchangeRate,
-		// 	maxFiatInput: false
-    // });
+
+    this.setState({
+      amount: inputValueConversion,
+      fiat: fromWei(toWei(processedInputValue))
+    })
+
+    this.props.getSendingData({
+      amount: inputValueConversion,
+      fiat: fromWei(toWei(processedInputValue)),
+    })
   };
 
-  const getDataFromQRCode = async data => {
-    var parseQrAddress = '';
-    if (data.lastIndexOf('?') !== -1) {
-      parseQrAddress = data.substring(
-        data.lastIndexOf(':') + 1,
-        data.lastIndexOf('?'),
-      );
-    } else {
-      parseQrAddress = data.substring(data.lastIndexOf(':') + 1);
-    }
-    if (parseQrAddress.length > 0) {
-      setSendingData({
-        ...sendingData,
-        name: 'No Name',
-        address: parseQrAddress,
-      });
-    }
-  };
 
-  const getDataFromAddressBook = data => {
-    setSendingData({
-      ...sendingData,
-      name: data.name,
-      address: data.address,
-    });
-  };
 
-  return (
-    <KeyboardAwareScrollView style={{ flex: 1 }}>
-      <Text style={styles.title}>{strings('bitg_wallet.send_title')} </Text>
-      <View style={styles.myWalletContainer}>
-        <Image
-          style={[
-            styles.walletImage,
-            { ...Platform.select({ ios: { tintColor: colors.blackColor } }) },
-          ]}
-          source={walletImageSource}
-          tintColor={Platform === 'ios' ? undefined : colors.blackColor}
-        />
-        <View style={styles.myPrimaryContainer}>
-          <Text style={{ fontSize: 12, color: colors.grey }}>
-            {strings('bitg_wallet.my_primary_address')}
-          </Text>
-          <Text
-            style={{ fontSize: 14, color: colors.blackColor, marginEnd: 10 }}
-            numberOfLines={2}>
-            {renderShortAddress(myWalletAddress)}
-          </Text>
-        </View>
-      </View>
-      <View style={styles.sendingToContainer}>
-        <Text style={styles.inputLabel}>
-          {strings('bitg_wallet.sending_to')}
-        </Text>
-        <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
-          <TextInput
-            style={styles.sendingInput}
-            placeholder={strings('bitg_wallet.send_address_hint')}
-            placeholderTextColor={colors.grey500}
-            editable={editable}
-            onChangeText={searchFieldChanged}
-            defaultValue={
-              sendingData.address === undefined
-                ? sendingData.name === undefined
-                  ? ''
-                  : sendingData.name
-                : sendingData.address
-            }
-          />
-          {paramsData != undefined ? null : (
-            <TouchableOpacity
-              style={styles.icon}
-              onPress={() => openOrCloseAddressBookModal(true)}>
-              <Image
-                style={[styles.icon, { resizeMode: 'center' }]}
-                source={address_book_source}
-              />
-            </TouchableOpacity>
-          )}
-          {paramsData != undefined ? null : (
-            <TouchableOpacity
-              style={styles.icon}
-              onPress={() => openOrCloseQrCodeModal(true)}>
-              <Image
-                style={[styles.icon, { resizeMode: 'contain' }]}
-                source={barcode_source}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
-      <View style={styles.amountContainer}>
-        <Text style={styles.inputLabel}>
-          {strings('bitg_wallet.amount')}
-        </Text>
+  render = () => {
 
-        <View style={styles.amountWrapper}>
+    const { ticker } = this.props;
+
+    const { addressBook, network } = this.props;
+
+    const {
+      fromSelectedAddress,
+      fromAccountName,
+      fromAccountBalance,
+      toSelectedAddress,
+      toSelectedAddressReady,
+      toSelectedAddressName,
+      addToAddressToAddressBook,
+      addressError,
+      balanceIsZero,
+      toInputHighlighted,
+      inputWidth,
+      errorContinue,
+      isOnlyWarning,
+      confusableCollection
+    } = this.state;
+
+
+    const { selectedAddress, paramsData, currentCurrency } = this.props;
+
+    const { editable, address, name, amount, fiat } = this.state;
+
+    const checksummedAddress = toSelectedAddress && toChecksumAddress(toSelectedAddress);
+    const existingContact = checksummedAddress && addressBook[network] && addressBook[network][checksummedAddress];
+    const displayConfusableWarning = !existingContact && confusableCollection && !!confusableCollection.length;
+    const displayAsWarning =
+      confusableCollection && confusableCollection.length && !confusableCollection.some(hasZeroWidthPoints);
+
+    return (
+      <KeyboardAwareScrollView style={{ flex: 1 }}>
+        <Text style={styles.title}>{strings('bitg_wallet.send_title')} </Text>
+        <View style={styles.myWalletContainer}>
           <Image
-            style={[styles.currencyIcon, { resizeMode: 'center' }]}
-            source={bit_currency}
+            style={[
+              styles.walletImage,
+              { ...Platform.select({ ios: { tintColor: colors.blackColor } }) },
+            ]}
+            source={walletImageSource}
+            tintColor={Platform === 'ios' ? undefined : colors.blackColor}
           />
-
-          <TextInput
-            style={styles.amountInput}
-            placeholder={`BITG ${strings('bitg_wallet.amount')}`}
-            placeholderTextColor={colors.grey500}
-            keyboardType="numeric"
-            onChangeText={amountBITGFieldChanged}
-            defaultValue={
-              sendingData.amount === undefined ? '' : sendingData.amount
-            }
-          />
+          <View style={styles.myPrimaryContainer}>
+            <Text style={{ fontSize: 12, color: colors.grey }}>
+              {strings('bitg_wallet.my_primary_address')}
+            </Text>
+            <Text
+              style={{ fontSize: 14, color: colors.blackColor, marginEnd: 10 }}
+              numberOfLines={2}>
+              {renderShortAddress(selectedAddress)}
+            </Text>
+          </View>
         </View>
+        <View style={styles.sendingToContainer}>
+          <Text style={styles.inputLabel}>
+            {strings('bitg_wallet.sending_to')}
+          </Text>
+          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
+            <TextInput
+              style={styles.sendingInput}
+              placeholder={strings('bitg_wallet.send_address_hint')}
+              placeholderTextColor={colors.grey500}
+              editable={editable}
+              onChangeText={this.searchFieldChanged}
+              defaultValue={
+                address === undefined
+                  ? name === undefined
+                    ? ''
+                    : name
+                  : address
+              }
+            />
+            {paramsData != undefined ? null : (
+              <TouchableOpacity
+                style={styles.icon}
+                onPress={() => this.openOrCloseAddressBookModal(true)}>
+                <Image
+                  style={[styles.icon, { resizeMode: 'center' }]}
+                  source={address_book_source}
+                />
+              </TouchableOpacity>
+            )}
+            {paramsData != undefined ? null : (
+              <TouchableOpacity
+                style={styles.icon}
+                onPress={() => this.openOrCloseQrCodeModal(true)}>
+                <Image
+                  style={[styles.icon, { resizeMode: 'contain' }]}
+                  source={barcode_source}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+        <View style={styles.amountContainer}>
+          <Text style={styles.inputLabel}>
+            {strings('bitg_wallet.amount')}
+          </Text>
 
+          <View style={styles.amountWrapper}>
+            <Image
+              style={[styles.currencyIcon, { resizeMode: 'center' }]}
+              source={bit_currency}
+            />
 
-        <MaterialCommunityIcons
-          name="swap-vertical"
-          size={24}
-          color={colors.grey500}
-          style={styles.switch}
-        />
+            <TextInput
+              style={styles.amountInput}
+              placeholder={`BITG ${strings('bitg_wallet.amount')}`}
+              placeholderTextColor={colors.grey500}
+              keyboardType="numeric"
+              onChangeText={this.amountBITGFieldChanged}
+              value={amount}
+              defaultValue={
+                amount === undefined ? '' : amount
+              }
+            />
+          </View>
 
-        <View style={styles.amountWrapper}>
+          <MaterialCommunityIcons
+            name="swap-vertical"
+            size={24}
+            color={colors.grey500}
+            style={styles.switch}
+          />
 
-          {/* <MaterialCommunityIcons
+          <View style={styles.amountWrapper}>
+            {/* <MaterialCommunityIcons
             name={`currency-${currentCurrency}`}
             size={30}
             color={colors.grey500}
           /> */}
-          <Text style={styles.inputCurrencyText}>{`${getCurrencySymbol(currentCurrency)} `}</Text>
-          <TextInput
-            style={styles.amountInput}
-            placeholder={`${ String(currentCurrency).toUpperCase()} ${strings('bitg_wallet.amount')}`}
-            placeholderTextColor={colors.grey500}
-            keyboardType="numeric"
-            onChangeText={amountFiatFieldChanged}
-            defaultValue={
-              sendingData.fiat === undefined ? '' : sendingData.fiat
-            }
-          />
+            <Text style={styles.inputCurrencyText}>{`${getCurrencySymbol(currentCurrency)} `}</Text>
+            <TextInput
+              style={styles.amountInput}
+              placeholder={`${String(currentCurrency).toUpperCase()} ${strings('bitg_wallet.amount')}`}
+              placeholderTextColor={colors.grey500}
+              keyboardType="numeric"
+              onChangeText={this.amountFiatFieldChanged}
+              value={fiat}
+              defaultValue={
+                fiat === undefined ? '' : fiat
+              }
+            />
+          </View>
+
+
+
         </View>
-
-
-
-      </View>
-      {/* <QRCodeScreen
-        visibility={modalVisibilityQrCode}
-        closeModal={() => openOrCloseQrCodeModal(false)}
-        getDataFromQRCode={getDataFromQRCode}
-      /> */}
-      {/* <AddressBookModal
+        {/* <AddressBookModal
         visibility={modalVisibilityAddressBook}
         closeModal={() => openOrCloseAddressBookModal(false)}
         getDataFromAddressBook={getDataFromAddressBook}
         navigation={navigation}
       /> */}
-    </KeyboardAwareScrollView>
-  );
+        {this.renderFromAccountModal()}
+        {this.renderFromAddressModal()}
+
+      </KeyboardAwareScrollView>
+    )
+  }
 }
 
 
@@ -589,7 +698,10 @@ const mapStateToProps = state => ({
   keyrings: state.engine.backgroundState.KeyringController.keyrings,
   ticker: state.engine.backgroundState.NetworkController.provider.ticker,
   network: state.engine.backgroundState.NetworkController.network,
-  providerType: state.engine.backgroundState.NetworkController.provider.type
+  providerType: state.engine.backgroundState.NetworkController.provider.type,
+  balances: state.engine.backgroundState.TokenBalancesController.contractBalances,
+  conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
+  currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useContext } from 'react';
+import React, { useEffect, useCallback, useState,useRef, useContext } from 'react';
 import {
 	View,
 	Text,
@@ -23,13 +23,18 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { showAlert } from './lib/Helpers';
+// import { showAlert } from './lib/Helpers';
+
+import { showAlert } from '../../actions/alert';
+
 
 import ToolBar from './ToolBar';
 
 import { GET_ARTICLES } from './api/queries/user';
 import { createApolloClient } from './api/createApolloClient';
 import {isValidAddressPolkadotAddress} from '../../util/address'
+
+import Engine from '../../core/Engine';
 
 const styles = StyleSheet.create({
 	container: {
@@ -102,7 +107,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.tintColor,
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 50
+		marginTop: 20
 	},
 	textButtons: {
 		fontSize: 18,
@@ -182,72 +187,65 @@ function AddressNewScreen(props) {
 		setUserInfo({ ...userInfo, bitgAddress: text });
 	};
 
+	const networkIdChanged = text => {
+		setSearchText('');
+		setUserInfo({ ...userInfo, network: text });
+	};
+
+	const memoChanged = text => {
+		setSearchText('');
+		setUserInfo({ ...userInfo, memo: text });
+	};
+
 	const addContact = async () => {
+
 		try {
+			
 			if (userInfo.bitgAddress != undefined) {
-				setLoaderVisible(true);
-				await sleep(1000);
-				const wallet = WalletManager.getWalletByName('BITGWallet');
-				const key = wallet.getKey(0);
-				const userData = await getUserData();
-				const myTransaction = {
-					hash: '',
-					sender: {
-						name: JSON.parse(userData).updateUser.user.username,
-						address: key.getAddress()
-					},
-					receiver: {
-						name: userInfo.username === undefined ? 'No Name' : userInfo.username,
-						address: userInfo.bitgAddress
-					},
-					send_amount: 0,
-					time: Math.floor(Date.now() / 1000),
-					is_expense: true,
-					is_my_friend: true,
-					color: getTransactionColor(userInfo.bitgAddress)
-				};
-				saveTransactionLocally(myTransaction);
-				setLoaderVisible(false);
+				const isValid =  isValidAddressPolkadotAddress(userInfo.bitgAddress)
+				if(!isValid){
+					const network = props.network
+					const { AddressBookController } = Engine.context;
+					let response = AddressBookController.set(userInfo.bitgAddress, userInfo.username, network);
+					console.log('response',response)
+					if(response){
+						// showSuccessfullyAlert(userInfo.username)
+						props.showAlert({
+							isVisible: true,
+							autodismiss: 5000,
+							content: 'clipboard-alert',
+							data: { msg: 'Added to the contract'}
+						});
+						setUserInfo({})
+					}
+
+					
+				}else{
+					props.showAlert({
+						isVisible: true,
+						autodismiss: 5000,
+						content: 'clipboard-alert',
+						data: { msg: 'Invalid Address'}
+					});
+				}
+
 			} else {
-				showAlert('Please enter at least BIT Address manually!');
+				props.showAlert({
+					isVisible: true,
+					autodismiss: 5000,
+					content: 'clipboard-alert',
+					data: { msg: 'Please enter at least BIT Address manually!'}
+				});
 			}
 		} catch (error) {
 			setLoaderVisible(false);
-			showAlert('We have a problem with servers, plese try later again!');
+			props.showAlert({
+				isVisible: true,
+				autodismiss: 5000,
+				content: '',
+				data: { msg: 'We have a problem with servers, plese try later again!'}
+			});
 		}
-	};
-
-	const saveTransactionLocally = async trans => {
-		// const transactionList = await getUserTransactions()
-		// const parseTransactions = JSON.parse(transactionList)
-		// if (parseTransactions != undefined && parseTransactions != null && parseTransactions.length > 0) {
-		//     const sameTrans = parseTransactions.filter(item => item.sender.address == trans.receiver.address || item.receiver.address == trans.receiver.address)
-		//     if ((sameTrans === undefined || sameTrans === null) || sameTrans.length == 0) {
-		//         parseTransactions.push(trans)
-		//         await setUserTransactions(JSON.stringify(parseTransactions))
-		//         setTransaction(parseTransactions)
-		//         showSuccessfullyAlert(trans.receiver.name === "No Name" ? trans.receiver.address : trans.receiver.name)
-		//     } else {
-		//         if (sameTrans[0].is_my_friend) {
-		//             showAlert("You already have this contact!")
-		//         } else {
-		//             parseTransactions.map(transItem => {
-		//                 if (transItem.sender.address == trans.receiver.address || transItem.receiver.address == trans.receiver.address) {
-		//                     transItem.is_my_friend = true
-		//                 }
-		//                 return transItem
-		//             })
-		//             await setUserTransactions(JSON.stringify(parseTransactions))
-		//             setTransaction(parseTransactions)
-		//             showSuccessfullyAlert(trans.receiver.name === "No Name" ? trans.receiver.address : trans.receiver.name)
-		//         }
-		//     }
-		// } else {
-		//     const transList = [trans]
-		//     await setUserTransactions(JSON.stringify(transList))
-		//     setTransaction(parseTransactions)
-		//     showSuccessfullyAlert(trans.receiver.name === "No Name" ? trans.receiver.address : trans.receiver.name)
-		// }
 	};
 
 	const showSuccessfullyAlert = name => {
@@ -259,14 +257,6 @@ function AddressNewScreen(props) {
 		]);
 	};
 
-	const onSaveToAddressBook = () => {
-		const { network } = this.props;
-		const { toSelectedAddress, alias } = this.state;
-		const { AddressBookController } = Engine.context;
-		AddressBookController.set(toSelectedAddress, alias, network);
-		this.toggleAddToAddressBookModal();
-		this.setState({ toSelectedAddressName: alias, addToAddressToAddressBook: false, alias: undefined });
-	};
 
 	const onScan = () => {
 		navigation.navigate('QRScanner', {
@@ -278,9 +268,13 @@ function AddressNewScreen(props) {
 
 						setUserInfo({ ...userInfo, bitgAddress: meta.target_address });
 					}else{
-						showAlert('Invalid Address:')
+						props.showAlert({
+							isVisible: true,
+							autodismiss: 5000,
+							content: 'clipboard-alert',
+							data: { msg: 'Invalid Address'}
+						});
 					}
-					// this.onToSelectedAddressChange(meta.target_address);
 				}
 			}
 		});
@@ -288,6 +282,26 @@ function AddressNewScreen(props) {
 
 	const onMenuPress = () => {
 		navigation.pop();
+	};
+
+	const nameInput = useRef();
+	const addressInput = useRef();
+	const networkIdInput = useRef();
+	const memoInput = useRef();
+
+	const jumpToNameInput = () => {
+		const { current } = nameInput;
+		current && current.focus();
+	};
+
+	const jumpAddressInput = () => {
+		const { current } = addressInput;
+		current && current.focus();
+	};
+
+	const jumpMemo = () => {
+		const { current } = memoInput;
+		current && current.focus();
 	};
 
 	return (
@@ -326,25 +340,33 @@ function AddressNewScreen(props) {
 										{strings('bitg_wallet.address_book.detail_title')}
 									</Text>
 
-									<TextInput
+									{/* <TextInput 
+									    ref={networkIdInput}
 										style={[styles.input, { marginTop: 20 }]}
 										placeholder={strings('bitg_wallet.address_book.identifier')}
 										placeholderTextColor={colors.grey400}
-										editable={false}
 										defaultValue={userInfo.network}
-									/>
+										onChangeText={networkIdChanged}
+										// onBlur={this.validateCustomTokenSymbol}
+										onSubmitEditing={jumpToNameInput}
+										returnKeyType={'next'}
+									/> */}
 
 									<TextInput
+										ref={nameInput}
 										style={[styles.input, { marginTop: 10 }]}
 										placeholder={strings('bitg_wallet.address_book.name')}
 										placeholderTextColor={colors.grey400}
 										defaultValue={userInfo.username}
 										onChangeText={text => nameChanged(text)}
+										onSubmitEditing={jumpAddressInput}
+										returnKeyType={'next'}
 									/>
 
 									<View style={styles.selectWrapper}>
 										<View style={styles.inputWrapper}>
 											<TextInput
+											    ref={addressInput}
 												autoCapitalize="none"
 												autoCorrect={false}
 												onChangeText={text => addressChanged(text)}
@@ -359,12 +381,11 @@ function AddressNewScreen(props) {
 												value={userInfo.bitgAddress}
 												defaultValue={userInfo.bitgAddress}
 												testID={'txn-to-address-input'}
+												onSubmitEditing={jumpMemo}
+												returnKeyType={'next'}
 											/>
 
 										</View>
-
-
-
 
 										<TouchableOpacity onPress={onScan} style={styles.iconWrapper}>
 											<AntIcon
@@ -375,7 +396,17 @@ function AddressNewScreen(props) {
 										</TouchableOpacity>
 									</View>
 
-
+									<TextInput
+									    ref={memoInput}
+										style={styles.input}
+										placeholder={'Memo'}
+										placeholderTextColor={colors.grey400}
+										defaultValue={userInfo.memo}
+										onChangeText={text => memoChanged(text)}
+										onSubmitEditing={addContact}
+										value={userInfo.memo}
+										returnKeyType={'done'}
+									/>
 
 									<TouchableOpacity style={styles.submitButton} activeOpacity={0.5} onPress={addContact}>
 										<Text style={styles.textButtons}>{strings('address_book.add_contact')}</Text>
@@ -415,8 +446,22 @@ AddressNewScreen.propTypes = {
 	/**
 	 * An object containing token exchange rates in the format address => exchangeRate
 	 */
-	tokenExchangeRates: PropTypes.object
+	tokenExchangeRates: PropTypes.object,
+
+
+		/**
+	 * Network id
+	 */
+	network: PropTypes.string,
+
+		/**
+	/* Triggers global alert
+	*/
+	showAlert: PropTypes.func,
+	
+
 };
+
 
 const mapStateToProps = state => ({
 	accounts: state.engine.backgroundState.AccountTrackerController.accounts,
@@ -424,7 +469,15 @@ const mapStateToProps = state => ({
 	balances: state.engine.backgroundState.TokenBalancesController.contractBalances,
 	conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
 	tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
-	currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency
+	currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
+	addressBook: state.engine.backgroundState.AddressBookController.addressBook,
+
+	network: state.engine.backgroundState.NetworkController.network,
 });
 
-export default connect(mapStateToProps)(AddressNewScreen);
+const mapDispatchToProps = dispatch => ({
+	showAlert: config => dispatch(showAlert(config))
+});
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(AddressNewScreen);

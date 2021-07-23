@@ -101,7 +101,7 @@ function ReceiveScreen({
 
 	conversionRate,
 
-	currentCurrency,
+    currentCurrency,
 
 	tokenExchangeRates }) {
 
