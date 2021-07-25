@@ -355,13 +355,13 @@ class AccountList extends PureComponent {
 								<Text style={styles.btnText}>{strings('accounts.create_new_account')}</Text>
 							)}
 						</TouchableOpacity>
-						<TouchableOpacity
+						{/* <TouchableOpacity
 							onPress={this.importAccount}
 							style={styles.footerButton}
 							testID={'import-account-button'}
 						>
 							<Text style={styles.btnText}>{strings('accounts.import_account')}</Text>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 					</View>
 				)}
 			</SafeAreaView>

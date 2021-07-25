@@ -124,7 +124,7 @@
 		"sync_help_step_four": "4. Scan the QR Code to start syncing",
 		"sync_from_browser_extension_button": "Sync with BITG extension",
 		"or": "OR",
-		"import_from_seed_button": "Import using Secret Recovery Phrase"
+		"import_from_seed_button": "Import Wallet"
 	},
 	"login": {
 		"title": "Welcome Back!",

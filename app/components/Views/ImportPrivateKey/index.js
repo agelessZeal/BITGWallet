@@ -165,11 +165,11 @@ export default class ImportPrivateKey extends PureComponent {
 		}
 	};
 
-	learnMore = () =>
-		this.props.navigation.navigate('Webview', {
-			url: 'https://metamask.zendesk.com/hc/en-us/articles/360015289932-What-are-imported-accounts-',
-			title: strings('drawer.metamask_support')
-		});
+	// learnMore = () =>
+	// 	this.props.navigation.navigate('Webview', {
+	// 		url: 'https://metamask.zendesk.com/hc/en-us/articles/360015289932-What-are-imported-accounts-',
+	// 		title: strings('drawer.metamask_support')
+	// 	});
 
 	onInputChange = value => {
 		this.setState({ privateKey: value });
