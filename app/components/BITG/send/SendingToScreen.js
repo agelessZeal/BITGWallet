@@ -325,6 +325,7 @@ class SendingToScreen extends PureComponent {
 	};
 
 	toggleFromAddressBookModal = () => {
+    // this.toggleFromAccountModal()
 		const { fromAddressModalVisible } = this.state;
 		this.setState({ fromAddressModalVisible: !fromAddressModalVisible });
 	};
@@ -435,11 +436,12 @@ class SendingToScreen extends PureComponent {
   };
 
   openOrCloseAddressBookModal = visibility => {
+    this.toggleFromAccountModal();
 
-    this.setState({
-      showModalAddress: visibility,
-      fromAddressModalVisible:visibility
-    })
+    // this.setState({
+    //   showModalAddress: visibility,
+    //   fromAddressModalVisible:visibility
+    // })
   }
 
   searchFieldChanged = text => {

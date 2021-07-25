@@ -341,7 +341,8 @@ export async function getTransactionReviewActionKey(transaction, chainId) {
  * @returns {string} - Corresponding ticker or ETH
  */
 export function getTicker(ticker) {
-	return ticker || strings('unit.eth');
+	return 'BITG';
+	// return ticker || strings('unit.eth');
 }
 
 /**

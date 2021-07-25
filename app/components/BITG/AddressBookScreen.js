@@ -141,55 +141,17 @@ const LabelElement = label => (
 	</View>
 );
 
-
-const dummy_addresses = [
-	{
-		hash: "",
-		sender: {
-			name: "Joe Citizeon",
-			address: "uytiuytiuytiuytukjytiu"
-		},
-		receiver: {
-			name: "Kristiana",
-			address: "Safsdafsdfasdf"
-		},
-		send_amount: 32.2,
-		time: Math.floor(Date.now() / 1000),
-		is_expense: true,
-		is_my_friend: true,
-		color: getTransactionColor('gdffgfsdfggdfgdf'),
-		confirmations: 4,
-
-	},
-	{
-		hash: "",
-		sender: {
-			name: "Caroline",
-			address: "uytiuytiuytiuytukjytiu"
-		},
-		receiver: {
-			name: "Charmaine",
-			address: "41234vfg23b4f"
-		},
-		send_amount: 23.30,
-		time: Math.floor(Date.now() / 1000),
-		is_expense: false,
-		is_my_friend: true,
-		color: getTransactionColor('434ree3423'),
-		confirmations: 2,
-
-	}
-];
-
 function AddressBookScreen(props) {
 	const navigation = useContext(NavigationContext);
 
 	// const { state, setTransaction } = useContext(TransactionContext)
 
 	const [loading, setLoading] = useState(false);
-	const [addressBook, setAddressBook] = useState(dummy_addresses);
+	// const [addressBook, setAddressBook] = useState(dummy_addresses);
+
+	// const [filteredAddressBook, setFilteredAddressBook] = useState(dummy_addresses);
+
 	const [userAddress, setUserAddress] = useState(props.selectedAddress);
-	const [filteredAddressBook, setFilteredAddressBook] = useState(dummy_addresses);
 
 	const [myAccountsOpened, setMyAccountsOpened] = useState(false);
 
@@ -363,7 +325,7 @@ function AddressBookScreen(props) {
 		const address = itemData.item.address
 		const name = itemData.item.name
         const element =  itemData.item;
-		navigation.navigate("AddressDetail", { address,data: element })
+		navigation.navigate("AddressDetail", { address,name,data: element })
 	};
 
 	const onItemSendPressed = (itemData, userAddress) => {r

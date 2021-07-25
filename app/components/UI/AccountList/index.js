@@ -290,17 +290,19 @@ class AccountList extends PureComponent {
 
 	getAccounts() {
 		const { accounts, identities, selectedAddress, keyrings, getBalanceError } = this.props;
+
 		// This is a temporary fix until we can read the state from @metamask/controllers
 		const allKeyrings = keyrings && keyrings.length ? keyrings : Engine.context.KeyringController.state.keyrings;
 
 		const accountsOrdered = allKeyrings.reduce((list, keyring) => list.concat(keyring.accounts), []);
+
 		return accountsOrdered
-			.filter(address => !!identities[toChecksumAddress(address)])
+			.filter(address => !!identities[address])
 			.map((addr, index) => {
-				const checksummedAddress = toChecksumAddress(addr);
+				const checksummedAddress = addr;
 				const identity = identities[checksummedAddress];
 				const { name, address } = identity;
-				const identityAddressChecksummed = toChecksumAddress(address);
+				const identityAddressChecksummed = address;
 				const isSelected = identityAddressChecksummed === selectedAddress;
 				const isImported = this.isImported(allKeyrings, identityAddressChecksummed);
 				let balance = 0x0;

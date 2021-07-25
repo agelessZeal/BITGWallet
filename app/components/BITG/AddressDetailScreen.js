@@ -7,16 +7,12 @@ import Feather from 'react-native-vector-icons/Feather';
 
 import ProgressCircle from 'react-native-progress-circle';
 
-import { formatNumber, getUserTransactions } from './lib/Helpers';
+import { formatNumber, getUserTransactions ,getTransactionColor} from './lib/Helpers';
 // import { Context as TransactionContext } from './lib/context/TransactionsContext'
 
 import { strings } from '../../../locales/i18n';
 import { colors, fontStyles } from '../../styles/common';
 import { getEmptyHeaderOptions } from '../UI/Navbar';
-
-// import { getUserTransactions, setUserTransactions ,getTransactionColor} from './lib/Helpers';
-
-// import { Context as TransactionContext } from '../lib/context/TransactionsContext'
 
 import { NavigationContext } from 'react-navigation';
 
@@ -79,6 +75,47 @@ const styles = StyleSheet.create({
 	}
 });
 
+
+const dummy_addresses = [
+	{
+		hash: "",
+		sender: {
+			name: "Joe Citizeon",
+			address: "uytiuytiuytiuytukjytiu"
+		},
+		receiver: {
+			name: "Kristiana",
+			address: "Safsdafsdfasdf"
+		},
+		send_amount: 32.2,
+		time: Math.floor(Date.now() / 1000),
+		is_expense: true,
+		is_my_friend: true,
+		color: getTransactionColor('gdffgfsdfggdfgdf'),
+		confirmations: 4,
+
+	},
+	{
+		hash: "",
+		sender: {
+			name: "Caroline",
+			address: "uytiuytiuytiuytukjytiu"
+		},
+		receiver: {
+			name: "Charmaine",
+			address: "41234vfg23b4f"
+		},
+		send_amount: 23.30,
+		time: Math.floor(Date.now() / 1000),
+		is_expense: false,
+		is_my_friend: true,
+		color: getTransactionColor('434ree3423'),
+		confirmations: 2,
+
+	}
+];
+
+
 function AddressDetailScreen(props) {
 	const navigation = useContext(NavigationContext);
 
@@ -93,7 +130,7 @@ function AddressDetailScreen(props) {
 		if (data) {
 			setName(data.name);
 			setAddress(data.address);
-			setTransactionFiltered([data.data]);
+			// setTransactionFiltered([data.data]);
 		}
 	}, []);
 
@@ -310,7 +347,27 @@ AddressDetailScreen.propTypes = {
 	/**
 	 * An object containing token exchange rates in the format address => exchangeRate
 	 */
-	tokenExchangeRates: PropTypes.object
+	tokenExchangeRates: PropTypes.object,
+
+
+	/**
+	 * List of accounts from the PreferencesController
+	*/
+	identities: PropTypes.object,
+	/**
+	 * Map representing the address book
+	 */
+	addressBook: PropTypes.object,
+
+	/**
+	 * Network id
+	 */
+	network: PropTypes.string,
+
+	/**
+	 * An array that represents the user transactions
+	 */
+	transactions: PropTypes.array,
 };
 
 const mapStateToProps = state => ({
