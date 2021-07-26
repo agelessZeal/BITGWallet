@@ -193,7 +193,7 @@ const Main = props => {
 
 		if(props.api){
 
-			// console.log('ref polka api')
+			console.log('ref polka api')
 			
 			// const MNEMONIC = 'sample split bamboo west visual approve brain fox arch impact relief smile';
 

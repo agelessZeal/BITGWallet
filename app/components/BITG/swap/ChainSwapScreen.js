@@ -130,7 +130,7 @@ function ChainSwapScreen(props) {
 
   useEffect(()=>{
     let addressData = navigation.getParam('data',null)
-    console.log('send sceen:',addressData)
+    console.log('ChainSwapScreen:',addressData)
   },[])
 
 

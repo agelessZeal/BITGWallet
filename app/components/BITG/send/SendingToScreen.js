@@ -18,12 +18,17 @@ import { getEmptyHeaderOptions, getBITGWalletNavbarOptions } from '../../UI/Navb
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Modal from 'react-native-modal';
+import { doENSLookup, doENSReverseLookup } from '../../../util/ENSUtils';
 
 import AddressList from '../../Views/SendFlow/AddressList';
 import AccountList from '../../UI/AccountList';
 
 import { isValidAddress, toChecksumAddress } from 'ethereumjs-util';
+import SendAddressModal from './SendAddressModal'
 
+import Engine from '../../../core/Engine';
+
+import {isValidAddressPolkadotAddress} from '../../../util/address'
 import {
   renderFromTokenMinimalUnit,
   balanceToFiat,
@@ -42,6 +47,9 @@ import {
   fromTokenMinimalUnitString,
   toHexadecimal
 } from '../../../util/number';
+import { isENS } from '../../../util/address';
+
+import NetworkList from '../../../util/networks';
 
 // import QRCodeScreen from '../QRCodeScreen';
 
@@ -203,7 +211,7 @@ class SendingToScreen extends PureComponent {
     showModalAddress: false,
     showModalAccount: false,
     editable: false,
-    searchText:'',
+    addressInput:'',
 
     addressError: undefined,
     balanceIsZero: false,
@@ -233,13 +241,26 @@ class SendingToScreen extends PureComponent {
 
 
   onToSelectedAddressChange = async toSelectedAddress => {
+    
+    console.log('onToSelectedAddressChange:',toSelectedAddress)
+
     const { AssetsContractController } = Engine.context;
     const { addressBook, network, identities, providerType } = this.props;
     const networkAddressBook = addressBook[network] || {};
-    console.log('onToSelectedAddressChange:',toSelectedAddress)
+
     let addressError, toAddressName, toEnsName, errorContinue, isOnlyWarning;
     let [addToAddressToAddressBook, toSelectedAddressReady] = [false, false];
-    if (isValidAddress(toSelectedAddress)) {
+
+    if (isValidAddressPolkadotAddress(toSelectedAddress)) {
+      this.setState({
+        address:toSelectedAddress,
+        showModalAddress:false,
+      })
+
+      this.props.getSendingData({
+        address: toSelectedAddress,
+      })
+
       const checksummedToSelectedAddress = toChecksumAddress(toSelectedAddress);
       toSelectedAddressReady = true;
       const ens = await doENSReverseLookup(toSelectedAddress);
@@ -325,61 +346,16 @@ class SendingToScreen extends PureComponent {
 	};
 
 	toggleFromAddressBookModal = () => {
-    // this.toggleFromAccountModal()
-		const { fromAddressModalVisible } = this.state;
-		this.setState({ fromAddressModalVisible: !fromAddressModalVisible });
+		const { showModalAddress } = this.state;
+		this.setState({ showModalAddress: !showModalAddress });
 	};
 
-	onAccountChange = async accountAddress => {
-		const { identities, ticker, accounts } = this.props;
-		const { name } = identities[accountAddress];
-		const { PreferencesController } = Engine.context;
-		const fromAccountBalance = `${renderFromWei(accounts[accountAddress].balance)} ${getTicker(ticker)}`;
-		// const ens = await doENSReverseLookup(accountAddress);
-		// const fromAccountName = ens || name;
-		// PreferencesController.setSelectedAddress(accountAddress);
-		// // If new account doesn't have the asset
-		// this.props.setSelectedAsset(getEther(ticker));
-		// this.setState({
-		// 	fromAccountName,
-		// 	fromAccountBalance,
-		// 	fromSelectedAddress: accountAddress,
-		// 	balanceIsZero: hexToBN(accounts[accountAddress].balance).isZero()
-		// });
-		// this.toggleFromAccountModal();
-  };
-  
-
-  renderFromAccountModal = () => {
-    const { identities, keyrings, ticker } = this.props;
-    const { fromAccountModalVisible, fromSelectedAddress } = this.state;
-    return (
-      <Modal
-        isVisible={fromAccountModalVisible}
-        style={styles.bottomModal}
-        onBackdropPress={this.toggleFromAccountModal}
-        onBackButtonPress={this.toggleFromAccountModal}
-        onSwipeComplete={this.toggleFromAccountModal}
-        swipeDirection={'down'}
-        propagateSwipe
-      >
-        <AccountList
-          enableAccountsAddition={false}
-          identities={identities}
-          selectedAddress={fromSelectedAddress}
-          keyrings={keyrings}
-          onAccountChange={this.onAccountChange}
-          ticker={ticker}
-        />
-      </Modal>
-    );
-  };
   renderFromAddressModal = () => {
     const { identities, keyrings, ticker } = this.props;
-    const { fromAddressModalVisible, fromSelectedAddress ,toSelectedAddress} = this.state;
+    const { showModalAddress, fromSelectedAddress ,toSelectedAddress} = this.state;
     return (
       <Modal
-        isVisible={fromAddressModalVisible}
+        isVisible={showModalAddress}
         style={styles.bottomModal}
         onBackdropPress={this.toggleFromAddressBookModal}
         onBackButtonPress={this.toggleFromAddressBookModal}
@@ -387,7 +363,7 @@ class SendingToScreen extends PureComponent {
         swipeDirection={'down'}
         propagateSwipe
       >
-        <AddressList
+        <SendAddressModal
           inputSearch={toSelectedAddress}
           onAccountPress={this.onToSelectedAddressChange}
           onAccountLongPress={dummy}
@@ -395,7 +371,6 @@ class SendingToScreen extends PureComponent {
       </Modal>
     )
   }
-
 
 
   validateToAddress = async () => {
@@ -420,7 +395,7 @@ class SendingToScreen extends PureComponent {
       onScanSuccess: meta => {
         if (meta.target_address) {
           console.log('onScallSuccessL', meta.target_address)
-          // this.onToSelectedAddressChange(meta.target_address);
+          this.onToSelectedAddressChange(meta.target_address);
         }
       }
     });
@@ -436,18 +411,29 @@ class SendingToScreen extends PureComponent {
   };
 
   openOrCloseAddressBookModal = visibility => {
-    this.toggleFromAccountModal();
-
-    // this.setState({
-    //   showModalAddress: visibility,
-    //   fromAddressModalVisible:visibility
-    // })
+    this.setState({
+      showModalAddress: visibility,
+      fromAddressModalVisible:visibility
+    })
   }
 
-  searchFieldChanged = text => {
-    this.setState({
-      searchText:text
-    })
+  addressFieldChanged = text => {
+
+    if(isValidAddressPolkadotAddress(text)){
+      this.setState({
+        addressInput:text,
+        address:text
+      })
+
+      this.props.getSendingData({
+        address: text,
+      })
+
+    }else{
+      this.setState({
+        addressInput:text
+      })
+    }
   };
 
   amountBITGFieldChanged = inputValue => {
@@ -525,11 +511,8 @@ class SendingToScreen extends PureComponent {
 
 
   render = () => {
-
     const { ticker } = this.props;
-
     const { addressBook, network } = this.props;
-
     const {
       fromSelectedAddress,
       fromAccountName,
@@ -544,7 +527,8 @@ class SendingToScreen extends PureComponent {
       inputWidth,
       errorContinue,
       isOnlyWarning,
-      confusableCollection
+      confusableCollection,
+      showModalAddress
     } = this.state;
 
 
@@ -591,7 +575,7 @@ class SendingToScreen extends PureComponent {
               placeholder={strings('bitg_wallet.send_address_hint')}
               placeholderTextColor={colors.grey500}
               editable={editable}
-              onChangeText={this.searchFieldChanged}
+              onChangeText={this.addressFieldChanged}
               defaultValue={
                 address === undefined
                   ? name === undefined
@@ -682,7 +666,7 @@ class SendingToScreen extends PureComponent {
         getDataFromAddressBook={getDataFromAddressBook}
         navigation={navigation}
       /> */}
-        {this.renderFromAccountModal()}
+        {/* {this.renderFromAccountModal()} */}
         {this.renderFromAddressModal()}
 
       </KeyboardAwareScrollView>

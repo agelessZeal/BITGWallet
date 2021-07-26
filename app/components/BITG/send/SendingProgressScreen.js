@@ -1,11 +1,11 @@
-import React, {useEffect,useState,useContext,useRef} from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Platform, ActivityIndicator } from 'react-native';
 
 
 
 import { strings } from '../../../../locales/i18n';
 import { colors, fontStyles } from '../../../styles/common';
-import { toFixedFloor} from '../lib/Helpers'
+import { toFixedFloor } from '../lib/Helpers'
 
 import { NavigationContext } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -34,14 +34,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginStart: 20,
         marginEnd: 20,
-        borderColor:colors.grey200,
-        borderWidth:1,
-        padding:10,
-        borderRadius:5,
-        marginTop:10,
+        borderColor: colors.grey200,
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
     },
     sectionSubContainer: {
-        flex:1,
+        flex: 1,
     },
     circleContainer: {
         width: 24,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         color: colors.tintColor,
         fontSize: 14,
         marginStart: 10,
-        textTransform:'uppercase'
+        textTransform: 'uppercase'
     },
     sectionSubTitle: {
         color: colors.grey200,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
         marginStart: 10,
-        resizeMode:'contain',
+        resizeMode: 'contain',
         ...Platform.select({ ios: { tintColor: colors.tintColor } })
     },
     credential: {
@@ -136,8 +136,8 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
                     :
                     sendingData.address === undefined ? <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 20, marginStart: 20, marginEnd: 20 }}>
                         {strings('bitg_wallet.invalid_send_data')}
-                        </Text> :
-                       
+                    </Text> :
+
 
                         < View style={{ flex: 1 }}>
                             <Image style={styles.imgBG} source={progress_source} />
@@ -148,7 +148,7 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
                                 </View>
                                 <View style={styles.sectionSubContainer}>
                                     <Text style={styles.sectionTitle}>{strings('bitg_wallet.from')}</Text>
-                                    <Text style={styles.sectionSubTitle}>{ strings('bitg_wallet.my_primary_wallet')}</Text>
+                                    <Text style={styles.sectionSubTitle}>{strings('bitg_wallet.my_primary_wallet')}</Text>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                                         <Image
                                             style={styles.bitgSmallImage}
@@ -168,9 +168,9 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.sectionTitle}>{strings('send.title')}</Text>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                                        <View style={styles.credential}>
+                                        {/* <View style={styles.credential}>
                                             <Text style={styles.credentialText}>{sendingData.address === undefined ? "" : sendingData.address.charAt(0)}</Text>
-                                        </View>
+                                        </View> */}
                                         <Text style={{ fontSize: 20, marginStart: 20, color: colors.blackColor }}>{sendingData.address === undefined ? "" : sendingData.address}</Text>
                                     </View>
                                 </View>
