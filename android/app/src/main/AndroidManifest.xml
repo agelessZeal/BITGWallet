@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="io.metamask"
+	package="org.bitg"
 	xmlns:tools="http://schemas.android.com/tools"
 >
 
@@ -50,13 +50,13 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="https" android:host="metamask.app.link" />
-				<data android:scheme="https" android:host="metamask-alternate.app.link" />
-				<data android:scheme="https" android:host="metamask.test-app.link" />
-				<data android:scheme="https" android:host="metamask-alternate.test-app.link" />
+				<data android:scheme="https" android:host="bitg.app.link" />
+				<data android:scheme="https" android:host="bitg-alternate.app.link" />
+				<data android:scheme="https" android:host="bitg.test-app.link" />
+				<data android:scheme="https" android:host="bitg-alternate.test-app.link" />
 			</intent-filter>
 			<intent-filter>
-				<data android:scheme="metamask" />
+				<data android:scheme="bitg" />
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
@@ -97,7 +97,7 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="https" android:host="metamask.io" />
+				<data android:scheme="https" android:host="bitg.org" />
 			</intent-filter>
 		</activity>
 		<activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
@@ -107,9 +107,9 @@
 		<meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
 		<!-- PUSH NOTIFICATIONS -->
 		<meta-data	android:name="com.dieam.reactnativepushnotification.notification_channel_name"
-		android:value="io.metamask"/>
+		android:value="org.bitg"/>
 		<meta-data	android:name="com.dieam.reactnativepushnotification.notification_channel_description"
-		android:value="io.metamask"/>
+		android:value="org.bitg"/>
 		<meta-data	android:name="com.dieam.reactnativepushnotification.notification_color"
 		android:resource="@color/lightgray"/>
 		<!-- MIXPANEL -->
@@ -126,7 +126,7 @@
 
 		<provider
 			android:name="androidx.core.content.FileProvider"
-			android:authorities="io.metamask.provider"
+			android:authorities="org.bitg.provider"
 			android:grantUriPermissions="true"
 			android:exported="false"
 		>

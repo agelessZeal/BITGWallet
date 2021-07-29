@@ -243,17 +243,24 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         padding: 10,
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         marginTop: 10,
         borderColor: colors.grey050,
         borderWidth: 1,
         borderRadius: 5,
+        position:'relative'
     },
     impactItemClose: {
         position: 'absolute',
         right: 6,
         top: 6,
+    },
+    impactItemStarWrapper: {
+        width:30,
+        justifyContent:'center',
+        alignItems:'center',
+        marginEnd:7,
     },
     impactItemStar: {
         tintColor: colors.blue,
@@ -261,14 +268,15 @@ const styles = StyleSheet.create({
         height: 25,
     },
     impactItemTitle: {
-        minWidth: '70%',
+        // maxWidth: '70%',
         justifyContent: 'space-around'
     },
     impactText1: {
         color: colors.grey200
     },
     impactText2: {
-        color: colors.black
+        color: colors.black,
+        
     },
 })
 
@@ -365,7 +373,7 @@ function MyWalletScreen({
     const [impactData, setImpactData] = useState([{
         title: 'Name',
         time: '5 min ago',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
+        content: 'New impact news, from bitg'
     }, {
         title: 'Name s',
         time: '1 hour ago',
@@ -534,12 +542,15 @@ function MyWalletScreen({
                                     {
                                         impactData.map((item, index) => (
                                             <View key={index} style={styles.impactItem}>
-                                                <Image source={impactImageSource} style={styles.impactItemStar} />
+                                                <View style={styles.impactItemStarWrapper}>
+                                                    <Image source={impactImageSource} style={styles.impactItemStar} />
+                                                </View>
+
                                                 <TouchableOpacity style={styles.impactItemTitle}>
                                                     <Text style={styles.impactText1}>
                                                         {`${item.title}  ${item.time}`}
                                                     </Text>
-                                                    <Text style={styles.impactText2}>
+                                                    <Text style={styles.impactText2} numberOfLines={2} ellipsizeMode='tail'>
                                                         {item.content}
                                                     </Text>
                                                 </TouchableOpacity>
