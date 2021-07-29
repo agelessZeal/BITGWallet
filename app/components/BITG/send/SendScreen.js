@@ -33,6 +33,13 @@ import Device from '../../../util/Device';
 import { makeAlert, sleep } from '../lib/Helpers'
 // import WalletManager from '../../wallet';
 import { createApolloClient } from '../api/createApolloClient';
+
+import Engine from '../../../core/Engine';
+
+
+// Import the keyring as required
+import { Keyring } from '@polkadot/api';
+
 // import {showAlert, SATOSHI_CONST, sleep} from '../../lib/Helpers';
 // import {Context as TransactionContext} from '../../lib/context/TransactionsContext';
 // import {Context as WalletContext} from '../../lib/context/WalletContext';
@@ -117,7 +124,8 @@ function SendScreen({
   conversionRate,
   tokenExchangeRates,
   currentCurrency,
-  showAlert
+  showAlert,
+  api
 }) {
 
   const navigation = useContext(NavigationContext);
@@ -167,13 +175,9 @@ function SendScreen({
   const [page, setPage] = useState(0);
   const viewPager = useRef();
 
-  // useEffect(() => {
-  //   getWalletInfo();
-  // }, [state, walletContext.state]);
-
   useEffect(() => {
     let addressData = navigation.getParam('data', null)
-    console.log('send sceen: yy', addressData)
+    // console.log('send sceen: yy', addressData)
   }, [])
 
 
@@ -183,19 +187,6 @@ function SendScreen({
     });
   }, [navigation]);
 
-  const getWalletInfo = async () => {
-    // try {
-    //   const wallet = WalletManager.getWalletByName('BITGWallet');
-    //   const myAddress = wallet.getKey(0).getAddress();
-    //   const balance = await wallet.getKey(0).getBalance();
-    //   setPrimaryAddress(myAddress);
-    //   setMyBalance((balance.confirmed + balance.unconfirmed) / SATOSHI_CONST);
-    // } catch (error) {
-    //   console.log(error);
-    //   setPrimaryAddress(undefined);
-    //   setMyBalance(undefined);
-    // }
-  };
 
   const onRefresh = async () => {
     NetInfo.fetch().then(state => {
@@ -229,7 +220,8 @@ function SendScreen({
   };
 
   const move = delta => {
-    NetInfo.fetch().then(state => {
+    showAlert
+    NetInfo.fetch().then(async state => {
       if (!state.isConnected) {
         makeAlert('Please connect to the internet');
 
@@ -267,6 +259,54 @@ function SendScreen({
               if (nextPage == 2) {
                 if (sendingData.address != undefined) {
                   setLoading(true);
+
+                  try {
+                    
+                    const { KeyringController } = Engine.context;
+
+                    const pairs = await KeyringController.getPolkaPair(selectedAddress);
+
+                    // console.log('current polka pair:',pairs,selectedAddress)
+
+                    if(!pairs || (pairs && pairs.length === 0)){
+                      console.log('Not found the correct polka pair')
+                      return;
+                    }
+                    const pair =   pairs[0]
+                          
+                    let { data: { free }, nonce } = await api.query.system.account(pair.address);
+    
+                    console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
+                    console.log('amount:',sendingData.amount,parseFloat(sendingData.amount))
+
+                    const transfer = api.tx.balances.transfer(sendingData.address, parseFloat(sendingData.amount)*100000000000000);
+
+                    console.log('transfer:',transfer)
+
+                    // // Sign and send the transaction using our account
+                    const hash = await transfer.signAndSend(pair);
+                  
+                    console.log('Transfer sent with hash', hash.toHex(),hash);
+
+                    setSendingData({
+                      ...sendingData,
+                      transactionHash: hash.toHex(),
+                    });
+
+                    
+                    setLoading(false);
+
+                    sleep(500).then(() => {
+                      viewPager.current.setPage(nextPage);
+                    });
+
+                   
+
+                  } catch (error) {
+                    console.log('error:',error)
+                    setLoading(false);
+                  }
+
                   // await sleep(1000);
                   // try {
                   //   const wallet = WalletManager.getWalletByName(
@@ -282,9 +322,9 @@ function SendScreen({
                   //     transactionHash: hashTrans,
                   //   });
 
-                    sleep(2000).then(() => {
-                      viewPager.current.setPage(nextPage);
-                    });
+
+
+                   
 
                   // } catch (error) {
                   //   setLoading(false);
@@ -434,6 +474,7 @@ function SendScreen({
                 currentPage={page}
                 sendingData={sendingData}
                 viewTransactionHistory={openTransactionHistory}
+                showAlert={showAlert}
                 // globalState={state}
                 updateGlobalState={updateTransactionsState}
               />

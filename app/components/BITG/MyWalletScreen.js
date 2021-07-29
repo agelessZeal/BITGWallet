@@ -333,7 +333,7 @@ function MyWalletScreen({
                 const balance = renderFromWei(accounts[selectedAddress].balance);
                 let balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
 
-                // console.log('MyWalletScreen:balance:',balance)
+                // console.log('MyWalletScreen:balance:',balance,selectedAddress)
                 // console.log('MyWalletScreen:balanceFiat:',balanceFiat)
                 // console.log('MyWalletScreen:conversionRate:',conversionRate)
                 // console.log('MyWalletScreen:balances:',balances)

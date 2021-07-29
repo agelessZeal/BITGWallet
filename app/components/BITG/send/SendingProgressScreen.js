@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Platform, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, Platform, ActivityIndicator, Dimensions, useWindowDimensions } from 'react-native';
 
 
 
@@ -20,7 +20,7 @@ const bit_currency = require('../../../images/bitg.png');
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.transparent,
     },
     imgBG: {
         width: 300,
@@ -129,10 +129,18 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
 
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyl={{ alignItems: 'center', justifyContent: 'center' }}>
             {
                 loaderIndicator == true ?
-                    <ActivityIndicator style={{ alignSelf: 'center' }} size="large" color={colors.tintColor} />
+                    <View style={{
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        width: Dimensions.get('window').width,
+                        height: Dimensions.get('window').height - 50, 
+                    }} >
+                        <ActivityIndicator style={{ alignSelf: 'center', justifyContent: 'center' }} size="large" color={colors.tintColor} />
+                    </View>
+
                     :
                     sendingData.address === undefined ? <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 20, marginStart: 20, marginEnd: 20 }}>
                         {strings('bitg_wallet.invalid_send_data')}

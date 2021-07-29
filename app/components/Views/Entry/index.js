@@ -203,7 +203,7 @@ const Entry = props => {
 		console.log('polka iniit in entry:')
 
 		// Construct
-		const wsProvider = new WsProvider('wss://testnet.bitg.org');
+		const wsProvider = new WsProvider('wss://testnode.bitg.org');
 		const api = await ApiPromise.create({  types: {
 			"CallOf": "Call",
 			"DispatchTime": {
@@ -442,6 +442,31 @@ const Entry = props => {
 
 		const { AccountTrackerController } = Engine.context;
 		AccountTrackerController.setPolkaApi(api);
+
+		console.log('my address:',props.selectedAddress)
+
+		  // Constuct the keyring after the API (crypto has an async init)
+		  const keyring = new Keyring({ type: 'sr25519' });
+
+		  // Add Alice to our keyring with a hard-deived path (empty phrase, so uses dev)
+		  const alice = keyring.addFromUri('//Alice');
+
+
+		 let { data: { free }, nonce } = await api.query.system.account(alice.address);
+
+		//  console.log(`${alice.address} has a balance of ${free}, nonce ${nonce}`);
+		
+		//   // Create a extrinsic, transferring 12345 units to Bob
+		//   const transfer = api.tx.balances.transfer(props.selectedAddress, 5000000);
+		
+		//   // Sign and send the transaction using our account
+		//   const hash = await transfer.signAndSend(alice);
+		
+		//   console.log('Transfer sent from Alice with hash ', hash.toHex());
+
+		//   let { data} = await api.query.system.account(props.selectedAddress);
+
+		//   console.log(`${props.selectedAddress} has a balance of ${data.free}`);
 
 		// const MNEMONIC = 'sample split bamboo west visual approve brain fox arch impact relief smile';
 

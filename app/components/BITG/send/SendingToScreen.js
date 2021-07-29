@@ -237,7 +237,18 @@ class SendingToScreen extends PureComponent {
 
   componentDidMount() {
     const pass_activity = this.props.navigation.getParam('activity', null);
+    console.log()
   }
+
+  componentDidUpdate(prevProps) {
+		if (prevProps.currentPage !== this.props.currentPage) {
+      this.setState({
+        amount: undefined,
+        fiat: undefined,
+        address: null,
+      })
+		}
+	}
 
 
   onToSelectedAddressChange = async toSelectedAddress => {
