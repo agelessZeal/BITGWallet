@@ -77,7 +77,7 @@ class EthereumAddress extends PureComponent {
 	formatAndResolveIfNeeded() {
 		const { address, type } = this.props;
 		const formattedAddress = this.formatAddress(address, type);
-		console.log('formattedAddress:',formattedAddress)
+		// console.log('formattedAddress:',formattedAddress)
 		this.setState({ address: formattedAddress, ensName: null });
 		this.doReverseLookup();
 	}

@@ -356,6 +356,7 @@ class ResetPassword extends PureComponent {
 			Alert.alert('Error', strings('choose_password.password_dont_match'));
 			return;
 		}
+
 		try {
 			this.setState({ loading: true });
 
@@ -594,7 +595,7 @@ class ResetPassword extends PureComponent {
 							<Image
 									source={lockedImage}
 									style={styles.lockImage}
-									resizeMethod={'contain'}
+	
 							/>
 
 							<Text style={styles.confirm_title}>{strings('manual_backup_step_1.confirm_password')}</Text>

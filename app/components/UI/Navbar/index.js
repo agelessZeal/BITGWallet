@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
 	},
 	centeredTitle: {
 		fontSize: 20,
-		color: colors.fontPrimary,
+		color: colors.white,
 		textAlign: 'center',
 		...fontStyles.normal,
 		alignItems: 'center',
@@ -938,30 +938,33 @@ export function getWebviewNavbar(navigation) {
 	const share = navigation.getParam('dispatch', () => {
 		'';
 	});
+
+
 	return {
 		headerTitle: <Text style={styles.centeredTitle}>{title}</Text>,
 		headerLeft: Device.isAndroid() ? (
 			// eslint-disable-next-line react/jsx-no-bind
 			<TouchableOpacity onPress={() => navigation.pop()} style={styles.backButton}>
-				<IonicIcon name={'md-arrow-back'} size={24} style={styles.backIcon} />
+				<IonicIcon name={'md-arrow-back'} size={24} style={styles.backIconWhite} />
 			</TouchableOpacity>
 		) : (
 			// eslint-disable-next-line react/jsx-no-bind
 			<TouchableOpacity onPress={() => navigation.pop()} style={styles.backButton}>
-				<IonicIcon name="ios-close" size={38} style={[styles.backIcon, styles.backIconIOS]} />
+				<IonicIcon name="ios-close" size={38} style={[styles.backIconWhite, styles.backIconIOS]} />
 			</TouchableOpacity>
 		),
 		headerRight: Device.isAndroid() ? (
 			// eslint-disable-next-line react/jsx-no-bind
 			<TouchableOpacity onPress={() => share()} style={styles.backButton}>
-				<MaterialCommunityIcon name="share-variant" size={24} style={styles.backIcon} />
+				<MaterialCommunityIcon name="share-variant" size={24} style={styles.backIconWhite} />
 			</TouchableOpacity>
 		) : (
 			// eslint-disable-next-line react/jsx-no-bind
 			<TouchableOpacity onPress={() => share()} style={styles.backButton}>
-				<EvilIcons name="share-apple" size={32} style={[styles.backIcon, styles.shareIconIOS]} />
+				<EvilIcons name="share-apple" size={32} style={[styles.backIconWhite, styles.shareIconIOS]} />
 			</TouchableOpacity>
-		)
+		),
+		headerStyle:{backgroundColor:colors.green}
 	};
 }
 

@@ -138,6 +138,11 @@ export default function ChainSwapSucess({
 		}
 	}, [currentPage]);
 
+	useEffect(()=> {
+		setBalance(myCurrentWalletBalance)
+		console.log('myCurrentWalletBalance:',myCurrentWalletBalance)
+	},[myCurrentWalletBalance])
+
 
 	const [balance,setBalance] =  useState(myCurrentWalletBalance)
 

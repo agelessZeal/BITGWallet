@@ -253,7 +253,7 @@ function TransactionHistory(props) {
 	};
 
 	const DetailTransactionItem = ({ itemData }) => {
-		console.log('item:', itemData, transactionFiltered);
+		// console.log('item:', itemData, transactionFiltered);
 
 		return (
 			<TouchableRipple style={styles.addressItem}>

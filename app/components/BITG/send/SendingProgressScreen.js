@@ -136,7 +136,7 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
                         alignItems: 'center', 
                         justifyContent: 'center',
                         width: Dimensions.get('window').width,
-                        height: Dimensions.get('window').height - 50, 
+                        height: Dimensions.get('window').height - 80, 
                     }} >
                         <ActivityIndicator style={{ alignSelf: 'center', justifyContent: 'center' }} size="large" color={colors.tintColor} />
                     </View>

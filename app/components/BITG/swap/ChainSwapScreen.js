@@ -33,6 +33,7 @@ import Device from '../../../util/Device';
 import {makeAlert,sleep} from '../lib/Helpers'
 import {createApolloClient} from '../api/createApolloClient';
 
+import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei } from '../../../util/number';
 
 const styles = StyleSheet.create({
   container: {
@@ -124,7 +125,7 @@ function ChainSwapScreen(props) {
   const [refreshWallet, setRefreshWallet] = useState(false);
   const [loading, setLoading] = useState(false);
   const [myPrimaryAddress, setPrimaryAddress] = useState(props.selectedAddress);
-  const [myBalance, setMyBalance] = useState(30034534.34);
+  const [myBalance, setMyBalance] = useState(0);
   const [page, setPage] = useState(0);
   const viewPager = useRef();
 
@@ -132,6 +133,18 @@ function ChainSwapScreen(props) {
     let addressData = navigation.getParam('data',null)
     console.log('ChainSwapScreen:',addressData)
   },[])
+
+  useEffect(() => {
+    try {
+      const {accounts,selectedAddress} = props;
+      if (accounts && accounts[selectedAddress] && accounts[selectedAddress].balance) {
+        const balance = renderFromWei(accounts[selectedAddress].balance);
+        setMyBalance(parseFloat(balance))
+      }
+    } catch (e) {
+      console.log('swap calc balance error:', e)
+    }
+  },[props.accounts, props.selectedAddress])
 
 
   useEffect(() => {
