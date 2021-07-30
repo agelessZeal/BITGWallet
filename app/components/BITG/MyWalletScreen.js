@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     },
     impactText2: {
         color: colors.black,
-        
+        maxWidth: Dimensions.get("window").width  - 95,
     },
 })
 
