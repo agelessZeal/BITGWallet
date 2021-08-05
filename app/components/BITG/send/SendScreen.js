@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
   viewPager: {
     flex: 1,
     minHeight: Device.height,
+    backgroundColor:colors.white
   },
   footerView: {
     height: 40,
@@ -150,6 +151,8 @@ function SendScreen({
     transactionHash: undefined,
   });
 
+  const [paymentInfo,setPaymentInfo] = useState(null)
+
   const [availableBalance, setAvailableBalance] = useState({
     balance: 0,
     balanceFiat: 0
@@ -181,6 +184,9 @@ function SendScreen({
   const [myBalance, setMyBalance] = useState(300);
   const [page, setPage] = useState(0);
   const viewPager = useRef();
+
+  const [paymentTransfer,setPaymentTransfer] = useState(null)
+  
 
   useEffect(() => {
     let addressData = navigation.getParam('data', null)
@@ -237,8 +243,6 @@ function SendScreen({
     const isDecimalValue = input.match(/^(\d+)\.(\d+)$/);
 
     let result;
-    console.log('inputToBn:',siPower,isDecimalValue)
-    console.log('basePower:',basePower,siUnitPower)
   
     if (isDecimalValue) {
       if (siUnitPower - isDecimalValue[2].length < -basePower) {
@@ -249,8 +253,6 @@ function SendScreen({
       const modString = input.replace(/^\d+\./, '').substr(0, api.registry.chainDecimals[0]);
       const mod = new BN(modString);
   
-      console.log(' modString.length:', modString.length)
-  
       result = div
         .mul(BN_TEN.pow(siPower))
         .add(mod.mul(BN_TEN.pow(new BN(basePower + siUnitPower - modString.length))));
@@ -258,7 +260,6 @@ function SendScreen({
       result = new BN(input.replace(/[^\d]/g, ''))
         .mul(BN_TEN.pow(siPower));
     }
-    console.log('result: ',result)
     return result;
 
   }
@@ -300,7 +301,40 @@ function SendScreen({
                 'You try to send more BITG than you have on your wallet',
               );
             } else {
-              if (nextPage == 2) {
+              if(nextPage === 1){
+
+
+                let result = inputToBn(sendingData.amount);
+
+                if(!result){
+                  return
+                }
+
+                const transfer = api.tx.balances.transfer(sendingData.address,result);
+
+                console.log('transfer:',transfer)
+
+                setPaymentTransfer(transfer)
+
+                try {
+                  const info = await transfer.paymentInfo(selectedAddress)
+                  // log relevant info, partialFee is Balance, estimated for current
+                  // console.log(`
+                  // class=${info.class.toString()},
+                  // weight=${info.weight.toString()},
+                  // partialFee=${info.partialFee.toHuman()}
+                  // `);
+
+                  // console.log(info.partialFee)
+                  setPaymentInfo(info)
+
+                } catch (error) {
+                  console.log('payment infro error:',error)
+                }
+
+
+              }
+              if (nextPage === 2) {
                 if (sendingData.address != undefined) {
                   setLoading(true);
 
@@ -317,30 +351,17 @@ function SendScreen({
                       return;
                     }
                     const pair =   pairs[0]
+
+                    console.log('Transfer:,',paymentTransfer)
                           
                     // let { data: { free }, nonce } = await api.query.system.account(pair.address);
     
                     // console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
                     // console.log('amount:',sendingData.amount,parseFloat(sendingData.amount))
 
-                    let result = inputToBn(sendingData.amount);
-                    if(result){
-
-                    }
-                    // let amount = new BN(sendingData.amount)
-              
-                    // // result = amount.mul(BN_TEN.pow(18))
-                    // const siPower =  new BN(18);
-
-                    // console.log('siPower:',siPower)
-                    // result = amount.mul(BN_TEN.pow(siPower))
-
-                    const transfer = api.tx.balances.transfer(sendingData.address,result);
-
-                    console.log('transfer:',transfer)
 
                     // // Sign and send the transaction using our account
-                    const hash = await transfer.signAndSend(pair);
+                    const hash = await paymentTransfer.signAndSend(pair);
                   
                     console.log('Transfer sent with hash', hash.toHex(),hash);
 
@@ -353,6 +374,10 @@ function SendScreen({
                     setLoading(false);
 
                     sleep(500).then(() => {
+
+                      const { AccountTrackerController } = Engine.context;
+                      AccountTrackerController.refresh();
+
                       viewPager.current.setPage(nextPage);
                     });
 
@@ -493,6 +518,7 @@ function SendScreen({
                 currentPage={page}
                 myCurrentWalletBalance={myBalance}
                 sendingData={sendingData}
+                paymentInfo={paymentInfo}
                 apolloClient={client}
                 getDataFromApi={getDataFromApi}
                 setLoaderIndicator={setLoaderIndicator}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef,useMemo } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Platform, ActivityIndicator, Dimensions, useWindowDimensions } from 'react-native';
 
 
@@ -13,6 +13,8 @@ import { connect } from 'react-redux';
 import Device from '../../../util/Device';
 
 import StepIndicator from 'react-native-step-indicator';
+
+import { formatBalance,isFunction } from "@polkadot/util";
 
 
 const bit_currency = require('../../../images/bitg.png');
@@ -95,7 +97,7 @@ const bitg_currency = require('../../../images/ic_bitg.png');
 
 const strokeWidth = 2;
 
-export default function SendingProgressScreen({ currentPage, myCurrentWalletBalance, sendingData, apolloClient, getDataFromApi, setLoaderIndicator, loaderIndicator }) {
+export default function SendingProgressScreen({ currentPage, paymentInfo,myCurrentWalletBalance, sendingData, apolloClient, getDataFromApi, setLoaderIndicator, loaderIndicator }) {
 
     useEffect(() => {
         if (currentPage == 1) {
@@ -126,7 +128,15 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
         }
     }, [currentPage]);
 
+    const [fee,setFee] = useState('0')
 
+    useEffect(()=>{
+        if(paymentInfo){
+            setFee(formatBalance(paymentInfo?.partialFee,{withSiFull:true}))
+        }
+    },[
+        paymentInfo
+    ])
 
     return (
         <ScrollView style={styles.container} contentContainerStyl={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -166,6 +176,7 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
                                         <Text style={{ fontSize: 30, color: colors.blackColor, marginStart: 5 }}>{toFixedFloor(myCurrentWalletBalance, 3)}</Text>
                                         <Text style={{ fontSize: 30, color: colors.redColor, marginStart: 20 }}>- {sendingData.amount}</Text>
                                     </View>
+                                    <Text style={{ fontSize: 20, color: colors.blackColor, marginStart: 20,marginBottom:5 }}>Transaction Fee: { parseFloat(fee)}</Text>
                                 </View>
                             </View>
                             <View style={styles.sectionContainer}>
@@ -195,7 +206,7 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
                                             source={bitg_currency}
                                             tintColor={Platform === 'ios' ? undefined : colors.tintColor}
                                         />
-                                        <Text style={{ fontSize: 30, color: colors.blackColor, marginStart: 5, fontWeight: '700' }}>{toFixedFloor((myCurrentWalletBalance - parseFloat(sendingData.amount)), 3)}</Text>
+                                        <Text style={{ fontSize: 30, color: colors.blackColor, marginStart: 5, fontWeight: '700' }}>{toFixedFloor((myCurrentWalletBalance - parseFloat(sendingData.amount) - parseFloat(fee)), 3)}</Text>
                                     </View>
                                 </View>
                             </View>
