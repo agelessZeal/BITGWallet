@@ -13,6 +13,9 @@ import {
 import { TouchableRipple } from 'react-native-paper';
 import ViewPager from '@react-native-community/viewpager';
 import NetInfo from '@react-native-community/netinfo';
+import BigNumber from 'bignumber.js';
+import bigInt from "big-integer";
+
 
 import { showAlert } from '../../../actions/alert';
 
@@ -35,6 +38,7 @@ import { makeAlert, sleep } from '../lib/Helpers'
 import { createApolloClient } from '../api/createApolloClient';
 
 import Engine from '../../../core/Engine';
+import {BN_ONE, BN_TEN,formatBalance,isBn,isUndefined,BN_ZERO,BN_TWO}  from '@polkadot/util'
 
 
 // Import the keyring as required
@@ -43,6 +47,7 @@ import { Keyring } from '@polkadot/api';
 // import {showAlert, SATOSHI_CONST, sleep} from '../../lib/Helpers';
 // import {Context as TransactionContext} from '../../lib/context/TransactionsContext';
 // import {Context as WalletContext} from '../../lib/context/WalletContext';
+import BN from "bn.js";
 
 const img_send_source = require('../../../images/img_send.png');
 
@@ -140,6 +145,8 @@ function SendScreen({
     name: undefined,
     address: undefined,
     amount: undefined,
+    amountInput: undefined,
+    fiatInput:undefined,
     transactionHash: undefined,
   });
 
@@ -218,6 +225,43 @@ function SendScreen({
   const onPageSelected = e => {
     setPage(e.nativeEvent.position);
   };
+  const inputToBn = (input) => {
+
+    if(!input){
+      return null;
+    }
+    const siPower =  new BN(18);
+    const basePower = 18;
+    const siUnitPower = 0;
+
+    const isDecimalValue = input.match(/^(\d+)\.(\d+)$/);
+
+    let result;
+    console.log('inputToBn:',siPower,isDecimalValue)
+    console.log('basePower:',basePower,siUnitPower)
+  
+    if (isDecimalValue) {
+      if (siUnitPower - isDecimalValue[2].length < -basePower) {
+        result = new BN(-1);
+      }
+  
+      const div = new BN(input.replace(/\.\d*$/, ''));
+      const modString = input.replace(/^\d+\./, '').substr(0, api.registry.chainDecimals[0]);
+      const mod = new BN(modString);
+  
+      console.log(' modString.length:', modString.length)
+  
+      result = div
+        .mul(BN_TEN.pow(siPower))
+        .add(mod.mul(BN_TEN.pow(new BN(basePower + siUnitPower - modString.length))));
+    } else {
+      result = new BN(input.replace(/[^\d]/g, ''))
+        .mul(BN_TEN.pow(siPower));
+    }
+    console.log('result: ',result)
+    return result;
+
+  }
 
   const move = delta => {
     showAlert
@@ -274,12 +318,24 @@ function SendScreen({
                     }
                     const pair =   pairs[0]
                           
-                    let { data: { free }, nonce } = await api.query.system.account(pair.address);
+                    // let { data: { free }, nonce } = await api.query.system.account(pair.address);
     
-                    console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
-                    console.log('amount:',sendingData.amount,parseFloat(sendingData.amount))
+                    // console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
+                    // console.log('amount:',sendingData.amount,parseFloat(sendingData.amount))
 
-                    const transfer = api.tx.balances.transfer(sendingData.address, parseFloat(sendingData.amount)*100000000000000);
+                    let result = inputToBn(sendingData.amount);
+                    if(result){
+
+                    }
+                    // let amount = new BN(sendingData.amount)
+              
+                    // // result = amount.mul(BN_TEN.pow(18))
+                    // const siPower =  new BN(18);
+
+                    // console.log('siPower:',siPower)
+                    // result = amount.mul(BN_TEN.pow(siPower))
+
+                    const transfer = api.tx.balances.transfer(sendingData.address,result);
 
                     console.log('transfer:',transfer)
 
@@ -306,35 +362,6 @@ function SendScreen({
                     console.log('error:',error)
                     setLoading(false);
                   }
-
-                  // await sleep(1000);
-                  // try {
-                  //   const wallet = WalletManager.getWalletByName(
-                  //     'BITGWallet',
-                  //   );
-                  //   const key = wallet.getKey(0);
-                  //   const hashTrans = await key.sendTransaction(
-                  //     sendingData.address,
-                  //     sendingData.amount * SATOSHI_CONST,
-                  //   );
-                  //   setSendingData({
-                  //     ...sendingData,
-                  //     transactionHash: hashTrans,
-                  //   });
-
-
-
-                   
-
-                  // } catch (error) {
-                  //   setLoading(false);
-                  //   showAlert(
-                  //     typeof error.message === 'string' &&
-                  //       error.message.includes('Insufficient funds')
-                  //       ? error.message
-                  //       : 'An error occurred with your transaction!',
-                  //   );
-                  // }
                 } else {
                   makeAlert(
                     'You need to enter a valid data to send transactions. Please go to Previous page and enter correct data',
@@ -357,6 +384,8 @@ function SendScreen({
       name: undefined,
       address: undefined,
       amount: undefined,
+      amountInput: undefined,
+      fiatInput:undefined,
       transactionHash: undefined,
     });
     viewPager.current.setPageWithoutAnimation(0);
@@ -389,6 +418,7 @@ function SendScreen({
     setSendingData({
       address: data.address || sendingData.address,
       amount: data.amount || sendingData.amount,
+      amountInput: data.amountInput || sendingData.amountInput,
       fiat: data.fiat || sendingData.fiat,
     });
   };

@@ -102,24 +102,24 @@ export default function SendingProgressScreen({ currentPage, myCurrentWalletBala
             if ((sendingData.address === undefined || sendingData.address === null) || sendingData.name === "No Name") {
                 (async () => {
                     setLoaderIndicator(true)
-                    try {
-                        const { data } = await apolloClient.query({
-                            query: GET_USER_BY_EITHER_USERNAMES_OR_ADDRESSES,
-                            variables: { str: sendingData.name === "No Name" ? sendingData.address : sendingData.name },
-                        });
-                        if (data.users.nodes.length > 0) {
-                            const usInfo = data.users.nodes[0]
-                            getDataFromApi({ address: usInfo.bitgAddress, name: usInfo.username })
-                        } else {
-                            if (sendingData.address === undefined || sendingData.address === null) {
-                                getDataFromApi({ address: sendingData.name, name: "No Name" })
-                            }
-                        }
-                    } catch (error) {
-                        if (sendingData.address === undefined || sendingData.address === null) {
-                            getDataFromApi({ address: sendingData.name, name: "No Name" })
-                        }
-                    }
+                    // try {
+                    //     const { data } = await apolloClient.query({
+                    //         query: GET_USER_BY_EITHER_USERNAMES_OR_ADDRESSES,
+                    //         variables: { str: sendingData.name === "No Name" ? sendingData.address : sendingData.name },
+                    //     });
+                    //     if (data.users.nodes.length > 0) {
+                    //         const usInfo = data.users.nodes[0]
+                    //         getDataFromApi({ address: usInfo.bitgAddress, name: usInfo.username })
+                    //     } else {
+                    //         if (sendingData.address === undefined || sendingData.address === null) {
+                    //             getDataFromApi({ address: sendingData.name, name: "No Name" })
+                    //         }
+                    //     }
+                    // } catch (error) {
+                    //     if (sendingData.address === undefined || sendingData.address === null) {
+                    //         getDataFromApi({ address: sendingData.name, name: "No Name" })
+                    //     }
+                    // }
                     setLoaderIndicator(false)
                 })();
             }

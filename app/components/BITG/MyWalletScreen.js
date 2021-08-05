@@ -268,7 +268,6 @@ const styles = StyleSheet.create({
         height: 25,
     },
     impactItemTitle: {
-        // maxWidth: '70%',
         justifyContent: 'space-around'
     },
     impactText1: {

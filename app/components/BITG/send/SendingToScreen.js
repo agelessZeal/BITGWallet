@@ -206,6 +206,7 @@ class SendingToScreen extends PureComponent {
     error: null,
     amount: undefined,
     fiat: undefined,
+    amountInput:undefined,
     address: null,
     name: null,
     showModalAddress: false,
@@ -470,16 +471,22 @@ class SendingToScreen extends PureComponent {
       currentCurrency
     )}`;
 
+
+
     if (comma) inputValue = inputValue && inputValue.replace('.', ',');
     inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
 
+    console.log('processedInputValue:',processedInputValue,inputValue)
+
     this.setState({
       amount: fromWei(toWei(processedInputValue)),
+      amountInput:inputValue,
       fiat: inputValueConversion
     })
 
     this.props.getSendingData({
       fiat: inputValueConversion,
+      amountInput:inputValue,
       amount: fromWei(toWei(processedInputValue)),
     })
 
@@ -507,6 +514,8 @@ class SendingToScreen extends PureComponent {
 
     if (comma) inputValue = inputValue && inputValue.replace('.', ',');
     inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
+
+    console.log('processedInputValue:2:',processedInputValue)
 
     this.setState({
       amount: inputValueConversion,
@@ -539,7 +548,8 @@ class SendingToScreen extends PureComponent {
       errorContinue,
       isOnlyWarning,
       confusableCollection,
-      showModalAddress
+      showModalAddress,
+      amountInput
     } = this.state;
 
 
@@ -634,9 +644,9 @@ class SendingToScreen extends PureComponent {
               placeholderTextColor={colors.grey500}
               keyboardType="numeric"
               onChangeText={this.amountBITGFieldChanged}
-              value={amount}
+              value={amountInput}
               defaultValue={
-                amount === undefined ? '' : amount
+                amountInput === undefined ? '' : amountInput
               }
             />
           </View>
