@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
   },
   viewPager: {
     flex: 1,
-    minHeight: Device.getDeviceHeight(),
     backgroundColor:colors.white
   },
   footerView: {
