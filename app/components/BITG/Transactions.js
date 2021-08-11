@@ -264,7 +264,6 @@ function TransactionHistory(props) {
 		}
 
 		if (props.selectedAddress) {
-			console.log('props.selectedAddress:', props.selectedAddress)
 			fetchData(props.selectedAddress)
 		}
 	}, [props.selectedAddress]);

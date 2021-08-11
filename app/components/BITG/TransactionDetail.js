@@ -142,40 +142,7 @@ const styles = StyleSheet.create({
 
 });
 
-const dummy_transactons = [
-
-	{
-		hash: '',
-		sender: {
-			name: 'Caroline',
-			address: 'uytiuytiuytiuytukjytiu'
-		},
-		receiver: {
-			name: 'Charmaine',
-			address: '41234vfg23b4f'
-		},
-		send_amount: 233.3,
-		time: Math.floor((Date.now() - 945345234) / 1000),
-		is_expense: false,
-		is_my_friend: true,
-		is_reward: false,
-		color: getTransactionColor('434ree3423'),
-		confirmations: 7
-	}
-];
-
-const ANY_TYPE = 'any'
-const REWARD_TYPE = 'reward'
 const TRANSACTION_QUERY_API = 'https://testnode.bitg.org:9443/'
-
-const transactionApi = axios.create({
-	baseURL: TRANSACTION_QUERY_API
-});
-
-// const getPartnerStatus = () => transakApi.get(`partners/${TRANSAK_API_KEY}`);
-const getTransactonDetail = hash =>
-	transactionApi.get(`transaction`, { params: { txhash: hash } });
-
 
 
 function TransactionDetail(props) {
@@ -183,14 +150,7 @@ function TransactionDetail(props) {
 
 	const [loading, setLoading] = useState(false);
 
-	const [transactionFiltered, setTransactionFiltered] = useState(dummy_transactons);
-
-	const [transactions, setTransactions] = useState(dummy_transactons);
-
-	const [type, setType] = useState('any');
-
 	const [item, setItem] = useState(null)
-	const [hash, setHash] = useState(null)
 
 	useEffect(() => {
 		async function fetchData(txhash) {
@@ -228,10 +188,8 @@ function TransactionDetail(props) {
 		}
 
 		const params = navigation.state.params;
-		console.log('hash in detail:', params)
 		if (params) {
 			if (params.hash) {
-				setHash(params.hash)
 				fetchData(params.hash)
 			}
 
@@ -262,32 +220,6 @@ function TransactionDetail(props) {
 		}
 	}
 
-
-	const changeType = type => {
-		setType(type);
-		if (type === REWARD_TYPE) {
-			const data = transactions.filter(item => {
-				return item.is_reward
-			});
-			setTransactionFiltered(data);
-		} else {
-			setTransactionFiltered(transactions);
-		}
-
-
-	};
-
-	const contains = (item, query) => {
-		if (
-			item.sender.name.toLowerCase().includes(query) ||
-			item.receiver.name.toLowerCase().includes(query) ||
-			item.sender.address.toLowerCase().includes(query) ||
-			item.receiver.address.toLowerCase().includes(query)
-		) {
-			return true;
-		}
-		return false;
-	};
 
 	const DetailTransactionItem = ({ itemData }) => {
 		// console.log('item:', itemData, transactionFiltered);
