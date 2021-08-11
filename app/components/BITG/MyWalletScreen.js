@@ -495,6 +495,10 @@ function MyWalletScreen({
         navigation.navigate('MyImpactDash');
     }
 
+    const goToTransactionHistory = () => {
+        navigation.navigate('TransactionHistory');
+    }
+
 
     return (
         <View style={styles.container}>
@@ -566,7 +570,7 @@ function MyWalletScreen({
                                         <MaterialIcons style={{ transform: [{ rotate: "90deg" }] }} name="compare-arrows" size={24} color={colors.grey} />
                                         <Text style={styles.textDays}>{`Past ${periodDays} days`}</Text>
                                     </View>
-                                    <TouchableOpacity style={styles.transactionButton}>
+                                    <TouchableOpacity style={styles.transactionButton} onPress={goToTransactionHistory}>
                                         <Text style={styles.textTransaction}>{strings('bitg_wallet.view_transaction')} </Text>
                                     </TouchableOpacity>
                                 </View>

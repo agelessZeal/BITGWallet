@@ -518,7 +518,7 @@ class DrawerView extends PureComponent {
 	};
 
 	goToTransactionHistory = () => {
-		this.props.navigation.navigate('TransactionsHome');
+		this.props.navigation.navigate('TransactionHistory');
 		this.hideDrawer();
 		this.trackEvent(ANALYTICS_EVENT_OPTS.NAVIGATION_TAPS_TRANSACTION_HISTORY);
 	};

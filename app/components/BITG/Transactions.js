@@ -32,7 +32,7 @@ import { NavigationContext } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import ToolBar from './ToolBar';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
 	container: {
@@ -204,6 +204,7 @@ const dummy_transactons = [
 
 const ANY_TYPE = 'any'
 const REWARD_TYPE = 'reward'
+const TRANSACTION_QUERY_API = 'https://testnode.bitg.org:9443/'
 
 function TransactionHistory(props) {
 	const navigation = useContext(NavigationContext);
@@ -216,7 +217,34 @@ function TransactionHistory(props) {
 
 	const [type, setType] = useState('any');
 
-	useEffect(() => {}, []);
+	useEffect(() => {
+		async function fetchData(address) {
+			try {
+				// const {
+				// 	data: { response } 
+				// } = await getTransactonDetail(txhash);
+				setLoading(true)
+				const response = await axios.get(`${TRANSACTION_QUERY_API}transaction?account=${address}`);
+
+				setLoading(false)
+
+				if (!response) {
+					console.log('query empty response:');
+				} else {
+
+					console.log('response:', response.data)
+					// setItem(response.data)
+				}
+			} catch (error) {
+				console.log('query error:', error);
+				setLoading(false)
+			}
+		}
+
+		if (props.selectedAddress) {
+			fetchData(props.selectedAddress)
+		}
+	}, []);
 
 	const search = text => {
 		const formattedQuery = text.toLowerCase().trim();
@@ -357,7 +385,7 @@ function TransactionHistory(props) {
 
 	const elipsizeName = name => (name.length >= 10 ? `${name.substring(0, 10)}...` : name);
 
-	console.log(transactionFiltered);
+	// console.log(transactionFiltered);
 
 	return (
 		<View style={styles.container}>

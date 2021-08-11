@@ -924,7 +924,8 @@ export function getNetworkNavbarOptions(title, translate, navigation) {
 				/>
 			</TouchableOpacity>
 		),
-		headerRight: <View />
+		headerRight: <View />,
+		headerStyle:{backgroundColor:colors.green}
 	};
 }
 

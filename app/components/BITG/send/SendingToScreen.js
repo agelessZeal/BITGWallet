@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Image, Platform, TextInput, TouchableOpacity, } from 'react-native';
+import { View, Text, StyleSheet, Image, Platform, TextInput,ActivityIndicator, TouchableOpacity,Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableRipple } from 'react-native-paper';
 // import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
@@ -28,7 +28,7 @@ import SendAddressModal from './SendAddressModal'
 
 import Engine from '../../../core/Engine';
 
-import {isValidAddressPolkadotAddress} from '../../../util/address'
+import { isValidAddressPolkadotAddress } from '../../../util/address'
 import {
   renderFromTokenMinimalUnit,
   balanceToFiat,
@@ -198,7 +198,9 @@ class SendingToScreen extends PureComponent {
 
     getSendingData: PropTypes.func,
 
-    clearChildrenState: PropTypes.bool
+    clearChildrenState: PropTypes.bool,
+
+    loaderIndicator: PropTypes.bool,
   };
 
   state = {
@@ -206,13 +208,13 @@ class SendingToScreen extends PureComponent {
     error: null,
     amount: undefined,
     fiat: undefined,
-    amountInput:undefined,
+    amountInput: undefined,
     address: null,
     name: null,
     showModalAddress: false,
     showModalAccount: false,
-    editable: false,
-    addressInput:'',
+    editable: true,
+    addressInput: '',
 
     addressError: undefined,
     balanceIsZero: false,
@@ -242,19 +244,20 @@ class SendingToScreen extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-		if (prevProps.currentPage !== this.props.currentPage) {
+    if (prevProps.currentPage !== this.props.currentPage) {
       this.setState({
         amount: undefined,
         fiat: undefined,
         address: null,
+        amountInput: null
       })
-		}
-	}
+    }
+  }
 
 
   onToSelectedAddressChange = async toSelectedAddress => {
-    
-    console.log('onToSelectedAddressChange:',toSelectedAddress)
+
+    console.log('onToSelectedAddressChange:', toSelectedAddress)
 
     const { AssetsContractController } = Engine.context;
     const { addressBook, network, identities, providerType } = this.props;
@@ -265,8 +268,8 @@ class SendingToScreen extends PureComponent {
 
     if (isValidAddressPolkadotAddress(toSelectedAddress)) {
       this.setState({
-        address:toSelectedAddress,
-        showModalAddress:false,
+        address: toSelectedAddress,
+        showModalAddress: false,
       })
 
       this.props.getSendingData({
@@ -353,18 +356,18 @@ class SendingToScreen extends PureComponent {
   };
 
   toggleFromAccountModal = () => {
-		const { fromAccountModalVisible } = this.state;
-		this.setState({ fromAccountModalVisible: !fromAccountModalVisible });
-	};
+    const { fromAccountModalVisible } = this.state;
+    this.setState({ fromAccountModalVisible: !fromAccountModalVisible });
+  };
 
-	toggleFromAddressBookModal = () => {
-		const { showModalAddress } = this.state;
-		this.setState({ showModalAddress: !showModalAddress });
-	};
+  toggleFromAddressBookModal = () => {
+    const { showModalAddress } = this.state;
+    this.setState({ showModalAddress: !showModalAddress });
+  };
 
   renderFromAddressModal = () => {
     const { identities, keyrings, ticker } = this.props;
-    const { showModalAddress, fromSelectedAddress ,toSelectedAddress} = this.state;
+    const { showModalAddress, fromSelectedAddress, toSelectedAddress } = this.state;
     return (
       <Modal
         isVisible={showModalAddress}
@@ -425,25 +428,25 @@ class SendingToScreen extends PureComponent {
   openOrCloseAddressBookModal = visibility => {
     this.setState({
       showModalAddress: visibility,
-      fromAddressModalVisible:visibility
+      fromAddressModalVisible: visibility
     })
   }
 
   addressFieldChanged = text => {
 
-    if(isValidAddressPolkadotAddress(text)){
+    if (isValidAddressPolkadotAddress(text)) {
       this.setState({
-        addressInput:text,
-        address:text
+        addressInput: text,
+        address: text
       })
 
       this.props.getSendingData({
         address: text,
       })
 
-    }else{
+    } else {
       this.setState({
-        addressInput:text
+        addressInput: text
       })
     }
   };
@@ -476,17 +479,17 @@ class SendingToScreen extends PureComponent {
     if (comma) inputValue = inputValue && inputValue.replace('.', ',');
     inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
 
-    console.log('processedInputValue:',processedInputValue,inputValue)
+    console.log('processedInputValue:', processedInputValue, inputValue)
 
     this.setState({
       amount: fromWei(toWei(processedInputValue)),
-      amountInput:inputValue,
+      amountInput: inputValue,
       fiat: inputValueConversion
     })
 
     this.props.getSendingData({
       fiat: inputValueConversion,
-      amountInput:inputValue,
+      amountInput: inputValue,
       amount: fromWei(toWei(processedInputValue)),
     })
 
@@ -515,7 +518,7 @@ class SendingToScreen extends PureComponent {
     if (comma) inputValue = inputValue && inputValue.replace('.', ',');
     inputValueConversion = inputValueConversion === '0' ? undefined : inputValueConversion;
 
-    console.log('processedInputValue:2:',processedInputValue)
+    console.log('processedInputValue:2:', processedInputValue)
 
     this.setState({
       amount: inputValueConversion,
@@ -553,7 +556,7 @@ class SendingToScreen extends PureComponent {
     } = this.state;
 
 
-    const { selectedAddress, paramsData, currentCurrency } = this.props;
+    const { selectedAddress, paramsData, currentCurrency, loaderIndicator, } = this.props;
 
     const { editable, address, name, amount, fiat } = this.state;
 
@@ -565,6 +568,23 @@ class SendingToScreen extends PureComponent {
 
     return (
       <KeyboardAwareScrollView style={{ flex: 1 }}>
+
+        {
+          loaderIndicator &&
+          <View style={{
+            position:'absolute',
+            top:0,
+            left:0,
+            zIndex:50,
+            backgroundColor: colors.transparent,
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height - 80,
+          }} >
+            <ActivityIndicator style={{ alignSelf: 'center', justifyContent: 'center' }} size="large" color={colors.tintColor} />
+          </View>
+        }
         <Text style={styles.title}>{strings('bitg_wallet.send_title')} </Text>
         <View style={styles.myWalletContainer}>
           <Image

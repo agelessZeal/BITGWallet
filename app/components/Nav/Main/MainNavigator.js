@@ -76,6 +76,7 @@ import ServiceScreen from '../../BITG/ServiceScreen'
 import GasEducationCarousel from '../../Views/GasEducationCarousel';
 
 import TransactionHistory from '../../BITG/Transactions'
+import TransactionDetail from '../../BITG/TransactionDetail'
 
 import ChainSwapScreen from '../../BITG/swap/ChainSwapScreen'
 
@@ -305,6 +306,9 @@ export default createStackNavigator(
 				{
 					TransactionHistory: {
 						screen:TransactionHistory
+					},
+					TransactionDetail: {
+						screen:TransactionDetail
 					},
 					TransactionsView: {
 						screen: ActivityView

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef,useMemo } from 'react';
+import React, { useEffect, useState, useContext, useRef, useMemo } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Platform, ActivityIndicator, Dimensions, useWindowDimensions } from 'react-native';
 
 
@@ -14,7 +14,7 @@ import Device from '../../../util/Device';
 
 import StepIndicator from 'react-native-step-indicator';
 
-import { formatBalance,isFunction } from "@polkadot/util";
+import { formatBalance, isFunction } from "@polkadot/util";
 
 
 const bit_currency = require('../../../images/bitg.png');
@@ -97,7 +97,7 @@ const bitg_currency = require('../../../images/ic_bitg.png');
 
 const strokeWidth = 2;
 
-export default function SendingProgressScreen({ currentPage, paymentInfo,myCurrentWalletBalance, sendingData, apolloClient, getDataFromApi, setLoaderIndicator, loaderIndicator }) {
+export default function SendingProgressScreen({ currentPage, paymentInfo, myCurrentWalletBalance, sendingData, apolloClient, getDataFromApi, setLoaderIndicator, loaderIndicator }) {
 
     useEffect(() => {
         if (currentPage == 1) {
@@ -128,89 +128,97 @@ export default function SendingProgressScreen({ currentPage, paymentInfo,myCurre
         }
     }, [currentPage]);
 
-    const [fee,setFee] = useState('0')
+    const [fee, setFee] = useState('0')
 
-    useEffect(()=>{
-        if(paymentInfo){
-            setFee(formatBalance(paymentInfo?.partialFee,{withSiFull:true}))
+    useEffect(() => {
+        if (paymentInfo) {
+            setFee(formatBalance(paymentInfo?.partialFee, { withSiFull: true }))
         }
-    },[
+    }, [
         paymentInfo
     ])
 
     return (
         <ScrollView style={styles.container} contentContainerStyl={{ alignItems: 'center', justifyContent: 'center' }}>
+
             {
-                loaderIndicator == true ?
-                    <View style={{
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        width: Dimensions.get('window').width,
-                        height: Dimensions.get('window').height - 80, 
-                    }} >
-                        <ActivityIndicator style={{ alignSelf: 'center', justifyContent: 'center' }} size="large" color={colors.tintColor} />
-                    </View>
+                loaderIndicator &&
+                <View style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    zIndex: 50,
+                    backgroundColor: colors.transparent,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: Dimensions.get('window').width,
+                    height: Dimensions.get('window').height - 80,
+                }} >
+                    <ActivityIndicator style={{ alignSelf: 'center', justifyContent: 'center' }} size="large" color={colors.tintColor} />
+                </View>
+            }
 
-                    :
-                    sendingData.address === undefined ? <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 20, marginStart: 20, marginEnd: 20 }}>
-                        {strings('bitg_wallet.invalid_send_data')}
-                    </Text> :
+
+            {
+                sendingData.address === undefined ? <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 20, marginStart: 20, marginEnd: 20 }}>
+                    {strings('bitg_wallet.invalid_send_data')}
+                </Text> :
 
 
-                        < View style={{ flex: 1 }}>
-                            <Image style={styles.imgBG} source={progress_source} />
-                            <View style={[styles.sectionContainer, { marginTop: 10 }]}>
-                                <View style={{ alignItems: 'center' }}>
-                                    <View style={styles.circleContainer} />
-                                    <Text style={{ color: colors.grey200, fontWeight: 'bold' }}>{`|\n|\n|\n|\n|\n|\n`}</Text>
-                                </View>
-                                <View style={styles.sectionSubContainer}>
-                                    <Text style={styles.sectionTitle}>{strings('bitg_wallet.from')}</Text>
-                                    <Text style={styles.sectionSubTitle}>{strings('bitg_wallet.my_primary_wallet')}</Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                                        <Image
-                                            style={styles.bitgSmallImage}
-                                            source={bitg_currency}
-                                            tintColor={Platform === 'ios' ? undefined : colors.tintColor}
-                                        />
-                                        <Text style={{ fontSize: 30, color: colors.blackColor, marginStart: 5 }}>{toFixedFloor(myCurrentWalletBalance, 3)}</Text>
-                                        <Text style={{ fontSize: 30, color: colors.redColor, marginStart: 20 }}>- {sendingData.amount}</Text>
-                                    </View>
-                                    <Text style={{ fontSize: 20, color: colors.blackColor, marginStart: 20,marginBottom:5 }}>Transaction Fee: { parseFloat(fee)}</Text>
-                                </View>
+                    < View style={{ flex: 1 }}>
+                        <Image style={styles.imgBG} source={progress_source} />
+                        <View style={[styles.sectionContainer, { marginTop: 10 }]}>
+                            <View style={{ alignItems: 'center' }}>
+                                <View style={styles.circleContainer} />
+                                <Text style={{ color: colors.grey200, fontWeight: 'bold' }}>{`|\n|\n|\n|\n|\n|\n`}</Text>
                             </View>
-                            <View style={styles.sectionContainer}>
-                                <View style={{ alignItems: 'center' }}>
-                                    <View style={[styles.circleContainer, { backgroundColor: colors.grey200 }]} />
-                                    <Text style={{ color: colors.grey200, fontWeight: 'bold' }}>{`|\n|\n|\n|\n|\n|\n`}</Text>
+                            <View style={styles.sectionSubContainer}>
+                                <Text style={styles.sectionTitle}>{strings('bitg_wallet.from')}</Text>
+                                <Text style={styles.sectionSubTitle}>{strings('bitg_wallet.my_primary_wallet')}</Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image
+                                        style={styles.bitgSmallImage}
+                                        source={bitg_currency}
+                                        tintColor={Platform === 'ios' ? undefined : colors.tintColor}
+                                    />
+                                    <Text style={{ fontSize: 30, color: colors.blackColor, marginStart: 5 }}>{toFixedFloor(myCurrentWalletBalance, 3)}</Text>
+                                    <Text style={{ fontSize: 30, color: colors.redColor, marginStart: 20 }}>- {sendingData.amount}</Text>
                                 </View>
-                                <View style={{ flex: 1 }}>
-                                    <Text style={styles.sectionTitle}>{strings('send.title')}</Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                                        {/* <View style={styles.credential}>
+                                <Text style={{ fontSize: 18, color: colors.blackColor, marginStart: 10, marginLeft: 15, marginBottom: 5 }}>Transaction Fee: <Text style={{ fontSize: 20, color: colors.redColor, marginStart: 10 }}>- {parseFloat(fee)}</Text></Text>
+                            </View>
+                        </View>
+                        <View style={styles.sectionContainer}>
+                            <View style={{ alignItems: 'center' }}>
+                                <View style={[styles.circleContainer, { backgroundColor: colors.grey200 }]} />
+                                <Text style={{ color: colors.grey200, fontWeight: 'bold' }}>{`|\n|\n|\n|\n|\n|\n`}</Text>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text style={styles.sectionTitle}>{strings('send.title')}</Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+                                    {/* <View style={styles.credential}>
                                             <Text style={styles.credentialText}>{sendingData.address === undefined ? "" : sendingData.address.charAt(0)}</Text>
                                         </View> */}
-                                        <Text style={{ fontSize: 20, marginStart: 20, color: colors.blackColor }}>{sendingData.address === undefined ? "" : sendingData.address}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={styles.sectionContainer}>
-                                <View style={{ alignItems: 'center' }}>
-                                    <View style={[styles.circleContainer, { backgroundColor: colors.grey200 }]} />
-                                </View>
-                                <View style={{ flex: 1 }}>
-                                    <Text style={styles.sectionTitle}>{strings('bitg_wallet.after_balance')}</Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                                        <Image
-                                            style={styles.bitgSmallImage}
-                                            source={bitg_currency}
-                                            tintColor={Platform === 'ios' ? undefined : colors.tintColor}
-                                        />
-                                        <Text style={{ fontSize: 30, color: colors.blackColor, marginStart: 5, fontWeight: '700' }}>{toFixedFloor((myCurrentWalletBalance - parseFloat(sendingData.amount) - parseFloat(fee)), 3)}</Text>
-                                    </View>
+                                    <Text style={{ fontSize: 20, marginStart: 20, color: colors.blackColor }}>{sendingData.address === undefined ? "" : sendingData.address}</Text>
                                 </View>
                             </View>
                         </View>
+                        <View style={styles.sectionContainer}>
+                            <View style={{ alignItems: 'center' }}>
+                                <View style={[styles.circleContainer, { backgroundColor: colors.grey200 }]} />
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text style={styles.sectionTitle}>{strings('bitg_wallet.after_balance')}</Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+                                    <Image
+                                        style={styles.bitgSmallImage}
+                                        source={bitg_currency}
+                                        tintColor={Platform === 'ios' ? undefined : colors.tintColor}
+                                    />
+                                    <Text style={{ fontSize: 30, color: colors.blackColor, marginStart: 5, fontWeight: '700' }}>{toFixedFloor((myCurrentWalletBalance - parseFloat(sendingData.amount) - parseFloat(fee)), 3)}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
             }
         </ScrollView >
 

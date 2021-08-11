@@ -304,11 +304,14 @@ function SendScreen({
               if(nextPage === 1){
 
 
+                
                 let result = inputToBn(sendingData.amount);
 
                 if(!result){
                   return
                 }
+
+                setLoading(true);
 
                 const transfer = api.tx.balances.transfer(sendingData.address,result);
 
@@ -327,9 +330,17 @@ function SendScreen({
 
                   // console.log(info.partialFee)
                   setPaymentInfo(info)
+                  setLoading(false);
+
+                  // viewPager.current.setPage(2);
+
+                  sleep(50).then(() => {
+                    viewPager.current.setPage(nextPage);
+                  });
 
                 } catch (error) {
                   console.log('payment infro error:',error)
+                  setLoading(false);
                 }
 
 
@@ -512,6 +523,7 @@ function SendScreen({
                 getSendingData={getSendingData}
                 navigation={navigation}
                 clearChildrenState={clearChildrenState}
+                loaderIndicator={loading}
               />
               <SendingProgressScreen
                 key="2"
@@ -531,6 +543,7 @@ function SendScreen({
                 sendingData={sendingData}
                 viewTransactionHistory={openTransactionHistory}
                 showAlert={showAlert}
+                navigation={navigation}
                 // globalState={state}
                 updateGlobalState={updateTransactionsState}
               />

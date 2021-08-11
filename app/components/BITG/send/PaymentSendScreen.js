@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
 })
 
 
-export default function PaymentSendScreen({ newTransaction, currentPage, sendingData, viewTransactionHistory, globalState, updateGlobalState ,showAlert}) {
+export default function PaymentSendScreen({ newTransaction, currentPage,navigation, sendingData, viewTransactionHistory, globalState, updateGlobalState ,showAlert}) {
 
     const [showModal, setShowModal] = useState(false)
     const [transactionInfo, setTransactionInfo] = useState(undefined);
@@ -155,6 +155,16 @@ export default function PaymentSendScreen({ newTransaction, currentPage, sending
     }
 
 
+    const viewTransaction =  async () => {
+        if (sendingData.transactionHash != undefined && sendingData.transactionHash != null) {
+            // navigatoin.navigate('TransactionDetail')
+            navigation.navigate('TransactionDetail', { hash: sendingData.transactionHash})
+
+        } else {
+            // showAlert("You don't have any wallet address!")
+        }
+    }
+
     const copyToClipboard =  async () => {
         if (sendingData.transactionHash != undefined && sendingData.transactionHash != null) {
             await Clipboard.setString(sendingData.transactionHash);
@@ -162,7 +172,7 @@ export default function PaymentSendScreen({ newTransaction, currentPage, sending
                 isVisible: true,
                 autodismiss: 1500,
                 content: 'clipboard-alert',
-                data: { msg: strings('transactions.address_copied_to_clipboard') }
+                data: { msg: strings('transactions.hash_copied_to_clipboard') }
             });
         } else {
             // showAlert("You don't have any wallet address!")
@@ -218,7 +228,7 @@ export default function PaymentSendScreen({ newTransaction, currentPage, sending
                         </View>
                     </View>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.buttons} activeOpacity={0.4}>
+                        <TouchableOpacity style={styles.buttons} activeOpacity={0.4} onPress={viewTransaction}>
                             <Text style={styles.buttonText}> { strings('bitg_wallet.view')} </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.buttons} activeOpacity={0.4} onPress={copyToClipboard}>
