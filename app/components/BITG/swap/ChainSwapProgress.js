@@ -25,8 +25,6 @@ const styles = StyleSheet.create({
 	mainContent: {
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		flex: 1,
-		flexGrow: 1,
 	},
 
 	progresContainer: {

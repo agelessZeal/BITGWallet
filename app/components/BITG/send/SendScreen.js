@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   viewPager: {
     flex: 1,
-    minHeight: Device.height,
+    minHeight: Device.getDeviceHeight(),
     backgroundColor:colors.white
   },
   footerView: {
@@ -380,7 +380,7 @@ function SendScreen({
                     
                     setLoading(false);
 
-                    sleep(500).then(() => {
+                    sleep(50).then(() => {
 
                       const { AccountTrackerController } = Engine.context;
                       AccountTrackerController.refresh();

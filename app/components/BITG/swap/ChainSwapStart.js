@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { View, Text, StyleSheet, Image, Platform, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, Platform, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableRipple } from 'react-native-paper';
 // import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
@@ -25,6 +25,7 @@ const bit_currency = require('../../../images/ic_bitg.png');
 const swap_logo = require('../../../images/swap_logo.png');
 
 const bitgImageSource = require('../../../images/ic_bitg.png');
+
 
 const styles = StyleSheet.create({
 	container: {
@@ -61,8 +62,6 @@ const styles = StyleSheet.create({
 	mainContent: {
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		flex:1,
-		flexGrow:1,
 	},
 	textContent: {
 		justifyContent: 'space-between',
@@ -96,7 +95,7 @@ function ChainSwapStart({ myWalletAddress, paramsData, currentPage, navigation, 
 	const canSubmit = true;
 
 	return (
-		<KeyboardAwareScrollView style={{ flexGrow: 1 }} contentContainerStyle={styles.mainContent}>
+		<KeyboardAwareScrollView style={{ flex: 1 }} contentContainerStyle={styles.mainContent}>
 				<Image style={styles.swapLogo} source={swap_logo} />
 
 				<View style={styles.textContent}>

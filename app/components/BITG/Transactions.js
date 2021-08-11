@@ -487,7 +487,36 @@ TransactionHistory.propTypes = {
 	/**
 	 * An object containing token exchange rates in the format address => exchangeRate
 	 */
-	tokenExchangeRates: PropTypes.object
+	tokenExchangeRates: PropTypes.object,
+		/**
+	/* Identities object required to get account name
+	*/
+	identities: PropTypes.object,
+	/**
+	/* navigation object required to push new views
+	*/
+	navigation: PropTypes.object,
+
+	/**
+	 * An array that represents the user transactions
+	 */
+	transactions: PropTypes.array,
+	/**
+	 * A string represeting the network name
+	 */
+	networkType: PropTypes.string,
+	/**
+	 * Array of ERC20 assets
+	 */
+	tokens: PropTypes.array,
+	/**
+	 * Current chainId
+	 */
+	chainId: PropTypes.string,
+		/**
+	/* Identities object required to get account name
+	*/
+	identities: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
@@ -496,7 +525,13 @@ const mapStateToProps = state => ({
 	balances: state.engine.backgroundState.TokenBalancesController.contractBalances,
 	conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
 	tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
-	currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency
+	currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
+	conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
+	tokens: state.engine.backgroundState.AssetsController.tokens,
+	identities: state.engine.backgroundState.PreferencesController.identities,
+	transactions: state.engine.backgroundState.TransactionController.transactions,
+	networkType: state.engine.backgroundState.NetworkController.provider.type,
+	chainId: state.engine.backgroundState.NetworkController.provider.chainId
 });
 
 export default connect(mapStateToProps)(TransactionHistory);
