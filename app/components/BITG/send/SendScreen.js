@@ -13,8 +13,6 @@ import {
 import { TouchableRipple } from 'react-native-paper';
 import ViewPager from '@react-native-community/viewpager';
 import NetInfo from '@react-native-community/netinfo';
-import BigNumber from 'bignumber.js';
-import bigInt from "big-integer";
 
 
 import { showAlert } from '../../../actions/alert';
@@ -303,8 +301,6 @@ function SendScreen({
             } else {
               if(nextPage === 1){
 
-
-                
                 let result = inputToBn(sendingData.amount);
 
                 if(!result){

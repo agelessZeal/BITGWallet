@@ -23,17 +23,13 @@ import { strings } from '../../../locales/i18n';
 import { colors, fontStyles } from '../../styles/common';
 import { getEmptyHeaderOptions, getBITGWalletNavbarOptions } from '../UI/Navbar';
 
-// import { getUserTransactions, setUserTransactions ,getTransactionColor} from './lib/Helpers';
-
-// import { Context as TransactionContext } from '../lib/context/TransactionsContext'
-
 import { NavigationContext } from 'react-navigation';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 import axios from 'axios';
 
+import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei, toWei, toBN } from '../../util/number';
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -211,28 +207,54 @@ function TransactionHistory(props) {
 
 	const [loading, setLoading] = useState(false);
 
-	const [transactionFiltered, setTransactionFiltered] = useState(dummy_transactons);
+	const [transactionFiltered, setTransactionFiltered] = useState([]);
 
-	const [transactions, setTransactions] = useState(dummy_transactons);
+	const [transactions, setTransactions] = useState([]);
 
 	const [type, setType] = useState('any');
 
 	useEffect(() => {
 		async function fetchData(address) {
 			try {
-				// const {
-				// 	data: { response } 
-				// } = await getTransactonDetail(txhash);
 				setLoading(true)
-				const response = await axios.get(`${TRANSACTION_QUERY_API}transaction?account=${address}`);
+				const response = await axios.get(`${TRANSACTION_QUERY_API}transactions?account=${address}`);
 
 				setLoading(false)
 
 				if (!response) {
 					console.log('query empty response:');
 				} else {
+					if (response && response.data && response.data.transactions) {
+						// setTransactions(response.data.transactions)
 
-					console.log('response:', response.data)
+						const res = response.data.transactions;
+
+						const checked = res.reverse().map((item, index) => {
+							const is_reward = item.sender === ''
+							const is_expense = item.sender === props.selectedAddress
+							return {
+								index,
+								sender: item.sender,
+								recipient: item.recipient,
+								time: item.dtblockchain,
+								amount: renderFromWei(toBN(String(item.amount))),
+								blocknumber:item.blocknumber,
+								is_reward,
+								is_expense,
+								txhash: item.txhash,
+								confirmations: 8,
+								is_my_friend: true,
+								color: getTransactionColor(String(item.hash)),
+							};
+
+						})
+
+						setTransactions(checked)
+						setTransactionFiltered(checked)
+
+					}
+
+
 					// setItem(response.data)
 				}
 			} catch (error) {
@@ -242,9 +264,10 @@ function TransactionHistory(props) {
 		}
 
 		if (props.selectedAddress) {
+			console.log('props.selectedAddress:', props.selectedAddress)
 			fetchData(props.selectedAddress)
 		}
-	}, []);
+	}, [props.selectedAddress]);
 
 	const search = text => {
 		const formattedQuery = text.toLowerCase().trim();
@@ -256,12 +279,12 @@ function TransactionHistory(props) {
 
 	const changeType = type => {
 		setType(type);
-		if(type === REWARD_TYPE){
+		if (type === REWARD_TYPE) {
 			const data = transactions.filter(item => {
-				 return item.is_reward
+				return item.is_reward
 			});
 			setTransactionFiltered(data);
-		}else{
+		} else {
 			setTransactionFiltered(transactions);
 		}
 
@@ -270,21 +293,22 @@ function TransactionHistory(props) {
 
 	const contains = (item, query) => {
 		if (
-			item.sender.name.toLowerCase().includes(query) ||
-			item.receiver.name.toLowerCase().includes(query) ||
-			item.sender.address.toLowerCase().includes(query) ||
-			item.receiver.address.toLowerCase().includes(query)
+			item.sender.toLowerCase().includes(query) ||
+			item.recipient.toLowerCase().includes(query) 
 		) {
 			return true;
 		}
 		return false;
 	};
 
-	const DetailTransactionItem = ({ itemData }) => {
-		// console.log('item:', itemData, transactionFiltered);
+	const goToDetail = (item) => {
+		console.log('goDetail',item)
+		navigation.navigate('TransactionDetail', { item})
+	}
 
+	const DetailTransactionItem = ({ itemData }) => {
 		return (
-			<TouchableRipple style={styles.addressItem}>
+			<TouchableOpacity style={styles.addressItem} onPress={() => goToDetail(itemData)}>
 				<View style={{ flex: 1, flexDirection: 'row' }}>
 					<View style={{ width: 15, alignItems: 'center' }}>
 						{itemData.confirmations < 6 ? (
@@ -297,8 +321,8 @@ function TransactionHistory(props) {
 								bgColor={colors.white}
 							/>
 						) : (
-							<MaterialIcons name="done" size={15} color={colors.tintColor} />
-						)}
+								<MaterialIcons name="done" size={15} color={colors.tintColor} />
+							)}
 						<View style={{ height: 40, width: 2, marginTop: 5, backgroundColor: colors.grey200 }} />
 					</View>
 
@@ -308,7 +332,7 @@ function TransactionHistory(props) {
 								<Text
 									style={{
 										fontSize: 18,
-										color: colors.grey500 
+										color: colors.grey500
 									}}
 								>
 									You were
@@ -318,7 +342,7 @@ function TransactionHistory(props) {
 									style={{
 										fontSize: 16,
 										marginStart: 10,
-										color: colors.blackColor 
+										color: colors.blackColor
 									}}
 								>
 									Rewarded
@@ -326,39 +350,36 @@ function TransactionHistory(props) {
 								<MaterialIcons style={{ marginHorizontal: 5 }} name="star" size={20} color={colors.green} />
 							</View>
 						) : (
-							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-								<Text
-									style={{
-										fontSize: 18,
-										color: itemData.is_expense ? colors.grey500 : colors.blackColor
-									}}
-								>
-									{itemData.is_expense
-										? 'You sent'
-										: itemData.sender.name === 'No Name'
-										? elipsizeName(itemData.sender.address)
-										: elipsizeName(itemData.sender.name)}
-								</Text>
-								<Text
-									style={{
-										fontSize: 16,
-										marginStart: 10,
-										color: itemData.is_expense ? colors.blackColor : colors.grey500
-									}}
-								>
-									{itemData.is_expense
-										? itemData.receiver.name === 'No Name'
-											? elipsizeName(itemData.receiver.address)
-											: elipsizeName(itemData.receiver.name)
-										: 'sent you'}
-								</Text>
-							</View>
-						)}
+								<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+									<Text
+										style={{
+											fontSize: 18,
+											color: itemData.is_expense ? colors.grey500 : colors.blackColor
+										}}
+									>
+										{itemData.is_expense
+											&& `You sent ${elipsizeName(itemData.recipient)}`
+										}
+									</Text>
+									<Text
+										style={{
+											fontSize: 16,
+											marginStart: 10,
+											color: itemData.is_expense ? colors.blackColor : colors.grey500
+										}}
+									>
+										{
+											!itemData.is_expense
+											&& `${elipsizeName(itemData.sender)} sent you`
+										}
+									</Text>
+								</View>
+							)}
 
 						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 							{/* <Feather name="clock" size={14} color={colors.grey500} /> */}
 							<Text style={{ fontSize: 14, color: colors.grey500 }}>
-								{Moment(itemData.time * 1000).calendar()}
+								{Moment(itemData.time).calendar()}
 							</Text>
 						</View>
 						{itemData.confirmations < 6 ? (
@@ -375,11 +396,11 @@ function TransactionHistory(props) {
 								color: itemData.is_expense ? colors.grey500 : colors.tintColor
 							}}
 						>
-							{`${itemData.is_expense ? ' - ' : ' + '}`.concat(formatNumber(itemData.send_amount, 2))}
+							{`${itemData.is_expense ? ' - ' : ' + '}`.concat(formatNumber(itemData.amount, 2))}
 						</Text>
 					</View>
 				</View>
-			</TouchableRipple>
+			</TouchableOpacity>
 		);
 	};
 
@@ -425,21 +446,16 @@ function TransactionHistory(props) {
 			{loading ? (
 				<ActivityIndicator style={{ alignSelf: 'center' }} size="large" color={colors.tintColor} />
 			) : (
-				<>
-					<FlatList
-						style={{ flex: 1 }}
-						contentContainerStyle={{ paddingTop: 20, paddingBottom: 20 }}
-						data={transactionFiltered
-							.sort(
-								(a, b) =>
-									Moment(a.time * 1000).format('YYYYMMDD') - Moment(b.time * 1000).format('YYYYMMDD')
-							)
-							.reverse()}
-						keyExtractor={(item, index) => index.toString()}
-						renderItem={({ item }) => <DetailTransactionItem itemData={item} />}
-					/>
-				</>
-			)}
+					<>
+						<FlatList
+							style={{ flex: 1 }}
+							contentContainerStyle={{ paddingTop: 20, paddingBottom: 20 }}
+							data={transactionFiltered}
+							keyExtractor={(item, index) => index.toString()}
+							renderItem={({ item }) => <DetailTransactionItem itemData={item} />}
+						/>
+					</>
+				)}
 		</View>
 	);
 }

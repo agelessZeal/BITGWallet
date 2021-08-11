@@ -158,7 +158,6 @@ export default function SendingProgressScreen({ currentPage, paymentInfo, myCurr
                 </View>
             }
 
-
             {
                 sendingData.address === undefined ? <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 20, marginStart: 20, marginEnd: 20 }}>
                     {strings('bitg_wallet.invalid_send_data')}

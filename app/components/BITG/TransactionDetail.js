@@ -22,9 +22,9 @@ import { formatNumber, getUserTransactions, getTransactionColor } from './lib/He
 
 import { strings } from '../../../locales/i18n';
 import { colors, fontStyles } from '../../styles/common';
-import { getEmptyHeaderOptions, getBITGWalletNavbarOptions ,getNetworkNavbarOptions} from '../UI/Navbar';
+import { getEmptyHeaderOptions, getBITGWalletNavbarOptions, getNetworkNavbarOptions } from '../UI/Navbar';
 
-import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei, toWei } from '../../util/number';
+import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei, toWei, toBN } from '../../util/number';
 
 
 import { NavigationContext } from 'react-navigation';
@@ -126,18 +126,18 @@ const styles = StyleSheet.create({
 		marginStart: 20,
 		marginEnd: 20
 	},
-	itemTitle:{
-		color:colors.tintColor,
-		fontSize:22,
-		fontWeight:'bold',
-		marginTop:7
+	itemTitle: {
+		color: colors.tintColor,
+		fontSize: 22,
+		fontWeight: 'bold',
+		marginTop: 7
 
 	},
 	itemContent: {
-		color:colors.blackColor,
-		fontSize:18,
-		marginTop:5,
-		marginStart:5
+		color: colors.blackColor,
+		fontSize: 18,
+		marginTop: 5,
+		marginStart: 5
 	}
 
 });
@@ -207,21 +207,19 @@ function TransactionDetail(props) {
 					console.log('query empty response:');
 				} else {
 
-					if(response.data === {}){
+					if (response.data === {}) {
 						setLoading(true)
-						setTimeout( async () => {
+						setTimeout(async () => {
 							const response1 = await axios.get(`${TRANSACTION_QUERY_API}transaction?txhash=${txhash}`);
 							setLoading(false)
 
-							if(response1.data){
-								
-								setItem(response1.data)
+							if (response1.data) {
+								parseItem(response1.data)
 							}
 
-						},500)
+						}, 800)
 					}
-					console.log('response:', response.data)
-					setItem(response.data)
+					parseItem(response.data)
 				}
 			} catch (error) {
 				console.log('query error:', error);
@@ -236,17 +234,34 @@ function TransactionDetail(props) {
 				setHash(params.hash)
 				fetchData(params.hash)
 			}
+
+			if (params.item) {
+				setItem(params.item)
+			}
 		}
 	}, []);
 
+	const parseItem = (item) => {
+		if (item.sender) {
+			const is_reward = item.sender === ''
+			const is_expense = item.sender === props.selectedAddress
+			const parsed = {
+				sender: item.sender,
+				recipient: item.recipient,
+				time: item.dtblockchain,
+				amount: renderFromWei(toBN(String(item.amount))),
+				blocknumber: item.blocknumber,
+				is_reward,
+				is_expense,
+				txhash: item.txhash,
+				confirmations: 8,
+				is_my_friend: true,
+				color: getTransactionColor(String(item.hash)),
+			};
+			setItem(parsed)
+		}
+	}
 
-	const search = text => {
-		const formattedQuery = text.toLowerCase().trim();
-		const data = transactions.filter(item => {
-			return contains(item, formattedQuery);
-		});
-		setTransactionFiltered(data);
-	};
 
 	const changeType = type => {
 		setType(type);
@@ -305,7 +320,7 @@ function TransactionDetail(props) {
 								<MaterialIcons style={{ marginHorizontal: 5 }} name="star" size={20} color={colors.green} />
 							</View>
 						) : (
-								<View style={{ flex: 1,marginTop:20 }}>
+								<View style={{ flex: 1, marginTop: 20 }}>
 									<Text
 										style={styles.itemTitle}
 									>
@@ -336,7 +351,7 @@ function TransactionDetail(props) {
 
 									<Text style={styles.itemContent}
 									>
-											{`${renderFromWei(itemData.amount)} BITG`}
+										{`${itemData.amount} BITG`}
 									</Text>
 
 
@@ -348,7 +363,7 @@ function TransactionDetail(props) {
 
 									<Text style={styles.itemContent}
 									>
-											{itemData.dtblockchain}
+										{itemData.time}
 									</Text>
 
 									<Text
@@ -359,19 +374,31 @@ function TransactionDetail(props) {
 
 									<Text style={styles.itemContent}
 									>
-											{itemData.sender} 
+										{itemData.sender}
 									</Text>
 
 
 									<Text
 										style={styles.itemTitle}
 									>
-										{`recipient:`}
+										{`recipient:` }
 									</Text>
 
 									<Text style={styles.itemContent}
 									>
-											{itemData.recipient} 
+										{itemData.recipient}
+									</Text>
+
+									<Text
+										style={styles.itemTitle}
+									>
+										{`balance change:`}
+									</Text>
+
+									<Text
+										style={styles.itemContent}
+									>
+										{`${itemData.is_expense ? 'You sent:  - ' : 'You recieve:  + '}`.concat(formatNumber(itemData.amount, 2))}
 									</Text>
 
 								</View>
@@ -379,36 +406,10 @@ function TransactionDetail(props) {
 
 					</View>
 
-					{/* <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						{
-							itemData.sender === props.selectedAddress && (
-								<Text
-									style={{
-										fontSize: 16,
-										marginStart: 10,
-										color: colors.grey500
-									}}
-								>
-									{`${' - '}`.concat(formatNumber(itemData.amount, 2))}
-								</Text>
-							)
-						}
+					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
 
-						{
-							itemData.recipient === props.selectedAddress && (
-								<Text
-									style={{
-										fontSize: 16,
-										marginStart: 10,
-										color: colors.tintColor
-									}}
-								>
-									{`${' + '}`.concat(formatNumber(itemData.amount, 2))}
-								</Text>
-							)
-						}
+					</View>
 
-					</View> */}
 				</View>
 			</TouchableRipple>
 		);
