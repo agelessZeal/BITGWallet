@@ -14,6 +14,7 @@ export default {
 	IPFS_DEFAULT_GATEWAY_URL: 'https://cloudflare-ipfs.com/ipfs/',
 	IPNS_DEFAULT_GATEWAY_URL: 'https://cloudflare-ipfs.com/ipns/',
 	SWARM_DEFAULT_GATEWAY_URL: 'https://swarm-gateways.net/bzz:/',
+	TRANSACTION_QUERY_API:'https://testnode.bitg.org:9443/',
 	supportedTLDs: ['eth', 'xyz', 'test'],
 	MAX_PUSH_NOTIFICATION_PROMPT_TIMES: 2,
 	CONNEXT: {

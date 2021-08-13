@@ -28,7 +28,7 @@ import { NavigationContext } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
-
+import AppConstants from '../../core/AppConstants'
 import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei, toWei, toBN } from '../../util/number';
 const styles = StyleSheet.create({
 	container: {
@@ -200,7 +200,7 @@ const dummy_transactons = [
 
 const ANY_TYPE = 'any'
 const REWARD_TYPE = 'reward'
-const TRANSACTION_QUERY_API = 'https://testnode.bitg.org:9443/'
+
 
 function TransactionHistory(props) {
 	const navigation = useContext(NavigationContext);
@@ -217,7 +217,7 @@ function TransactionHistory(props) {
 		async function fetchData(address) {
 			try {
 				setLoading(true)
-				const response = await axios.get(`${TRANSACTION_QUERY_API}transactions?account=${address}`);
+				const response = await axios.get(`${AppConstants.TRANSACTION_QUERY_API}transactions?account=${address}`);
 
 				setLoading(false)
 

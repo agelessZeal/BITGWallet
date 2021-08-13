@@ -26,7 +26,7 @@ import { getEmptyHeaderOptions, getBITGWalletNavbarOptions, getNetworkNavbarOpti
 
 import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei, toWei, toBN } from '../../util/number';
 
-
+import AppConstants from '../../core/AppConstants'
 import { NavigationContext } from 'react-navigation';
 
 import PropTypes from 'prop-types';
@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
 
 });
 
-const TRANSACTION_QUERY_API = 'https://testnode.bitg.org:9443/'
 
 
 function TransactionDetail(props) {
@@ -159,7 +158,7 @@ function TransactionDetail(props) {
 				// 	data: { response } 
 				// } = await getTransactonDetail(txhash);
 				setLoading(true)
-				const response = await axios.get(`${TRANSACTION_QUERY_API}transaction?txhash=${txhash}`);
+				const response = await axios.get(`${AppConstants.TRANSACTION_QUERY_API}transaction?txhash=${txhash}`);
 
 				setLoading(false)
 
@@ -170,7 +169,7 @@ function TransactionDetail(props) {
 					if (response.data === {}) {
 						setLoading(true)
 						setTimeout(async () => {
-							const response1 = await axios.get(`${TRANSACTION_QUERY_API}transaction?txhash=${txhash}`);
+							const response1 = await axios.get(`${AppConstants.TRANSACTION_QUERY_API}transaction?txhash=${txhash}`);
 							setLoading(false)
 
 							if (response1.data) {

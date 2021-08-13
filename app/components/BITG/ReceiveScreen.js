@@ -111,7 +111,8 @@ function ReceiveScreen({
     useEffect(() => {
         // const wallet = WalletManager.getWalletByName("BITGWallet")
         // setMyWallet(wallet.getKey(0).getAddress())
-    }, []);
+        setMyWallet(selectedAddress)
+    }, [selectedAddress]);
 
     const copyToClipboard = () => {
         if (myWallet != undefined && myWallet != null) {
