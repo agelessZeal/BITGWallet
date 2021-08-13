@@ -237,7 +237,7 @@ class SendingToScreen extends PureComponent {
     inputWidth: { width: '99%' }
 
   };
-  
+
   animatingAccountsModal = false;
 
   addressToInputRef = React.createRef();
@@ -412,9 +412,9 @@ class SendingToScreen extends PureComponent {
   onScan = () => {
     this.props.navigation.navigate('QRScanner', {
       onScanSuccess: meta => {
-        if (meta.target_address) {
-          console.log('onScallSuccessL', meta.target_address)
-          this.onToSelectedAddressChange(meta.target_address);
+        console.log('onScan Success meta', meta)
+        if (meta  && isValidAddressPolkadotAddress(meta)) {
+          this.onToSelectedAddressChange(meta);
         }
       }
     });

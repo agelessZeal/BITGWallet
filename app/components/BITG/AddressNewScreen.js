@@ -263,12 +263,10 @@ function AddressNewScreen(props) {
 		navigation.navigate('QRScanner', {
 			onScanSuccess: meta => {
 				console.log('scan address meta:',meta)
-
-				if (meta.target_address) {
-					console.log('scan address:',meta.target_address)
-					const isValid = isValidAddressPolkadotAddress(meta.target_address)
+				if (meta) {
+					const isValid = isValidAddressPolkadotAddress(meta)
 					if(isValid){
-						setUserInfo({ ...userInfo, bitgAddress: meta.target_address });
+						setUserInfo({ ...userInfo, bitgAddress: meta });
 					}else{
 						props.showAlert({
 							isVisible: true,
