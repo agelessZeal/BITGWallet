@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.darkTintColor,
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: 200,
-		marginBottom: 30,
+		height: 150,
+		marginBottom: 10,
 	},
 	titleText: {
 		fontSize: 30,
@@ -58,7 +58,9 @@ const styles = StyleSheet.create({
 		color: colors.white
 	},
 	inputContainer: {
-		margin: 30
+		margin: 30,
+		marginTop:0,
+		
 	},
 	inputTextTitle: {
 		fontSize: 16,
@@ -264,7 +266,6 @@ function AddressNewScreen(props) {
 					console.log('scan address:',meta.target_address)
 					const isValid = isValidAddressPolkadotAddress(meta.target_address)
 					if(isValid){
-
 						setUserInfo({ ...userInfo, bitgAddress: meta.target_address });
 					}else{
 						props.showAlert({
@@ -314,7 +315,7 @@ function AddressNewScreen(props) {
 			<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : null}>
 				<ScrollView style={{ flex: 1 }}>
 					<View style={styles.inputContainer}>
-						<Text style={styles.inputTextTitle}>{strings('bitg_wallet.address_book.find_title')}</Text>
+						{/* <Text style={styles.inputTextTitle}>{strings('bitg_wallet.address_book.find_title')}</Text>
 						<Text style={styles.text}>{strings('bitg_wallet.address_book.find_desc')}</Text>
 						<View style={styles.searchContainer}>
 							<MaterialIcons style={{ marginStart: 10 }} name="search" size={25} color={colors.grey300} />
@@ -326,7 +327,7 @@ function AddressNewScreen(props) {
 								onSubmitEditing={() => submit()}
 								defaultValue={searchText}
 							/>
-						</View>
+						</View> */}
 						{loaderVisible ? (
 							<ActivityIndicator
 								style={{ alignSelf: 'center', marginTop: 20 }}
@@ -335,7 +336,7 @@ function AddressNewScreen(props) {
 							/>
 						) : (
 								<View style={{ flex: 1 }}>
-									<Text style={[styles.inputTextTitle, { marginTop: 40 }]}>
+									<Text style={[styles.inputTextTitle, { marginTop: 20 }]}>
 										{strings('bitg_wallet.address_book.detail_title')}
 									</Text>
 

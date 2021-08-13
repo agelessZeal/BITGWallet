@@ -714,7 +714,7 @@ export function getBITGWalletNavbarOptions(title, navigation) {
 	}
 
 	return {
-		headerTitle: <NavbarTitle title={title} hideNetwork/>,
+		headerTitle: <NavbarTitle title={title} hideNetwork disableNetwork/>,
 		headerLeft: (
 			<TouchableOpacity onPress={openDrawer} style={styles.backButton} testID={'hamburger-menu-button-wallet'}>
 				<IonicIcon
@@ -791,7 +791,7 @@ export function getBITGAddNavbarOptions(title, navigation,type) {
 	}
 
 	return {
-		headerTitle: <NavbarTitle title={title} hideNetwork/>,
+		headerTitle: <NavbarTitle title={title} hideNetwork disableNetwork/>,
 		headerLeft: (
 			<TouchableOpacity onPress={openDrawer} style={styles.backButton} testID={'hamburger-menu-button-wallet'}>
 				<IonicIcon

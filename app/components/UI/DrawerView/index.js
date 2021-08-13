@@ -464,13 +464,13 @@ class DrawerView extends PureComponent {
 	};
 
 	toggleNetworksModal = () => {
-		if (!this.animatingNetworksModal) {
-			this.animatingNetworksModal = true;
-			this.props.toggleNetworkModal();
-			setTimeout(() => {
-				this.animatingNetworksModal = false;
-			}, 500);
-		}
+		// if (!this.animatingNetworksModal) {
+		// 	this.animatingNetworksModal = true;
+		// 	this.props.toggleNetworkModal();
+		// 	setTimeout(() => {
+		// 		this.animatingNetworksModal = false;
+		// 	}, 500);
+		// }
 	};
 
 	showReceiveModal = () => {

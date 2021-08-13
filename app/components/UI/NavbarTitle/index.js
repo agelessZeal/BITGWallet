@@ -81,11 +81,11 @@ class NavbarTitle extends PureComponent {
 	openNetworkList = () => {
 		if (!this.props.disableNetwork) {
 			if (!this.animating) {
-				this.animating = true;
-				this.props.toggleNetworkModal();
-				setTimeout(() => {
-					this.animating = false;
-				}, 500);
+				// this.animating = true;
+				// this.props.toggleNetworkModal();
+				// setTimeout(() => {
+				// 	this.animating = false;
+				// }, 500);
 			}
 		}
 	};

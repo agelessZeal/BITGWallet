@@ -1564,8 +1564,8 @@ export const BrowserTab = props => {
 	 * Handle switch network press
 	 */
 	const switchNetwork = () => {
-		toggleOptionsIfNeeded();
-		props.toggleNetworkModal();
+		// toggleOptionsIfNeeded();
+		// props.toggleNetworkModal();
 	};
 
 	/**
