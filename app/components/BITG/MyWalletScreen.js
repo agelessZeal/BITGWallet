@@ -20,6 +20,7 @@ import { toFixedFloor } from './lib/Helpers'
 
 import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol } from '../../util/number';
 
+import BITGAccountOverview from './BITGAccountOverview'
 import {
     setSwapsHasOnboarded,
     setSwapsLiveness,
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     },
     balanceContainer: {
         flexDirection: 'row',
-        marginTop: 20,
+        marginTop: 5,
         marginStart: 20,
         marginEnd: 20
     },
@@ -283,12 +284,25 @@ const bitgImageSource = require("../../images/ic_bitg.png");
 const impactImageSource = require("../../images/ic_stars_24px.png");
 const initiativeImageSource = require("../../images/ic_vibration_24px.png");
 const shopImageSource = require("../../images/ic_store_mall_directory_24px.png");
+const dummy_impact = [
+    {
+        title: 'Name',
+        time: '5 min ago',
+        content: 'New impact news, from bitg'
+    }, 
+    {
+        title: 'Name s',
+        time: '1 hour ago',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
+    }
+] 
 
 function MyWalletScreen({
     swapsTokens,
     accounts,
     selectedAddress,
     balances,
+    identities,
     tokensWithBalance,
     tokensTopAssets,
     conversionRate,
@@ -310,28 +324,6 @@ function MyWalletScreen({
         balanceFiat: 0
     });
 
-    // useEffect(() => {
-
-    //     console.log('MyWalletScreen:selectedAddress:',selectedAddress)
-    //     // console.log('MyWalletScreen:accounts:',accounts)
-    //     try {
-    //         const balance = renderFromWei(accounts[selectedAddress].balance);
-    //         const balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
-
-    //         // console.log('MyWalletScreen:balance:',balance)
-    //         // console.log('MyWalletScreen:balanceFiat:',balanceFiat)
-    //         // console.log('MyWalletScreen:conversionRate:',conversionRate)
-    //         // console.log('MyWalletScreen:balances:',balances)
-
-    //         setAvailableBalance({
-    //             balance,
-    //             balanceFiat
-    //         })
-    //     } catch (e) {
-    //         console.log('calc balance error:', e)
-    //     }
-    // }, [])
-
     useEffect(() => {
         try {
 
@@ -340,10 +332,6 @@ function MyWalletScreen({
                 const balance = renderFromWei(accounts[selectedAddress].balance);
                 let balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
 
-                // console.log('MyWalletScreen:balance:',balance,selectedAddress)
-                // console.log('MyWalletScreen:balanceFiat:',balanceFiat)
-                // console.log('MyWalletScreen:conversionRate:',conversionRate)
-                // console.log('MyWalletScreen:balances:',balances)
                 if (balance === '0') {
                     balanceFiat = getCurrencySymbol(currentCurrency) + ' 0'
                 }
@@ -369,15 +357,7 @@ function MyWalletScreen({
     const [income, setIncome] = useState(0);
     const [expense, setExpense] = useState(0);
 
-    const [impactData, setImpactData] = useState([{
-        title: 'Name',
-        time: '5 min ago',
-        content: 'New impact news, from bitg'
-    }, {
-        title: 'Name s',
-        time: '1 hour ago',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
-    }]);
+    const [impactData, setImpactData] = useState(dummy_impact);
 
     // useEffect(() => {
     //     getWalletInfo()
@@ -499,6 +479,13 @@ function MyWalletScreen({
         navigation.navigate('TransactionHistory');
     }
 
+    const removeImpact = (item) =>{
+        console.log('removeImpact:',item)
+
+    }
+
+    const account = { address: selectedAddress, ...identities[selectedAddress], ...accounts[selectedAddress] };
+
 
     return (
         <View style={styles.container}>
@@ -517,6 +504,7 @@ function MyWalletScreen({
                     <>
                         <ScrollView style={{ flex: 1 }}>
                             <View style={{ flex: 1, paddingBottom: 20 }}>
+                                <BITGAccountOverview account={account}  />
                                 <View style={styles.balanceContainer}>
                                     <Image style={styles.bitgImage} source={bitgImageSource} />
                                     <View>
@@ -557,7 +545,7 @@ function MyWalletScreen({
                                                         {item.content}
                                                     </Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={styles.impactItemClose}>
+                                                <TouchableOpacity style={styles.impactItemClose} onPress={() =>removeImpact(item)}>
                                                     <MaterialIcons name="close" size={14} color={colors.grey300} />
                                                 </TouchableOpacity>
 
@@ -696,7 +684,11 @@ MyWalletScreen.propTypes = {
     /**
      * Function to set liveness
      */
-    setLiveness: PropTypes.func
+    setLiveness: PropTypes.func,
+        /**
+     * An object containing each identity in the format address => account
+     */
+    identities: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
@@ -707,6 +699,7 @@ const mapStateToProps = state => ({
     conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
     tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
     currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
+    identities: state.engine.backgroundState.PreferencesController.identities,
 });
 
 const mapDispatchToProps = dispatch => ({

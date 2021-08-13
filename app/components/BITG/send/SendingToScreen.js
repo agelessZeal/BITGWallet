@@ -28,6 +28,9 @@ import SendAddressModal from './SendAddressModal'
 
 import Engine from '../../../core/Engine';
 
+import { protectWalletModalVisible } from '../../../actions/user';
+import { toggleAccountsModal, toggleReceiveModal } from '../../../actions/modals';
+
 import { isValidAddressPolkadotAddress } from '../../../util/address'
 import {
   renderFromTokenMinimalUnit,
@@ -234,7 +237,8 @@ class SendingToScreen extends PureComponent {
     inputWidth: { width: '99%' }
 
   };
-
+  
+  animatingAccountsModal = false;
 
   addressToInputRef = React.createRef();
 
@@ -531,6 +535,16 @@ class SendingToScreen extends PureComponent {
     })
   };
 
+  toggleAccountsModal = () => {
+		const { onboardingWizard } = this.props;
+		if (!onboardingWizard && !this.animatingAccountsModal) {
+			this.animatingAccountsModal = true;
+			this.props.toggleAccountsModal();
+			setTimeout(() => {
+				this.animatingAccountsModal = false;
+			}, 500);
+		}
+	};
 
 
   render = () => {
@@ -586,7 +600,7 @@ class SendingToScreen extends PureComponent {
           </View>
         }
         <Text style={styles.title}>{strings('bitg_wallet.send_title')} </Text>
-        <View style={styles.myWalletContainer}>
+        <TouchableOpacity onPress={this.toggleAccountsModal} style={styles.myWalletContainer}>
           <Image
             style={[
               styles.walletImage,
@@ -605,7 +619,7 @@ class SendingToScreen extends PureComponent {
               {renderShortAddress(selectedAddress)}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={styles.sendingToContainer}>
           <Text style={styles.inputLabel}>
             {strings('bitg_wallet.sending_to')}
@@ -735,7 +749,9 @@ const mapDispatchToProps = dispatch => ({
   setRecipient: (from, to, ensRecipient, transactionToName, transactionFromName) =>
     dispatch(setRecipient(from, to, ensRecipient, transactionToName, transactionFromName)),
   newAssetTransaction: selectedAsset => dispatch(newAssetTransaction(selectedAsset)),
-  setSelectedAsset: selectedAsset => dispatch(setSelectedAsset(selectedAsset))
+  setSelectedAsset: selectedAsset => dispatch(setSelectedAsset(selectedAsset)),
+  toggleAccountsModal: () => dispatch(toggleAccountsModal()),
+	toggleReceiveModal: asset => dispatch(toggleReceiveModal(asset))
 });
 
 export default connect(
