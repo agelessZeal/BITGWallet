@@ -202,11 +202,14 @@ function TransactionDetail(props) {
 		if (item.sender) {
 			const is_reward = item.sender === ''
 			const is_expense = item.sender === props.selectedAddress
+
+			const itemAmount = item.amount.toLocaleString().replace(/,/g,'');
+
 			const parsed = {
 				sender: item.sender,
 				recipient: item.recipient,
 				time: item.dtblockchain,
-				amount: renderFromWei(toBN(String(item.amount))),
+				amount: renderFromWei(toBN(itemAmount)),
 				blocknumber: item.blocknumber,
 				is_reward,
 				is_expense,

@@ -358,8 +358,9 @@ function MyWalletScreen({
 							const is_reward = item.sender === ''
                             const is_expense = item.sender === selectedAddress
                             console.log('item:',item)
+                            const itemAmount = item.amount.toLocaleString().replace(/,/g,'');
 
-                            const parsed =  isNaN( renderFromWei(toBN(String(item.amount)))  )   ? '0' : renderFromWei(toBN(String(item.amount)));
+                            const parsed =  isNaN( renderFromWei(toBN(itemAmount)  ))   ? '0' : renderFromWei(toBN(itemAmount));
 
                             const amount = is_expense ?  -parseFloat(parsed) :  parseFloat(parsed);
 

@@ -232,12 +232,15 @@ function TransactionHistory(props) {
 						const checked = res.reverse().map((item, index) => {
 							const is_reward = item.sender === ''
 							const is_expense = item.sender === props.selectedAddress
+
+							const itemAmount = item.amount.toLocaleString().replace(/,/g,'');
+
 							return {
 								index,
 								sender: item.sender,
 								recipient: item.recipient,
 								time: item.dtblockchain,
-								amount: renderFromWei(toBN(String(item.amount))),
+								amount: renderFromWei(toBN(itemAmount)),
 								blocknumber:item.blocknumber,
 								is_reward,
 								is_expense,
