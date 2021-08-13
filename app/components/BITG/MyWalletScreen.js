@@ -357,7 +357,7 @@ function MyWalletScreen({
 						res.reverse().map((item, index) => {
 							const is_reward = item.sender === ''
                             const is_expense = item.sender === selectedAddress
-                            console.log('item:',item)
+                 
                             const itemAmount = item.amount.toLocaleString().replace(/,/g,'');
 
                             const parsed =  isNaN( renderFromWei(toBN(itemAmount)  ))   ? '0' : renderFromWei(toBN(itemAmount));
@@ -374,7 +374,6 @@ function MyWalletScreen({
 
 						})
                         setGraphData(balances)
-                        console.log('bal',balances)
                         setIncome(added)
                         setExpense(Math.abs(loss))
 					}
@@ -423,58 +422,12 @@ function MyWalletScreen({
 
     const [impactData, setImpactData] = useState(dummy_impact);
 
-    // useEffect(() => {
-    //     getWalletInfo()
-    // }, [state, walletContext.state]);
-
-    const getWalletInfo = async () => {
-
-        setGraphData([Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100])
-
-        // try {
-        //     const wallet = WalletManager.getWalletByName('BITGWallet');
-        //     const balanceWallet = await wallet.getBalance();
-        //     const exchangeRateWallet = await WalletManager.getExchangeRate();
-        //     const balanceConfirmed = (balanceWallet.confirmed + balanceWallet.unconfirmed) / SATOSHI_CONST
-        //     const transactions = await getUserTransactions()
-        //     if (transactions != undefined && transactions != null) {
-        //         const transactionsParse = JSON.parse(transactions)
-        //         const transactionsFiltered = transactionsParse.filter(item => item.send_amount > 0)
-        //         const balancePoints = getBalancePoints(transactionsFiltered, periodDays, balanceConfirmed)
-        //         const inc = getIncome(transactionsFiltered, periodDays)
-        //         const exp = getExpenses(transactionsFiltered, periodDays)
-        //         setGraphData(balancePoints)
-        //         setIncome(inc)
-        //         setExpense(exp)
-        //         console.log(balancePoints);
-        //     }
-
-        //     setAvailableBalance({
-        //         ...availableBalance,
-        //         balance: balanceConfirmed,
-        //         exchangeBalance: balanceConfirmed * exchangeRateWallet
-        //     })
-        // } catch (error) {
-        //     console.log(error);
-        //     setAvailableBalance(undefined)
-        // }
-    }
-
-    const onMenuPress = () => {
-        navigation.toggleDrawer()
-    }
 
     const onRefresh = async () => {
         NetInfo.fetch().then(state => {
             if (state.isConnected) {
                 (async () => {
                     setLoading(true)
-                    // try {
-                    //     await WalletManager.connect();
-                    //     walletContext.setWalletConnection(true)
-                    // } catch (error) {
-                    //     console.log(error);
-                    // }
                     setLoading(false)
                 })();
             }
@@ -558,8 +511,6 @@ function MyWalletScreen({
 
     return (
         <View style={styles.container}>
-            {/* <ToolBar title={Strings.MY_WALLET} iconName={Strings.ICON_MENU} onMenuPress={onMenuPress} /> */}
-
             {
                 availableBalance === undefined ?
                     <ScrollView style={{ flex: 1 }} refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}>
