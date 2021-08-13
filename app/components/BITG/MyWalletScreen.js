@@ -18,7 +18,7 @@ import { NavigationContext } from 'react-navigation';
 import { getBITGWalletNavbarOptions } from '../UI/Navbar';
 import { toFixedFloor } from './lib/Helpers'
 
-import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol } from '../../util/number';
+import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol ,toBN} from '../../util/number';
 import moment from 'moment'
 
 import BITGAccountOverview from './BITGAccountOverview'
@@ -31,7 +31,7 @@ import {
 } from '../../reducers/swaps';
 import axios from 'axios';
 import AppConstants from '../../core/AppConstants'
-import {BN_ONE, BN_TEN,formatBalance,isBn,isUndefined,BN_ZERO,BN_TWO,toBN,bnToBn}  from '@polkadot/util'
+import {BN_ONE, BN_TEN,formatBalance,isBn,isUndefined,BN_ZERO,BN_TWO,bnToBn}  from '@polkadot/util'
 
 const styles = StyleSheet.create({
     container: {
@@ -330,6 +330,8 @@ function MyWalletScreen({
         balanceFiat: 0
     });
 
+    const [mybalance,setMyBalance] = useState(0)
+
     const [expense,setExpense] = useState(0)
     const [income,setIncome] = useState(0)
     const [history,setHistory] = useState([])
@@ -350,31 +352,31 @@ function MyWalletScreen({
                         const res = response.data.transactions;
                         let added = 0;
                         let loss = 0;
-						const balances = res.reverse().map((item, index) => {
+
+                        let balances = []
+						res.reverse().map((item, index) => {
 							const is_reward = item.sender === ''
                             const is_expense = item.sender === selectedAddress
                             console.log('item:',item)
-                            // console.log('bntobn:',bnToBn(item.amount))
-                            const amount = is_expense ?  renderFromWei(toBN(String(item.amount))) :  '-'+ renderFromWei(toBN(String(item.amount)));
+
+                            const parsed =  isNaN( renderFromWei(toBN(String(item.amount)))  )   ? '0' : renderFromWei(toBN(String(item.amount)));
+
+                            const amount = is_expense ?  -parseFloat(parsed) :  parseFloat(parsed);
 
                             if(is_expense){
                                 loss += parseFloat(amount)
                             }else{
                                 added += parseFloat(amount)
                             }
-							return {
-								amount,
-							};
+
+                            balances.push(amount)
 
 						})
-                        setHistory(balances)
+                        setGraphData(balances)
                         console.log('bal',balances)
-                        console.log('added:',added)
-                        console.log('los:',loss)
+                        setIncome(added)
+                        setExpense(Math.abs(loss))
 					}
-
-
-					// setItem(response.data)
 				}
 			} catch (error) {
 				console.log('query error:', error);
@@ -385,12 +387,12 @@ function MyWalletScreen({
 		if (selectedAddress) {
 			fetchData(selectedAddress)
 		}
-	}, [selectedAddress]);
+	}, [selectedAddress,mybalance]);
 
     useEffect(() => {
         try {
             if (accounts && accounts[selectedAddress] && accounts[selectedAddress].balance) {
-                const balance = renderFromWei(accounts[selectedAddress].balance);
+                const balance = renderFromWei(accounts[selectedAddress].balance,3);
                 let balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
 
                 if (balance === '0') {
@@ -401,6 +403,7 @@ function MyWalletScreen({
                     balance,
                     balanceFiat
                 })
+                setMyBalance(balance)
             }
 
         } catch (e) {

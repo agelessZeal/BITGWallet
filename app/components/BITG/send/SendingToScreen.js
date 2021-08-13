@@ -383,7 +383,6 @@ class SendingToScreen extends PureComponent {
         propagateSwipe
       >
         <SendAddressModal
-          selectedAddress
           inputSearch={toSelectedAddress}
           onAccountPress={this.onToSelectedAddressChange}
           onAccountLongPress={dummy}
