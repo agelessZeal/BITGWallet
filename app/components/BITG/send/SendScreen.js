@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { getEmptyHeaderOptions, getBITGWalletNavbarOptions } from '../../UI/Navbar';
-import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei } from '../../../util/number';
+import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei,getCurrencySymbol } from '../../../util/number';
 import SendingToScreen from './SendingToScreen';
 import SendingProgressScreen from './SendingProgressScreen';
 import PaymentSendScreen from './PaymentSendScreen';
@@ -544,17 +544,17 @@ function SendScreen({
               />
             </ViewPager>
             {loading == true ? null : (
-              <KeyboardAvoidingView
+              <View
                 behavior={Platform.OS === 'ios' ? 'position' : null}>
                 <View style={styles.footerView}>
                   {page == 0 || page > 1 ? (
                     <View style={styles.previousButton} />
                   ) : (
-                      <TouchableRipple
+                      <TouchableOpacity
                         style={styles.previousButton}
                         onPress={() => move(-1)}>
                         <Text style={styles.previousText}>{strings('bitg_wallet.previous')}</Text>
-                      </TouchableRipple>
+                      </TouchableOpacity>
                     )}
                   <View
                     style={{
@@ -593,17 +593,17 @@ function SendScreen({
                   {page > 1 ? (
                     <View style={styles.nextButton} />
                   ) : (
-                      <TouchableRipple
+                      <TouchableOpacity
                         style={styles.nextButton}
                         onPress={() => move(1)}>
                         <Text style={styles.nextText}>{` ${page == 1
                           ? strings('bitg_wallet.confirm')
                           : strings('bitg_wallet.next')
                           }  `}</Text>
-                      </TouchableRipple>
+                      </TouchableOpacity>
                     )}
                 </View>
-              </KeyboardAvoidingView>
+              </View>
             )}
           </>
         )}

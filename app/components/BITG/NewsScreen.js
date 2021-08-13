@@ -1,5 +1,5 @@
 import React ,{useState,useContext,useEffect} from 'react';
-import { View, StyleSheet, FlatList, Image, Text, Linking, RefreshControl } from 'react-native';
+import { View, StyleSheet, FlatList, Image, Text, Linking, RefreshControl, TouchableOpacity } from 'react-native';
 
 import { TouchableRipple } from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
@@ -42,6 +42,35 @@ const styles = StyleSheet.create({
     }
 })
 
+const dummy_news = [
+    {
+        id:1,
+        image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
+        header:"Article main heading",
+        url:"https://bitg.org",
+        datePublished:"June 12 2011",
+        description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
+
+    },
+    // {
+    //     id:2,
+    //     image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
+    //     header:"Article main heading",
+    //     url:"https://bitg.org",
+    //     datePublished:"June 12 2011",
+    //     description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
+
+    // },
+    // {
+    //     id:3,
+    //     image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
+    //     header:"Article main heading",
+    //     url:"https://bitg.org",
+    //     datePublished:"June 12 2011",
+    //     description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
+
+    // }
+]
 
 function NewsScreen(props) {
 
@@ -50,35 +79,7 @@ function NewsScreen(props) {
     const client = createApolloClient();
 
     const [loading, setLoading] = useState(false);
-    const [data, setData] = useState([
-        {
-            id:1,
-            image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
-            header:"Article main heading",
-            url:"https://bitg.org",
-            datePublished:"June 12 2011",
-            description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
-
-        },
-        // {
-        //     id:2,
-        //     image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
-        //     header:"Article main heading",
-        //     url:"https://bitg.org",
-        //     datePublished:"June 12 2011",
-        //     description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
-
-        // },
-        // {
-        //     id:3,
-        //     image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
-        //     header:"Article main heading",
-        //     url:"https://bitg.org",
-        //     datePublished:"June 12 2011",
-        //     description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
-
-        // }
-    ]);
+    const [data, setData] = useState(dummy_news);
 
     const onMenuPress = () => {
         navigation.pop()
@@ -99,8 +100,18 @@ function NewsScreen(props) {
                 query: GET_ARTICLES
             });
             if (data.articles.nodes.length > 0) {
-                let arr = data.articles.nodes.sort((a, b) => Moment(a.datePublished).format('YYYYMMDD') - Moment(b.datePublished).format('YYYYMMDD')).reverse()
+                const news = data.articles.nodes;
+                
+                const arranged = news.map((item) => {
+                    return {
+                        ...item,
+                        time:Moment(item.datePublished).format('X')
+                    }
+                })
+
+                const arr = arranged.sort((a, b) => b.time - a.time);
                 setData(arr)
+
             }
         } catch (error) {
             console.log(error);
@@ -134,7 +145,7 @@ function NewsScreen(props) {
 }
 
 const ItemView = ({ itemData, itemClicked }) => (
-    <TouchableRipple style={styles.itemContainer} onPress={() => itemClicked(itemData)}>
+    <TouchableOpacity style={styles.itemContainer} onPress={() => itemClicked(itemData)}>
         <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ flex: 2, backgroundColor: colors.transparent }}>
                 <Image source={{ uri: itemData.image }} style={styles.imgBG} />
@@ -159,7 +170,7 @@ const ItemView = ({ itemData, itemClicked }) => (
                 </Text>
             </View>
         </View>
-    </TouchableRipple>
+    </TouchableOpacity>
 )
 
 
