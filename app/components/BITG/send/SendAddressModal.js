@@ -168,7 +168,7 @@ class SendAddressModal extends PureComponent {
 
 
 	renderMyAccounts = () => {
-		const { identities, onAccountPress, inputSearch, onAccountLongPress } = this.props;
+		const { identities, onAccountPress, inputSearch, onAccountLongPress ,selectedAddress} = this.props;
 		const { myAccountsOpened } = this.state;
 		if (inputSearch) return;
 		return !myAccountsOpened ? (
@@ -181,7 +181,7 @@ class SendAddressModal extends PureComponent {
 			</TouchableOpacity>
 		) : (
 				<View>
-					{Object.keys(identities).map(address => (
+					{Object.keys(identities).filter(address => address !== selectedAddress).map(address => (
 						<AddressElement
 							key={address}
 							address={address}
@@ -241,7 +241,8 @@ const mapStateToProps = state => ({
 	addressBook: state.engine.backgroundState.AddressBookController.addressBook,
 	identities: state.engine.backgroundState.PreferencesController.identities,
 	network: state.engine.backgroundState.NetworkController.network,
-	transactions: state.engine.backgroundState.TransactionController.transactions
+	transactions: state.engine.backgroundState.TransactionController.transactions,
+	selectedAddress: state.engine.backgroundState.PreferencesController.selectedAddress,
 });
 
 export default connect(mapStateToProps)(SendAddressModal);

@@ -18,7 +18,7 @@ import { NavigationContext } from 'react-navigation';
 import { getBITGWalletNavbarOptions } from '../UI/Navbar';
 import { toFixedFloor } from './lib/Helpers'
 
-import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol ,toBN} from '../../util/number';
+import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol } from '../../util/number';
 import moment from 'moment'
 
 import BITGAccountOverview from './BITGAccountOverview'
@@ -31,7 +31,7 @@ import {
 } from '../../reducers/swaps';
 import axios from 'axios';
 import AppConstants from '../../core/AppConstants'
-
+import {BN_ONE, BN_TEN,formatBalance,isBn,isUndefined,BN_ZERO,BN_TWO,toBN,bnToBn}  from '@polkadot/util'
 
 const styles = StyleSheet.create({
     container: {
@@ -354,6 +354,7 @@ function MyWalletScreen({
 							const is_reward = item.sender === ''
                             const is_expense = item.sender === selectedAddress
                             console.log('item:',item)
+                            // console.log('bntobn:',bnToBn(item.amount))
                             const amount = is_expense ?  renderFromWei(toBN(String(item.amount))) :  '-'+ renderFromWei(toBN(String(item.amount)));
 
                             if(is_expense){
