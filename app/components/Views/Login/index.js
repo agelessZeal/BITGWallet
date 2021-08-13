@@ -541,13 +541,13 @@ class Login extends PureComponent {
 
 
 						<Text style={styles.title}>{strings('login.unlock_walllet')}</Text>
-
+{/* 
 						<View style={styles.fingerWrapper}>
 								<Image
 									source={require('../../../images/ic_fingerprint.png')}
 									style={styles.fingerImage}
 								/>
-						</View>
+						</View> */}
 
 						<View style={styles.field}>
 							<Text style={styles.label}>{strings('login.password')}</Text>

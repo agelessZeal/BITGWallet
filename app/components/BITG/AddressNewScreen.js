@@ -262,6 +262,8 @@ function AddressNewScreen(props) {
 	const onScan = () => {
 		navigation.navigate('QRScanner', {
 			onScanSuccess: meta => {
+				console.log('scan address meta:',meta)
+
 				if (meta.target_address) {
 					console.log('scan address:',meta.target_address)
 					const isValid = isValidAddressPolkadotAddress(meta.target_address)
