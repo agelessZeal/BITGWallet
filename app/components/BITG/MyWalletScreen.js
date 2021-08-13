@@ -286,11 +286,13 @@ const initiativeImageSource = require("../../images/ic_vibration_24px.png");
 const shopImageSource = require("../../images/ic_store_mall_directory_24px.png");
 const dummy_impact = [
     {
+        id:1,
         title: 'Name',
         time: '5 min ago',
         content: 'New impact news, from bitg'
     }, 
     {
+        id:2,
         title: 'Name s',
         time: '1 hour ago',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
@@ -482,6 +484,12 @@ function MyWalletScreen({
     const removeImpact = (item) =>{
         console.log('removeImpact:',item)
 
+        const impacts = impactData;
+        if(impacts && impacts.length > 0){
+            const filter = impacts.filter((news) => news.id !== item.id )
+            setImpactData(filter)
+        }
+
     }
 
     const account = { address: selectedAddress, ...identities[selectedAddress], ...accounts[selectedAddress] };
@@ -529,30 +537,36 @@ function MyWalletScreen({
                                         </View>
                                     </View>
                                 </View>
-                                <View style={styles.impactWrapper}>
-                                    {
-                                        impactData.map((item, index) => (
-                                            <View key={index} style={styles.impactItem}>
-                                                <View style={styles.impactItemStarWrapper}>
-                                                    <Image source={impactImageSource} style={styles.impactItemStar} />
+
+                                {
+                                    impactData && impactData.length > 0 && (
+                                        <View style={styles.impactWrapper}>
+                                        {
+                                            impactData.map((item, index) => (
+                                                <View key={index} style={styles.impactItem}>
+                                                    <View style={styles.impactItemStarWrapper}>
+                                                        <Image source={impactImageSource} style={styles.impactItemStar} />
+                                                    </View>
+    
+                                                    <TouchableOpacity style={styles.impactItemTitle}>
+                                                        <Text style={styles.impactText1}>
+                                                            {`${item.title}  ${item.time}`}
+                                                        </Text>
+                                                        <Text style={styles.impactText2} numberOfLines={2} ellipsizeMode='tail'>
+                                                            {item.content}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity style={styles.impactItemClose} onPress={() =>removeImpact(item)}>
+                                                        <MaterialIcons name="close" size={14} color={colors.grey300} />
+                                                    </TouchableOpacity>
+    
                                                 </View>
+                                            ))
+                                        }
+                                        </View>
+                                    )
+                                }
 
-                                                <TouchableOpacity style={styles.impactItemTitle}>
-                                                    <Text style={styles.impactText1}>
-                                                        {`${item.title}  ${item.time}`}
-                                                    </Text>
-                                                    <Text style={styles.impactText2} numberOfLines={2} ellipsizeMode='tail'>
-                                                        {item.content}
-                                                    </Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity style={styles.impactItemClose} onPress={() =>removeImpact(item)}>
-                                                    <MaterialIcons name="close" size={14} color={colors.grey300} />
-                                                </TouchableOpacity>
-
-                                            </View>
-                                        ))
-                                    }
-                                </View>
                                 <View style={styles.transactionContainer}>
                                     <View style={{ flexDirection: 'row' }}>
                                         <MaterialIcons style={{ transform: [{ rotate: "90deg" }] }} name="compare-arrows" size={24} color={colors.grey} />

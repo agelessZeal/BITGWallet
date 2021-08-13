@@ -43,15 +43,15 @@ const styles = StyleSheet.create({
 })
 
 const dummy_news = [
-    {
-        id:1,
-        image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
-        header:"Article main heading",
-        url:"https://bitg.org",
-        datePublished:"June 12 2011",
-        description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
+    // {
+    //     id:1,
+    //     image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
+    //     header:"Article main heading",
+    //     url:"https://bitg.org",
+    //     datePublished:"June 12 2011",
+    //     description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
 
-    },
+    // },
     // {
     //     id:2,
     //     image:"https://miro.medium.com/max/700/1*P72GImnorJZKSYyHJBSFYw.jpeg",
