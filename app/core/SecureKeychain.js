@@ -14,7 +14,7 @@ import {
 const privates = new WeakMap();
 const encryptor = new Encryptor();
 const defaultOptions = {
-	service: 'com.metamask',
+	service: 'com.bitg',
 	authenticationPromptTitle: strings('authentication.auth_prompt_title'),
 	authenticationPrompt: { title: strings('authentication.auth_prompt_desc') },
 	authenticationPromptDesc: strings('authentication.auth_prompt_desc'),
@@ -105,7 +105,7 @@ export default {
 		}
 
 		const encryptedPassword = await instance.encryptPassword(password);
-		await Keychain.setGenericPassword('metamask-user', encryptedPassword, { ...defaultOptions, ...authOptions });
+		await Keychain.setGenericPassword('bitg-user', encryptedPassword, { ...defaultOptions, ...authOptions });
 
 		if (type === this.TYPES.BIOMETRICS) {
 			await AsyncStorage.setItem(BIOMETRY_CHOICE, TRUE);
