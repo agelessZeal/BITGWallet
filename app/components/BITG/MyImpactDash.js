@@ -7,7 +7,8 @@ import {
 	TouchableOpacity,
 	ImageBackground,
 	FlatList,
-	RefreshControl
+	RefreshControl,
+	ScrollView
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -423,7 +424,6 @@ class MyImpactDash extends PureComponent {
 						<Text style={styles.headerText}>{strings('bitg_wallet.my_impact')}</Text>
 					</View>
 				</ImageBackground>
-
 				<View style={styles.header}>
 					<View style={styles.bitg}>
 						<View style={styles.totalRewards}>
@@ -453,36 +453,39 @@ class MyImpactDash extends PureComponent {
 						</TouchableOpacity>
 					</View>
 				</View>
+				<ScrollView>
+					<View style={styles.header}>
+						<View style={styles.shield}>
+							<MaterialCommunityIcons name="shield" size={50} color={colors.orange} />
+							<Text style={styles.smallShieldText}>{level}</Text>
+						</View>
 
-				<View style={styles.header}>
-					<View style={styles.shield}>
-						<MaterialCommunityIcons name="shield" size={50} color={colors.orange} />
-						<Text style={styles.smallShieldText}>{level}</Text>
+						<Text style={styles.moreText} numberOfLines={2}>
+							Complete 3 more{'\n'}actions to progress
+						</Text>
+
+						<Text style={styles.moreText2} numberOfLines={2}>
+							Great Work! You're in the {'\n'}top 10% of users
+						</Text>
 					</View>
 
-					<Text style={styles.moreText} numberOfLines={2}>
-						Complete 3 more{'\n'}actions to progress
-					</Text>
+					<View style={styles.historyWrapper}>
+						<Text style={styles.recentText}>{strings('bitg_wallet.recent_activity')}</Text>
+						<TouchableOpacity style={styles.rewardsHistoryButton} activeOpacity={0.4} onPress={this.goToHistory}>
+							<Text style={styles.rewardsHistoryText}>{strings('bitg_wallet.impact_history')}</Text>
+						</TouchableOpacity> 
+					</View>
 
-					<Text style={styles.moreText2} numberOfLines={2}>
-						Great Work! You're in the {'\n'}top 10% of users
-					</Text>
-				</View>
+					<FlatList
+						refreshControl={<RefreshControl refreshing={loading} onRefresh={this.onRefresh} />}
+						style={{ margin: 10 }}
+						data={activities}
+						renderItem={this.renderItem}
+						keyExtractor={item => item.id + ''}
+					/>
+				</ScrollView>
 
-				<View style={styles.historyWrapper}>
-					<Text style={styles.recentText}>{strings('bitg_wallet.recent_activity')}</Text>
-					<TouchableOpacity style={styles.rewardsHistoryButton} activeOpacity={0.4} onPress={this.goToHistory}>
-						<Text style={styles.rewardsHistoryText}>{strings('bitg_wallet.impact_history')}</Text>
-					</TouchableOpacity> 
-				</View>
 
-				<FlatList
-					refreshControl={<RefreshControl refreshing={loading} onRefresh={this.onRefresh} />}
-					style={{ margin: 10 }}
-					data={activities}
-					renderItem={this.renderItem}
-					keyExtractor={item => item.id + ''}
-				/>
 
 				{/* <TouchableOpacity style={styles.rewardsHistoryButton} activeOpacity={0.4}>
 					<Text style={styles.rewardsHistoryText}>{strings('bitg_wallet.reward_history')}</Text>

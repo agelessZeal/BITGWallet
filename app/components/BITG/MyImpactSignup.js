@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState, useContext, PureComponent } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity ,TextInput} from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity ,TextInput,KeyboardAvoidingView} from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -11,6 +11,7 @@ import { getBITGWalletNavbarOptions } from '../UI/Navbar';
 import { getPasswordStrengthWord } from "../../util/password";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import zxcvbn from 'zxcvbn';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const styles = StyleSheet.create({
 	container: {
@@ -198,7 +199,11 @@ class MyImpactSignup extends PureComponent {
 
 
 	onPressStart = async () => {
-		this.props.navigation.navigate('MyImpactDash');
+		const {password,email} = this.state
+		if(password !== '' && email !== ''){
+			this.props.navigation.navigate('MyImpactDash');
+		}
+		
 	}
 
 	onPasswordChange = val => {
@@ -243,17 +248,13 @@ class MyImpactSignup extends PureComponent {
 
 		const emailCorrect =  email !== '';
 
-
 		const correctInputed = emailCorrect && password !== '';
 		const canSubmit = correctInputed;
-
-		
-
 
 		const passwordStrengthWord = getPasswordStrengthWord(passwordStrength);
 
 		return (
-			<View style={styles.container}>
+			<KeyboardAwareScrollView style={styles.container}>
 				<View style={styles.header}>
 					<Image  source={impactImageSource} style={styles.startImage}/>
 
@@ -279,7 +280,6 @@ class MyImpactSignup extends PureComponent {
 				<View style={styles.field}>
 					<Text style={styles.subTitle}>{strings('bitg_wallet.email_address')}</Text>
 					<TextInput
-						
 						style={[styles.input, inputWidth]}
 						value={email}
 						onChangeText={this.onEmailChange}
@@ -346,7 +346,7 @@ class MyImpactSignup extends PureComponent {
 					</StyledButton>
 				</View>
 
-			</View>
+			</KeyboardAwareScrollView>
 		);
 	}
 }
