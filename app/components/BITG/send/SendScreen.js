@@ -26,17 +26,19 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { getEmptyHeaderOptions, getBITGWalletNavbarOptions } from '../../UI/Navbar';
-import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei,getCurrencySymbol } from '../../../util/number';
+import { renderFromWei, weiToFiat, hexToBN, weiToFiatNumber, fiatNumberToWei, getCurrencySymbol } from '../../../util/number';
 import SendingToScreen from './SendingToScreen';
 import SendingProgressScreen from './SendingProgressScreen';
 import PaymentSendScreen from './PaymentSendScreen';
 import Device from '../../../util/Device';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { makeAlert, sleep } from '../lib/Helpers'
 // import WalletManager from '../../wallet';
 import { createApolloClient } from '../api/createApolloClient';
 
 import Engine from '../../../core/Engine';
-import {BN_ONE, BN_TEN,formatBalance,isBn,isUndefined,BN_ZERO,BN_TWO}  from '@polkadot/util'
+import { BN_ONE, BN_TEN, formatBalance, isBn, isUndefined, BN_ZERO, BN_TWO } from '@polkadot/util'
 
 
 // Import the keyring as required
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
   },
   viewPager: {
     flex: 1,
-    backgroundColor:colors.white
+    backgroundColor: colors.white,
   },
   footerView: {
     height: 40,
@@ -144,11 +146,11 @@ function SendScreen({
     address: undefined,
     amount: undefined,
     amountInput: undefined,
-    fiatInput:undefined,
+    fiatInput: undefined,
     transactionHash: undefined,
   });
 
-  const [paymentInfo,setPaymentInfo] = useState(null)
+  const [paymentInfo, setPaymentInfo] = useState(null)
 
   const [availableBalance, setAvailableBalance] = useState({
     balance: 0,
@@ -172,7 +174,7 @@ function SendScreen({
     } catch (e) {
       console.log('calc balance error:', e)
     }
-  },[accounts, selectedAddress])
+  }, [accounts, selectedAddress])
 
   const [clearChildrenState, setClearChildrenState] = useState(false);
   const [refreshWallet, setRefreshWallet] = useState(false);
@@ -182,8 +184,8 @@ function SendScreen({
   const [page, setPage] = useState(0);
   const viewPager = useRef();
 
-  const [paymentTransfer,setPaymentTransfer] = useState(null)
-  
+  const [paymentTransfer, setPaymentTransfer] = useState(null)
+
 
   useEffect(() => {
     let addressData = navigation.getParam('data', null)
@@ -230,26 +232,26 @@ function SendScreen({
   };
   const inputToBn = (input) => {
 
-    if(!input){
+    if (!input) {
       return null;
     }
-    const siPower =  new BN(18);
+    const siPower = new BN(18);
     const basePower = 18;
     const siUnitPower = 0;
 
     const isDecimalValue = input.match(/^(\d+)\.(\d+)$/);
 
     let result;
-  
+
     if (isDecimalValue) {
       if (siUnitPower - isDecimalValue[2].length < -basePower) {
         result = new BN(-1);
       }
-  
+
       const div = new BN(input.replace(/\.\d*$/, ''));
       const modString = input.replace(/^\d+\./, '').substr(0, api.registry.chainDecimals[0]);
       const mod = new BN(modString);
-  
+
       result = div
         .mul(BN_TEN.pow(siPower))
         .add(mod.mul(BN_TEN.pow(new BN(basePower + siUnitPower - modString.length))));
@@ -260,13 +262,21 @@ function SendScreen({
     return result;
 
   }
+  const goPrevious = () => {
+    var nextPage = page - 1;
+    if(nextPage === 0){
+      setPage(0)
+    }else{
+      viewPager.current.setPage(nextPage);
+    }
+    
+  }
 
   const move = delta => {
-    showAlert
+
     NetInfo.fetch().then(async state => {
       if (!state.isConnected) {
         makeAlert('Please connect to the internet');
-
       } else {
         // console.log('move',showAlert)
         var nextPage = page + delta;
@@ -298,19 +308,19 @@ function SendScreen({
                 'You try to send more BITG than you have on your wallet',
               );
             } else {
-              if(nextPage === 1){
+              if (nextPage === 1) {
 
                 let result = inputToBn(sendingData.amount);
 
-                if(!result){
+                if (!result) {
                   return
                 }
 
                 setLoading(true);
 
-                const transfer = api.tx.balances.transfer(sendingData.address,result);
+                const transfer = api.tx.balances.transfer(sendingData.address, result);
 
-                console.log('transfer:',transfer)
+                console.log('transfer:', transfer)
 
                 setPaymentTransfer(transfer)
 
@@ -328,13 +338,14 @@ function SendScreen({
                   setLoading(false);
 
                   // viewPager.current.setPage(2);
-
-                  sleep(50).then(() => {
-                    viewPager.current.setPage(nextPage);
-                  });
+                  setPage(1)
+                  // sleep(50).then(() => {
+                    
+                  //   // viewPager.current.setPage(nextPage);
+                  // });
 
                 } catch (error) {
-                  console.log('payment infro error:',error)
+                  console.log('payment infro error:', error)
                   setLoading(false);
                 }
 
@@ -345,38 +356,38 @@ function SendScreen({
                   setLoading(true);
 
                   try {
-                    
+
                     const { KeyringController } = Engine.context;
 
                     const pairs = await KeyringController.getPolkaPair(selectedAddress);
 
                     // console.log('current polka pair:',pairs,selectedAddress)
 
-                    if(!pairs || (pairs && pairs.length === 0)){
+                    if (!pairs || (pairs && pairs.length === 0)) {
                       console.log('Not found the correct polka pair')
                       return;
                     }
-                    const pair =   pairs[0]
+                    const pair = pairs[0]
 
-                    console.log('Transfer:,',paymentTransfer)
-                          
+                    console.log('Transfer:,', paymentTransfer)
+
                     // let { data: { free }, nonce } = await api.query.system.account(pair.address);
-    
+
                     // console.log(`${pair.address} has a balance of ${free}, nonce ${nonce}`);
                     // console.log('amount:',sendingData.amount,parseFloat(sendingData.amount))
 
 
                     // // Sign and send the transaction using our account
                     const hash = await paymentTransfer.signAndSend(pair);
-                  
-                    console.log('Transfer sent with hash', hash.toHex(),hash);
+
+                    console.log('Transfer sent with hash', hash.toHex(), hash);
 
                     setSendingData({
                       ...sendingData,
                       transactionHash: hash.toHex(),
                     });
 
-                    
+
                     setLoading(false);
 
                     sleep(50).then(() => {
@@ -385,12 +396,13 @@ function SendScreen({
                       AccountTrackerController.refresh();
 
                       viewPager.current.setPage(nextPage);
+                      setPage(2)
                     });
 
-                   
+
 
                   } catch (error) {
-                    console.log('error:',error)
+                    console.log('error:', error)
                     setLoading(false);
                   }
                 } else {
@@ -399,7 +411,7 @@ function SendScreen({
                   );
                 }
               } else {
-                viewPager.current.setPage(nextPage);
+                // viewPager.current.setPage(nextPage);
               }
             }
           }
@@ -416,7 +428,7 @@ function SendScreen({
       address: undefined,
       amount: undefined,
       amountInput: undefined,
-      fiatInput:undefined,
+      fiatInput: undefined,
       transactionHash: undefined,
     });
     viewPager.current.setPageWithoutAnimation(0);
@@ -475,6 +487,10 @@ function SendScreen({
     // setTransaction(transactions);
   };
 
+  const goNext = () => {
+    move(1)
+  }
+
   return (
     <View style={styles.container}>
       {page == 0 ? (
@@ -505,54 +521,74 @@ function SendScreen({
           </View>
         </ScrollView>
       ) : (
-          <>
-            <ViewPager
-              ref={viewPager}
-              style={styles.viewPager}
-              initialPage={0}
-              scrollEnabled={false}
-              onPageSelected={onPageSelected}>
-              <SendingToScreen
-                key="1"
-                currentPage={page}
-                getSendingData={getSendingData}
-                navigation={navigation}
-                clearChildrenState={clearChildrenState}
-                loaderIndicator={loading}
-              />
-              <SendingProgressScreen
-                key="2"
-                currentPage={page}
-                myCurrentWalletBalance={myBalance}
-                sendingData={sendingData}
-                paymentInfo={paymentInfo}
-                apolloClient={client}
-                getDataFromApi={getDataFromApi}
-                setLoaderIndicator={setLoaderIndicator}
-                loaderIndicator={loading}
-              />
-              <PaymentSendScreen
-                key="3"
-                newTransaction={newTransaction}
-                currentPage={page}
-                sendingData={sendingData}
-                viewTransactionHistory={openTransactionHistory}
-                showAlert={showAlert}
-                navigation={navigation}
-                // globalState={state}
-                updateGlobalState={updateTransactionsState}
-              />
-            </ViewPager>
+          <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, flexGrow: 1, justifyContent: 'space-between' }}>
+            {
+              page === 0 ? (
+
+                <SendingToScreen
+                  key="1"
+                  currentPage={page}
+                  getSendingData={getSendingData}
+                  navigation={navigation}
+                  clearChildrenState={clearChildrenState}
+                  loaderIndicator={loading}
+                  goNext={goNext}
+                />
+              )
+                : (
+                  <ViewPager
+                    ref={viewPager}
+                    style={styles.viewPager}
+                    initialPage={1}
+                    scrollEnabled={false}
+                    onPageSelected={onPageSelected}>
+                    <SendingToScreen
+                      key="1"
+                      currentPage={page}
+                      getSendingData={getSendingData}
+                      navigation={navigation}
+                      clearChildrenState={clearChildrenState}
+                      loaderIndicator={loading}
+                      goNext={goNext}
+                    />
+                    <SendingProgressScreen
+                      key="2"
+                      currentPage={page}
+                      myCurrentWalletBalance={myBalance}
+                      sendingData={sendingData}
+                      paymentInfo={paymentInfo}
+                      apolloClient={client}
+                      getDataFromApi={getDataFromApi}
+                      setLoaderIndicator={setLoaderIndicator}
+                      loaderIndicator={loading}
+                    />
+                    <PaymentSendScreen
+                      key="3"
+                      newTransaction={newTransaction}
+                      currentPage={page}
+                      sendingData={sendingData}
+                      viewTransactionHistory={openTransactionHistory}
+                      showAlert={showAlert}
+                      navigation={navigation}
+                      // globalState={state}
+                      updateGlobalState={updateTransactionsState}
+                    />
+                  </ViewPager>
+                )}
+
+
+
+
             {loading == true ? null : (
               <View
                 behavior={Platform.OS === 'ios' ? 'position' : null}>
-                <View style={styles.footerView}>
+                <KeyboardAvoidingView style={styles.footerView}>
                   {page == 0 || page > 1 ? (
                     <View style={styles.previousButton} />
                   ) : (
                       <TouchableOpacity
                         style={styles.previousButton}
-                        onPress={() => move(-1)}>
+                        onPress={goPrevious}>
                         <Text style={styles.previousText}>{strings('bitg_wallet.previous')}</Text>
                       </TouchableOpacity>
                     )}
@@ -602,11 +638,12 @@ function SendScreen({
                           }  `}</Text>
                       </TouchableOpacity>
                     )}
-                </View>
+                </KeyboardAvoidingView>
               </View>
             )}
-          </>
+          </KeyboardAwareScrollView>
         )}
+
     </View>
   );
 }
@@ -645,7 +682,7 @@ SendScreen.propTypes = {
   showAlert: PropTypes.func,
 
 
-	api: PropTypes.object,
+  api: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
@@ -656,7 +693,7 @@ const mapStateToProps = state => ({
   conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
   tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
   currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
-  api:state.polka.api
+  api: state.polka.api
 });
 
 const mapDispatchToProps = dispatch => ({

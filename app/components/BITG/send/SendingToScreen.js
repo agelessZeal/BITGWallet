@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Image, Platform, TextInput,ActivityIndicator, TouchableOpacity,Dimensions } from 'react-native';
+import React, { PureComponent ,useRef} from 'react';
+import { View, Text, StyleSheet, Image, Platform, TextInput,ActivityIndicator, TouchableOpacity,Dimensions, KeyboardAvoidingView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableRipple } from 'react-native-paper';
 // import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     marginEnd: 5,
     marginBottom: 5,
     fontSize: 18,
+    
 
   },
   amountInput: {
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     alignItems: 'center',
     textAlignVertical: 'center',
+    minWidth:'100%'
   },
   amountWrapper: {
     marginTop: 5,
@@ -204,6 +206,8 @@ class SendingToScreen extends PureComponent {
     clearChildrenState: PropTypes.bool,
 
     loaderIndicator: PropTypes.bool,
+
+    goNext:PropTypes.func
   };
 
   state = {
@@ -242,6 +246,10 @@ class SendingToScreen extends PureComponent {
 
   addressToInputRef = React.createRef();
 
+  bitgAmountInputRef = React.createRef();
+
+  bitgFiatInputRef = React.createRef();
+
   componentDidMount() {
     const pass_activity = this.props.navigation.getParam('activity', null);
     console.log()
@@ -261,7 +269,6 @@ class SendingToScreen extends PureComponent {
 
   onToSelectedAddressChange = async toSelectedAddress => {
 
-    console.log('onToSelectedAddressChange:', toSelectedAddress)
 
     const { AssetsContractController } = Engine.context;
     const { addressBook, network, identities, providerType } = this.props;
@@ -271,8 +278,10 @@ class SendingToScreen extends PureComponent {
     let [addToAddressToAddressBook, toSelectedAddressReady] = [false, false];
 
     if (isValidAddressPolkadotAddress(toSelectedAddress)) {
+
       this.setState({
         address: toSelectedAddress,
+        addressInput:toSelectedAddress,
         showModalAddress: false,
       })
 
@@ -544,9 +553,24 @@ class SendingToScreen extends PureComponent {
 				this.animatingAccountsModal = false;
 			}, 500);
 		}
-	};
-
-
+  };
+  
+  jumpAmount = () => {
+		const { current } = this.bitgAmountInputRef;
+		current && current.focus();
+  };
+  
+  jumpFiat = () => {
+		const { current } = this.bitgFiatInputRef;
+		current && current.focus();
+  };
+  
+  goNext = () => {
+    if(this.props.goNext){
+      this.props.goNext()
+    }
+  }
+  
   render = () => {
     const { ticker } = this.props;
     const { addressBook, network } = this.props;
@@ -566,7 +590,8 @@ class SendingToScreen extends PureComponent {
       isOnlyWarning,
       confusableCollection,
       showModalAddress,
-      amountInput
+      amountInput,
+      addressInput
     } = this.state;
 
 
@@ -581,8 +606,7 @@ class SendingToScreen extends PureComponent {
       confusableCollection && confusableCollection.length && !confusableCollection.some(hasZeroWidthPoints);
 
     return (
-      <KeyboardAwareScrollView style={{ flex: 1 }}>
-
+      <View>
         {
           loaderIndicator &&
           <View style={{
@@ -626,11 +650,15 @@ class SendingToScreen extends PureComponent {
           </Text>
           <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
             <TextInput
+              ref={this.addressToInputRef}
               style={styles.sendingInput}
               placeholder={strings('bitg_wallet.send_address_hint')}
               placeholderTextColor={colors.grey500}
-              editable={editable}
               onChangeText={this.addressFieldChanged}
+              value={addressInput}
+              returnKeyType='next'
+              autoCapitalize="none"
+              onSubmitEditing={this.jumpAmount}
               defaultValue={
                 address === undefined
                   ? name === undefined
@@ -673,12 +701,15 @@ class SendingToScreen extends PureComponent {
             />
 
             <TextInput
+              ref={this.bitgAmountInputRef}
               style={styles.amountInput}
               placeholder={`BITG ${strings('bitg_wallet.amount')}`}
               placeholderTextColor={colors.grey500}
-              keyboardType="numeric"
+              keyboardType='number-pad'
+              returnKeyType= {Platform.OS === 'ios' ? 'done': 'next'}
               onChangeText={this.amountBITGFieldChanged}
               value={amountInput}
+              onSubmitEditing={this.jumpFiat}
               defaultValue={
                 amountInput === undefined ? '' : amountInput
               }
@@ -700,20 +731,20 @@ class SendingToScreen extends PureComponent {
           /> */}
             <Text style={styles.inputCurrencyText}>{`${getCurrencySymbol(currentCurrency)} `}</Text>
             <TextInput
+              ref={this.bitgFiatInputRef}
               style={styles.amountInput}
               placeholder={`${String(currentCurrency).toUpperCase()} ${strings('bitg_wallet.amount')}`}
               placeholderTextColor={colors.grey500}
               keyboardType="numeric"
               onChangeText={this.amountFiatFieldChanged}
               value={fiat}
+              onSubmitEditing={this.goNext}
+              returnKeyType='done'
               defaultValue={
                 fiat === undefined ? '' : fiat
               }
             />
           </View>
-
-
-
         </View>
         {/* <AddressBookModal
         visibility={modalVisibilityAddressBook}
@@ -723,8 +754,7 @@ class SendingToScreen extends PureComponent {
       /> */}
         {/* {this.renderFromAccountModal()} */}
         {this.renderFromAddressModal()}
-
-      </KeyboardAwareScrollView>
+      </View>
     )
   }
 }
