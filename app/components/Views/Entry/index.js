@@ -95,6 +95,7 @@ const Entry = props => {
 			useNativeDriver: true,
 			isInteraction: false
 		}).start(() => {
+			console.log('onAnimationFinished:')
 			if (viewToGo && (viewToGo !== 'WalletView' || viewToGo !== 'Onboarding')) {
 				props.navigation.navigate(viewToGo);
 			} else if (viewToGo === 'Onboarding') {
@@ -107,6 +108,7 @@ const Entry = props => {
 
 	const animateAndGoTo = useCallback(
 		viewToGo => {
+			console.log('animateAndGoTo:',viewToGo)
 			setViewToGo(viewToGo);
 			if (Device.isAndroid()) {
 				animation && animation.current ? animation.current.play(0, 25) : onAnimationFinished();
@@ -124,20 +126,25 @@ const Entry = props => {
 			// Retreive the credentials
 			const { KeyringController } = Engine.context;
 			const credentials = await SecureKeychain.getGenericPassword();
+			console.log('credentials in entry:',credentials)
 			if (credentials) {
 				// Restore vault with existing credentials
 
 				await KeyringController.submitPassword(credentials.password);
+
+				console.log('submitPassword:')
 				const encryptionLib = await AsyncStorage.getItem(ENCRYPTION_LIB);
 				if (encryptionLib !== ORIGINAL) {
 					await recreateVaultWithSamePassword(credentials.password, props.selectedAddress);
 					await AsyncStorage.setItem(ENCRYPTION_LIB, ORIGINAL);
 				}
+				console.log('recreateVaultWithSamePassword')
 				// Get onboarding wizard state
 				const onboardingWizard = await AsyncStorage.getItem(ONBOARDING_WIZARD);
 				// Check if user passed through metrics opt-in screen
 				// const metricsOptIn = await AsyncStorage.getItem(METRICS_OPT_IN);
 				const metricsOptIn =  true;
+				console.log('')
 				if (!metricsOptIn) {
 					animateAndGoTo('OptinMetrics');
 				} else if (onboardingWizard) {
@@ -181,7 +188,7 @@ const Entry = props => {
 					}
 				}
 			} catch (error) {
-				Logger.error(error);
+				Logger.error(error);r
 			}
 
 			if (existingUser !== null) {
@@ -445,14 +452,23 @@ const Entry = props => {
 
 		console.log('my address:',props.selectedAddress)
 
+		// console.log('my api.query.assets.amount:',api.query.assets.amount)
+		
+
+		// const token = await api.query.assets.account(0,props.selectedAddress);
+		// console.log('token',token)
+		// console.log('my address:',api.query.assets.assets)
+
+		// api.query.assets.amount
+
 		  // Constuct the keyring after the API (crypto has an async init)
-		  const keyring = new Keyring({ type: 'sr25519' });
+		//   const keyring = new Keyring({ type: 'sr25519' });
 
 		  // Add Alice to our keyring with a hard-deived path (empty phrase, so uses dev)
-		  const alice = keyring.addFromUri('//Alice');
+		//   const alice = keyring.addFromUri('//Alice');
 
 
-		 let { data: { free }, nonce } = await api.query.system.account(alice.address);
+		//  let { data: { free }, nonce } = await api.query.system.account(alice.address);
 
 		//  console.log(`${alice.address} has a balance of ${free}, nonce ${nonce}`);
 		
