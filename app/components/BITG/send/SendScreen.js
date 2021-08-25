@@ -228,7 +228,7 @@ function SendScreen({
   };
 
   const onPageSelected = e => {
-    setPage(e.nativeEvent.position);
+    setPage(e.nativeEvent.position + 1);
   };
   const inputToBn = (input) => {
 
@@ -263,8 +263,8 @@ function SendScreen({
 
   }
   const goPrevious = () => {
-    var nextPage = page - 1;
-    if(nextPage === 0){
+    var nextPage = page - 2;
+    if(nextPage <= 0){
       setPage(0)
     }else{
       viewPager.current.setPage(nextPage);
@@ -281,7 +281,6 @@ function SendScreen({
         // console.log('move',showAlert)
         var nextPage = page + delta;
 
-        // viewPager.current.setPage(nextPage);
         console.log('sending data:', sendingData)
 
         if (
@@ -338,11 +337,11 @@ function SendScreen({
                   setLoading(false);
 
                   // viewPager.current.setPage(2);
-                  setPage(1)
-                  // sleep(50).then(() => {
-                    
-                  //   // viewPager.current.setPage(nextPage);
-                  // });
+                  setPage(nextPage)
+                  sleep(50).then(() => {
+                    setPage(nextPage)
+                    // viewPager.current.setPage(nextPage);
+                  });
 
                 } catch (error) {
                   console.log('payment infro error:', error)
@@ -395,7 +394,7 @@ function SendScreen({
                       const { AccountTrackerController } = Engine.context;
                       AccountTrackerController.refresh();
 
-                      viewPager.current.setPage(nextPage);
+                      viewPager.current.setPage(1);
                       setPage(2)
                     });
 
@@ -431,7 +430,8 @@ function SendScreen({
       fiatInput: undefined,
       transactionHash: undefined,
     });
-    viewPager.current.setPageWithoutAnimation(0);
+    // viewPager.current.setPageWithoutAnimation(0);
+    setPage(0)
     await sleep(2000);
     setClearChildrenState(false);
 
@@ -491,6 +491,8 @@ function SendScreen({
     move(1)
   }
 
+  console.log('next page:',page)
+
   return (
     <View style={styles.container}>
       {page == 0 ? (
@@ -521,28 +523,30 @@ function SendScreen({
           </View>
         </ScrollView>
       ) : (
-          <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, flexGrow: 1, justifyContent: 'space-between' }}>
+
+        <>
             {
               page === 0 ? (
-
-                <SendingToScreen
-                  key="1"
-                  currentPage={page}
-                  getSendingData={getSendingData}
-                  navigation={navigation}
-                  clearChildrenState={clearChildrenState}
-                  loaderIndicator={loading}
-                  goNext={goNext}
-                />
+                <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+                  <SendingToScreen
+                    key="1"
+                    currentPage={page}
+                    getSendingData={getSendingData}
+                    navigation={navigation}
+                    clearChildrenState={clearChildrenState}
+                    loaderIndicator={loading}
+                    goNext={goNext}
+                  />
+                </KeyboardAwareScrollView>
               )
                 : (
                   <ViewPager
                     ref={viewPager}
                     style={styles.viewPager}
-                    initialPage={1}
+                    initialPage={0}
                     scrollEnabled={false}
                     onPageSelected={onPageSelected}>
-                    <SendingToScreen
+                    {/* <SendingToScreen
                       key="1"
                       currentPage={page}
                       getSendingData={getSendingData}
@@ -550,9 +554,9 @@ function SendScreen({
                       clearChildrenState={clearChildrenState}
                       loaderIndicator={loading}
                       goNext={goNext}
-                    />
+                    /> */}
                     <SendingProgressScreen
-                      key="2"
+                      key="1"
                       currentPage={page}
                       myCurrentWalletBalance={myBalance}
                       sendingData={sendingData}
@@ -563,7 +567,7 @@ function SendScreen({
                       loaderIndicator={loading}
                     />
                     <PaymentSendScreen
-                      key="3"
+                      key="2"
                       newTransaction={newTransaction}
                       currentPage={page}
                       sendingData={sendingData}
@@ -641,7 +645,7 @@ function SendScreen({
                 </KeyboardAvoidingView>
               </View>
             )}
-          </KeyboardAwareScrollView>
+          </>
         )}
 
     </View>
