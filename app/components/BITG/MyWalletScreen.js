@@ -295,12 +295,12 @@ const dummy_impact = [
         time: '5 min ago',
         content: 'New impact news, from bitg'
     }, 
-    {
-        id:2,
-        title: 'Name s',
-        time: '1 hour ago',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
-    }
+    // {
+    //     id:2,
+    //     title: 'Name s',
+    //     time: '1 hour ago',
+    //     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
+    // }
 ] 
 
 function MyWalletScreen({
@@ -336,11 +336,13 @@ function MyWalletScreen({
     const [income,setIncome] = useState(0)
     const [history,setHistory] = useState([])
 
+
+
     useEffect(() => {
 		async function fetchData(address) {
 			try {
                 const dts = moment().subtract(30,'days').format()
-                console.log('dts:',dts)
+                // console.log('dts:',dts)
 
 				const response = await axios.get(`${AppConstants.TRANSACTION_QUERY_API}transactions?account=${address}&dts=${dts}`);
 
@@ -372,7 +374,11 @@ function MyWalletScreen({
 
                             balances.push(amount)
 
-						})
+                        })
+                        
+                        if(balances.length === 1){
+                            balances.unshift(0)
+                        }
                         setGraphData(balances)
                         setIncome(added)
                         setExpense(Math.abs(loss))
@@ -417,7 +423,7 @@ function MyWalletScreen({
 
 
     const [periodDays, setPeriodDays] = useState(30);
-    const [graphData, setGraphData] = useState([34, 80, 22, 165, 2]);
+    const [graphData, setGraphData] = useState([]);
 
 
     const [impactData, setImpactData] = useState(dummy_impact);
@@ -508,7 +514,6 @@ function MyWalletScreen({
 
     const account = { address: selectedAddress, ...identities[selectedAddress], ...accounts[selectedAddress] };
 
-
     return (
         <View style={styles.container}>
             {
@@ -588,39 +593,44 @@ function MyWalletScreen({
                                         <Text style={styles.textTransaction}>{strings('bitg_wallet.view_transaction')} </Text>
                                     </TouchableOpacity>
                                 </View>
-                                <View style={[styles.graphView, { overflow: 'hidden', backgroundColor: "#ffffff" }]}>
-                                    <LineChart
-                                        style={{ marginLeft: -65 }}
-                                        data={{
-                                            datasets: [
-                                                {
-                                                    data: graphData
-                                                }
-                                            ]
-                                        }}
-                                        width={getGraphWidth(Dimensions.get("window").width + 25, graphData.length)}
-                                        height={150}
-                                        chartConfig={{
-                                            backgroundGradientFrom: "#ffffff",
-                                            backgroundGradientFromOpacity: 0,
-                                            backgroundGradientTo: "#ffffff",
-                                            backgroundGradientToOpacity: 0,
-                                            color: (opacity = 1) => `rgba(0, 165, 25, ${opacity})`,
-                                            strokeWidth: 0.1,
-                                            useShadowColorFromDataset: false,
-                                            fillShadowGradientOpacity: 0.4
-                                        }}
-                                        withDots={false}
-                                        withInnerLine={false}
-                                        withOuterLines={false}
-                                        withVerticalLines={false}
-                                        withHorizontalLines={false}
-                                        withVerticalLabels={false}
-                                        withHorizontalLabels={false}
-                                        fromZero={true}
-                                        bezier
-                                    />
-                                </View>
+                                {
+                                    graphData && graphData.length > 0  && (
+                                        <View style={[styles.graphView, { overflow: 'hidden', backgroundColor: "#ffffff" }]}>
+                                            <LineChart
+                                                style={{ marginLeft: -65 }}
+                                                data={{
+                                                    datasets: [
+                                                        {
+                                                            data: graphData
+                                                        }
+                                                    ]
+                                                }}
+                                                width={getGraphWidth(Dimensions.get("window").width + 25, graphData.length)}
+                                                height={150}
+                                                chartConfig={{
+                                                    backgroundGradientFrom: "#ffffff",
+                                                    backgroundGradientFromOpacity: 0,
+                                                    backgroundGradientTo: "#ffffff",
+                                                    backgroundGradientToOpacity: 0,
+                                                    color: (opacity = 1) => `rgba(0, 165, 25, ${opacity})`,
+                                                    strokeWidth: 0.1,
+                                                    useShadowColorFromDataset: false,
+                                                    fillShadowGradientOpacity: 0.4
+                                                }}
+                                                withDots={false}
+                                                withInnerLine={false}
+                                                withOuterLines={false}
+                                                withVerticalLines={false}
+                                                withHorizontalLines={false}
+                                                withVerticalLabels={false}
+                                                withHorizontalLabels={false}
+                                                fromZero={true}
+                                                bezier
+                                            />
+                                        </View>
+                                    )
+                                }
+
                                 <ProgressBar style={styles.progressBar} progress={getBarGraphValue(income, expense) === 0.0 ? 0.5 : getBarGraphValue(income, expense)} color={colors.tintColor} />
                                 <View style={styles.inExContainer}>
                                     <View>
