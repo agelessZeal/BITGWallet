@@ -277,7 +277,7 @@ class MyImpactSignup extends PureComponent {
 				</View>
 
 
-				<View style={styles.field}>
+				<KeyboardAwareScrollView style={styles.field}>
 					<Text style={styles.subTitle}>{strings('bitg_wallet.email_address')}</Text>
 					<TextInput
 						style={[styles.input, inputWidth]}
@@ -297,11 +297,11 @@ class MyImpactSignup extends PureComponent {
 						) : null}
 					</View>
 
-				</View>
+				</KeyboardAwareScrollView>
 
 
 
-				<View style={styles.field}>
+				<KeyboardAwareScrollView style={styles.field}>
 					<Text style={styles.subTitle}>{strings('password_reset.password_title')}</Text>
 					<Text onPress={this.toggleShowHide} style={[styles.hintLabel, styles.showPassword]}>
 						{strings(`reset_password.${secureTextEntry ? 'show' : 'hide'}`)}
@@ -332,7 +332,7 @@ class MyImpactSignup extends PureComponent {
 							</Text>
 						</Text>
 					)) || <Text style={styles.hintLabel} />}
-				</View>
+				</KeyboardAwareScrollView>
 
 
 				<View style={styles.ctaWrapper}>
