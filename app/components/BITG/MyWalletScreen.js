@@ -17,8 +17,10 @@ import { NavigationContext } from 'react-navigation';
 
 import { getBITGWalletNavbarOptions } from '../UI/Navbar';
 import { toFixedFloor } from './lib/Helpers'
-
-import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol ,toBN} from '../../util/number';
+import AssetElement from '../UI/AssetElement';
+import NetworkMainAssetLogo from '../UI/NetworkMainAssetLogo';
+import TokenImage from '../UI/TokenImage'
+import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol, toBN } from '../../util/number';
 import moment from 'moment'
 
 import BITGAccountOverview from './BITGAccountOverview'
@@ -31,7 +33,7 @@ import {
 } from '../../reducers/swaps';
 import axios from 'axios';
 import AppConstants from '../../core/AppConstants'
-import {BN_ONE, BN_TEN,formatBalance,isBn,isUndefined,BN_ZERO,BN_TWO,bnToBn}  from '@polkadot/util'
+import { BN_ONE, BN_TEN, formatBalance, isBn, isUndefined, BN_ZERO, BN_TWO, bnToBn } from '@polkadot/util'
 
 const styles = StyleSheet.create({
     container: {
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
         borderColor: colors.grey050,
         borderWidth: 1,
         borderRadius: 5,
-        position:'relative'
+        position: 'relative'
     },
     impactItemClose: {
         position: 'absolute',
@@ -262,10 +264,10 @@ const styles = StyleSheet.create({
         top: 6,
     },
     impactItemStarWrapper: {
-        width:30,
-        justifyContent:'center',
-        alignItems:'center',
-        marginEnd:7,
+        width: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginEnd: 7,
     },
     impactItemStar: {
         tintColor: colors.blue,
@@ -280,8 +282,35 @@ const styles = StyleSheet.create({
     },
     impactText2: {
         color: colors.black,
-        maxWidth: Dimensions.get("window").width  - 95,
+        maxWidth: Dimensions.get("window").width - 95,
     },
+    balances: {
+        flex: 1,
+        justifyContent: 'center'
+    },
+    balance: {
+        fontSize: 16,
+        color: colors.fontPrimary,
+        ...fontStyles.normal,
+        // textTransform: 'uppercase',
+        // fontWeight:'bold'
+    },
+    
+    balanceFiat: {
+        fontSize: 12,
+        color: colors.fontSecondary,
+        ...fontStyles.normal,
+        textTransform: 'uppercase'
+    },
+    balanceFiatTokenError: {
+        textTransform: 'capitalize'
+    },
+    ethLogo: {
+        width: 50,
+        height: 50,
+        overflow: 'hidden',
+        marginRight: 20
+    }
 })
 
 const bitgImageSource = require("../../images/ic_bitg.png");
@@ -290,18 +319,18 @@ const initiativeImageSource = require("../../images/ic_vibration_24px.png");
 const shopImageSource = require("../../images/ic_store_mall_directory_24px.png");
 const dummy_impact = [
     {
-        id:1,
+        id: 1,
         title: 'Name',
         time: '5 min ago',
         content: 'New impact news, from bitg'
-    }, 
+    },
     // {
     //     id:2,
     //     title: 'Name s',
     //     time: '1 hour ago',
     //     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
     // }
-] 
+]
 
 function MyWalletScreen({
     swapsTokens,
@@ -316,6 +345,7 @@ function MyWalletScreen({
     currentCurrency,
     userHasOnboarded,
     setHasOnboarded,
+    api,
     setLiveness }) {
 
     const navigation = useContext(NavigationContext);
@@ -330,75 +360,80 @@ function MyWalletScreen({
         balanceFiat: 0
     });
 
-    const [mybalance,setMyBalance] = useState(0)
+    const [mybalance, setMyBalance] = useState(0)
 
-    const [expense,setExpense] = useState(0)
-    const [income,setIncome] = useState(0)
-    const [history,setHistory] = useState([])
+    const [expense, setExpense] = useState(0)
+    const [income, setIncome] = useState(0)
+    const [history, setHistory] = useState([])
+
+    const [tokenBalance, setTokenBalance] = useState(0)
+
+    const [tokenMeta, setTokenMeta] = useState(null)
+    const [tokenAsset, setTokenAsset] = useState(null)
 
 
 
     useEffect(() => {
-		async function fetchData(address) {
-			try {
-                const dts = moment().subtract(30,'days').format()
+        async function fetchData(address) {
+            try {
+                const dts = moment().subtract(30, 'days').format()
                 // console.log('dts:',dts)
 
-				const response = await axios.get(`${AppConstants.TRANSACTION_QUERY_API}transactions?account=${address}&dts=${dts}`);
+                const response = await axios.get(`${AppConstants.TRANSACTION_QUERY_API}transactions?account=${address}&dts=${dts}`);
 
-				if (!response) {
-					console.log('query empty response:');
-				} else {
-					if (response && response.data && response.data.transactions) {
-						// setTransactions(response.data.transactions)
+                if (!response) {
+                    console.log('query empty response:');
+                } else {
+                    if (response && response.data && response.data.transactions) {
+                        // setTransactions(response.data.transactions)
                         const res = response.data.transactions;
                         let added = 0;
                         let loss = 0;
 
                         let balances = []
-						res.reverse().map((item, index) => {
-							const is_reward = item.sender === ''
+                        res.reverse().map((item, index) => {
+                            const is_reward = item.sender === ''
                             const is_expense = item.sender === selectedAddress
-                 
-                            const itemAmount = item.amount.toLocaleString().replace(/,/g,'');
 
-                            const parsed =  isNaN( renderFromWei(toBN(itemAmount)  ))   ? '0' : renderFromWei(toBN(itemAmount));
+                            const itemAmount = item.amount.toLocaleString().replace(/,/g, '');
 
-                            const amount = is_expense ?  -parseFloat(parsed) :  parseFloat(parsed);
+                            const parsed = isNaN(renderFromWei(toBN(itemAmount))) ? '0' : renderFromWei(toBN(itemAmount));
 
-                            if(is_expense){
+                            const amount = is_expense ? -parseFloat(parsed) : parseFloat(parsed);
+
+                            if (is_expense) {
                                 loss += parseFloat(amount)
-                            }else{
+                            } else {
                                 added += parseFloat(amount)
                             }
 
                             balances.push(amount)
 
                         })
-                        
-                        if(balances.length === 1){
+
+                        if (balances.length === 1) {
                             balances.unshift(0)
                         }
                         setGraphData(balances)
                         setIncome(added)
                         setExpense(Math.abs(loss))
-					}
-				}
-			} catch (error) {
-				console.log('query error:', error);
-				setLoading(false)
-			}
-		}
+                    }
+                }
+            } catch (error) {
+                console.log('query error:', error);
+                setLoading(false)
+            }
+        }
 
-		if (selectedAddress) {
-			fetchData(selectedAddress)
-		}
-	}, [selectedAddress,mybalance]);
+        if (selectedAddress) {
+            fetchData(selectedAddress)
+        }
+    }, [selectedAddress, mybalance]);
 
     useEffect(() => {
         try {
             if (accounts && accounts[selectedAddress] && accounts[selectedAddress].balance) {
-                const balance = renderFromWei(accounts[selectedAddress].balance,3);
+                const balance = renderFromWei(accounts[selectedAddress].balance, 3);
                 let balanceFiat = weiToFiat(hexToBN(accounts[selectedAddress].balance), conversionRate, currentCurrency);
 
                 if (balance === '0') {
@@ -420,7 +455,34 @@ function MyWalletScreen({
             accounts, selectedAddress
         ])
 
+    useEffect(() => {
 
+        async function getTokenBalance() {
+            try {
+                if (api) {
+                    const tokenInfo = await api.query.assets.asset(1);
+                    const metaInfo = await api.query.assets.metadata(1);
+                    setTokenMeta(metaInfo)
+                    console.log('token metadata:', tokenInfo, metaInfo)
+                    const amount = await api.query.assets.account(1, selectedAddress);
+
+                    const asset = { logo: '', address: '0x3Ed3B47Dd13EC9a98b44e6204A523E766B225811', name:metaInfo.name,symbol:metaInfo.symbol,balance: amount.balance, balanceFiat: 0 };
+                    setTokenAsset(asset)
+                    // console.log('amount:',amount,amount.balance,asset)
+
+                    // console.log('main wallet screen token', token)
+                    setTokenBalance(amount.balance)
+
+                    
+                }
+            } catch (error) {
+                console.log('query error:', error);
+            }
+        }
+
+        
+        getTokenBalance()
+    }, [selectedAddress])
 
     const [periodDays, setPeriodDays] = useState(30);
     const [graphData, setGraphData] = useState([]);
@@ -502,11 +564,11 @@ function MyWalletScreen({
         navigation.navigate('TransactionHistory');
     }
 
-    const removeImpact = (item) =>{
+    const removeImpact = (item) => {
 
         const impacts = impactData;
-        if(impacts && impacts.length > 0){
-            const filter = impacts.filter((news) => news.id !== item.id )
+        if (impacts && impacts.length > 0) {
+            const filter = impacts.filter((news) => news.id !== item.id)
             setImpactData(filter)
         }
 
@@ -529,7 +591,7 @@ function MyWalletScreen({
                     <>
                         <ScrollView style={{ flex: 1 }}>
                             <View style={{ flex: 1, paddingBottom: 20 }}>
-                                <BITGAccountOverview account={account}  />
+                                <BITGAccountOverview account={account} />
                                 <View style={styles.balanceContainer}>
                                     <Image style={styles.bitgImage} source={bitgImageSource} />
                                     <View>
@@ -556,30 +618,53 @@ function MyWalletScreen({
                                 </View>
 
                                 {
+                                    tokenAsset && (
+                                        <AssetElement
+                                            key={'0x'}
+                                            testID={'asset'}
+                                            // onPress={this.onItemPress}
+                                            // onLongPress={asset.isETH ? null : this.showRemoveMenu}
+                                            asset={tokenAsset}
+                                        >
+                                            <TokenImage asset={tokenAsset} containerStyle={styles.ethLogo} />
+
+                                            <View style={styles.balances} testID={'balance'}>
+                                                <Text style={styles.balance}>{`${tokenBalance} wUSDT`}</Text>
+                                                {tokenAsset.secondaryBalance ? (
+                                                    <Text style={[styles.balanceFiat, asset?.balanceError && styles.balanceFiatTokenError]}>
+                                                        {secondaryBalance}
+                                                    </Text>
+                                                ) : null}
+                                            </View>
+                                        </AssetElement>
+                                    )
+                                }
+
+                                {
                                     impactData && impactData.length > 0 && (
                                         <View style={styles.impactWrapper}>
-                                        {
-                                            impactData.map((item, index) => (
-                                                <View key={index} style={styles.impactItem}>
-                                                    <View style={styles.impactItemStarWrapper}>
-                                                        <Image source={impactImageSource} style={styles.impactItemStar} />
+                                            {
+                                                impactData.map((item, index) => (
+                                                    <View key={index} style={styles.impactItem}>
+                                                        <View style={styles.impactItemStarWrapper}>
+                                                            <Image source={impactImageSource} style={styles.impactItemStar} />
+                                                        </View>
+
+                                                        <TouchableOpacity style={styles.impactItemTitle}>
+                                                            <Text style={styles.impactText1}>
+                                                                {`${item.title}  ${item.time}`}
+                                                            </Text>
+                                                            <Text style={styles.impactText2} numberOfLines={2} ellipsizeMode='tail'>
+                                                                {item.content}
+                                                            </Text>
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity style={styles.impactItemClose} onPress={() => removeImpact(item)}>
+                                                            <MaterialIcons name="close" size={14} color={colors.grey300} />
+                                                        </TouchableOpacity>
+
                                                     </View>
-    
-                                                    <TouchableOpacity style={styles.impactItemTitle}>
-                                                        <Text style={styles.impactText1}>
-                                                            {`${item.title}  ${item.time}`}
-                                                        </Text>
-                                                        <Text style={styles.impactText2} numberOfLines={2} ellipsizeMode='tail'>
-                                                            {item.content}
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity style={styles.impactItemClose} onPress={() =>removeImpact(item)}>
-                                                        <MaterialIcons name="close" size={14} color={colors.grey300} />
-                                                    </TouchableOpacity>
-    
-                                                </View>
-                                            ))
-                                        }
+                                                ))
+                                            }
                                         </View>
                                     )
                                 }
@@ -594,7 +679,7 @@ function MyWalletScreen({
                                     </TouchableOpacity>
                                 </View>
                                 {
-                                    graphData && graphData.length > 0  && (
+                                    graphData && graphData.length > 0 && (
                                         <View style={[styles.graphView, { overflow: 'hidden', backgroundColor: "#ffffff" }]}>
                                             <LineChart
                                                 style={{ marginLeft: -65 }}
@@ -721,10 +806,12 @@ MyWalletScreen.propTypes = {
      * Function to set liveness
      */
     setLiveness: PropTypes.func,
-        /**
-     * An object containing each identity in the format address => account
-     */
+    /**
+ * An object containing each identity in the format address => account
+ */
     identities: PropTypes.object,
+
+    api: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
@@ -736,6 +823,7 @@ const mapStateToProps = state => ({
     tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
     currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
     identities: state.engine.backgroundState.PreferencesController.identities,
+    api: state.polka.api
 });
 
 const mapDispatchToProps = dispatch => ({
