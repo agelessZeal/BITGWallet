@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet,Switch,Image, TouchableOpacity} from 'react-native';
+import { View, StyleSheet, Switch, Image, TouchableOpacity, InteractionManager, ActivityIndicator ,Dimensions} from 'react-native';
 import { Text, TouchableRipple } from 'react-native-paper';
 
 import PropTypes from 'prop-types';
@@ -16,6 +16,10 @@ import Device from '../../util/Device';
 import { passwordSet, passwordUnset, seedphraseNotBackedUp } from '../../actions/user';
 import { setLockTime } from '../../actions/settings';
 
+import Engine from '../../core/Engine';
+
+import Analytics from '../../core/Analytics';
+import { ANALYTICS_EVENT_OPTS } from '../../util/analytics';
 
 import { getBITGWalletNavbarOptions } from '../UI/Navbar';
 
@@ -35,7 +39,7 @@ const styles = StyleSheet.create({
 	titleText: {
 		color: colors.green,
 		fontSize: 16,
-        marginStart: 10,
+		marginStart: 10,
 	},
 	item: {
 		marginLeft: 10,
@@ -48,8 +52,8 @@ const styles = StyleSheet.create({
 	},
 	itemTitle: {
 		color: colors.green,
-        fontSize: 16,
-        textTransform:'uppercase'
+		fontSize: 16,
+		textTransform: 'uppercase'
 	},
 	itemText: {
 		marginTop: 10,
@@ -59,14 +63,14 @@ const styles = StyleSheet.create({
 	icon: {
 		width: 22,
 		height: 22
-    },
-    biometrics: {
+	},
+	biometrics: {
 		position: 'relative',
 	},
 	biometryLabel: {
 		fontSize: 14,
-        color: colors.green,
-        textTransform:'uppercase'
+		color: colors.green,
+		textTransform: 'uppercase'
 		// position: 'absolute',
 		// top: 0,
 		// left: 0
@@ -127,7 +131,17 @@ class SettingsScreen extends PureComponent {
 		/**
 		 * An object containing token exchange rates in the format address => exchangeRate
 		 */
-		tokenExchangeRates: PropTypes.object
+		tokenExchangeRates: PropTypes.object,
+
+		/**
+ * An object containing all the keyrings
+ */
+		keyrings: PropTypes.array,
+
+		/**
+ * An object containing each identity in the format address => account
+ */
+		identities: PropTypes.object,
 	};
 
 	state = {
@@ -147,6 +161,7 @@ class SettingsScreen extends PureComponent {
 	};
 
 	async componentDidMount() {
+		this.mounted = true;
 		const biometryType = await SecureKeychain.getSupportedBiometryType();
 
 		const state = { view: CONFIRM_PASSWORD };
@@ -178,43 +193,44 @@ class SettingsScreen extends PureComponent {
 
 	componentWillUnmount() {
 		this.mounted = false;
-    }
-    
-    createNewWallet = () => {
+	}
+
+
+	createNewWallet = () => {
 		// this.props.navigation.navigate('OnboardingNav');
 	};
 
 
-    manualBackup = () => {
+	manualBackup = () => {
 		this.props.navigation.navigate('ManualBackupStep1');
 	};
 
 	resetPassword = () => {
 		this.props.navigation.navigate('ResetPassword');
-    };
+	};
 
-    goToRevealPrivateCredential = () => {
+	goToRevealPrivateCredential = () => {
 		this.props.navigation.navigate('RevealPrivateCredentialView', { privateCredentialName: 'seed_phrase' });
 	};
 
 	goToExportPrivateKey = () => {
 		this.props.navigation.navigate('RevealPrivateCredentialView', { privateCredentialName: 'private_key' });
-    };
-    
-    goNetworkIdSetting = () => {
-		this.props.navigation.navigate('NetworkIDSetting');
-    };
-    
+	};
 
-    updateBiometryChoice = async biometryChoice => {
+	goNetworkIdSetting = () => {
+		this.props.navigation.navigate('NetworkIDSetting');
+	};
+
+
+	updateBiometryChoice = async biometryChoice => {
 		if (!biometryChoice) {
 			await AsyncStorage.setItem(BIOMETRY_CHOICE_DISABLED, TRUE);
 		} else {
 			await AsyncStorage.removeItem(BIOMETRY_CHOICE_DISABLED);
 		}
 		this.setState({ biometryChoice });
-    };
-    
+	};
+
 	renderSwitch = () => {
 		const { biometryType, rememberMe, biometryChoice } = this.state;
 		return (
@@ -235,26 +251,72 @@ class SettingsScreen extends PureComponent {
 						</View>
 					</>
 				) : (
-					<>
-						<Text style={styles.itemTitle}>	{strings(`biometrics.enable_touchid`)}</Text>
-                        <Text style={styles.itemText}>{strings('bitg_wallet.use_biometrics_description', { biometryType: "fingerprint" })}</Text>
-						<Switch
-							onValueChange={rememberMe => this.setState({ rememberMe })} // eslint-disable-line react/jsx-no-bind
-							value={rememberMe}
-							style={styles.biometrySwitch}
-							trackColor={Device.isIos() ? { true: colors.green, false: colors.grey200 } : null}
-							ios_backgroundColor={colors.grey200}
-						/>
-					</>
-				)}
+						<>
+							<Text style={styles.itemTitle}>	{strings(`biometrics.enable_touchid`)}</Text>
+							<Text style={styles.itemText}>{strings('bitg_wallet.use_biometrics_description', { biometryType: "fingerprint" })}</Text>
+							<Switch
+								onValueChange={rememberMe => this.setState({ rememberMe })} // eslint-disable-line react/jsx-no-bind
+								value={rememberMe}
+								style={styles.biometrySwitch}
+								trackColor={Device.isIos() ? { true: colors.green, false: colors.grey200 } : null}
+								ios_backgroundColor={colors.grey200}
+							/>
+						</>
+					)}
 			</View>
 		);
 	};
 
+
+	addAccount = async () => {
+		if (this.state.loading) return;
+		this.mounted && this.setState({ loading: true });
+		const { KeyringController } = Engine.context;
+		requestAnimationFrame(async () => {
+			try {
+				await KeyringController.addNewAccount();
+				const { PreferencesController } = Engine.context;
+				const newIndex = Object.keys(this.props.identities).length - 1;
+				PreferencesController.setSelectedAddress(Object.keys(this.props.identities)[newIndex]);
+				// this.mounted && this.setState({ selectedAccountIndex: newIndex });
+				setTimeout(() => {
+					this.mounted && this.setState({ loading: false });
+				}, 100);
+				// const orderedAccounts = this.getAccounts();
+				// this.mounted && this.setState({ orderedAccounts });
+			} catch (e) {
+				// Restore to the previous index in case anything goes wrong
+				Logger.error(e, 'error while trying to add a new account'); // eslint-disable-line
+				this.mounted && this.setState({ loading: false });
+			}
+		});
+		InteractionManager.runAfterInteractions(() => {
+			Analytics.trackEvent(ANALYTICS_EVENT_OPTS.ACCOUNTS_ADDED_NEW_ACCOUNT);
+		});
+	};
+
+
 	render() {
+		const { loading } = this.state;
 
 		return (
 			<View style={styles.container}>
+				{
+					loading &&
+					<View style={{
+						position: 'absolute',
+						top: 0,
+						left: 0,
+						zIndex: 50,
+						backgroundColor: colors.transparent,
+						alignItems: 'center',
+						justifyContent: 'center',
+						width: Dimensions.get('window').width,
+						height: Dimensions.get('window').height - 80,
+					}} >
+						<ActivityIndicator style={{ alignSelf: 'center', justifyContent: 'center' }} size="large" color={colors.tintColor} />
+					</View>
+				}
 				<View style={styles.subMenu}>
 					<MaterialIcons name="settings" size={24} color={colors.green} style={styles.icon} />
 					<Text style={styles.titleText}>{strings('app_settings.general_title')}</Text>
@@ -265,41 +327,42 @@ class SettingsScreen extends PureComponent {
 					<Text style={styles.itemText}>{strings('bitg_wallet.change_password_description')}</Text>
 				</TouchableOpacity>
 
-                <TouchableOpacity style={styles.item}>{this.renderSwitch()}</TouchableOpacity>
+				<TouchableOpacity style={styles.item}>{this.renderSwitch()}</TouchableOpacity>
 
 
 				<View style={styles.subMenu}>
-                    <Image style={styles.icon} source={walletImageSource} />
+					<Image style={styles.icon} source={walletImageSource} />
 					<Text style={styles.titleText}>{strings('drawer.wallet')}</Text>
 				</View>
 
 
-				<TouchableOpacity style={styles.item} onPress={this.createNewWallet}>
-					<Text style={styles.itemTitle}>{strings('bitg_wallet.create_wallet')}</Text>
+				<TouchableOpacity style={styles.item} onPress={this.addAccount}>
+					<Text style={styles.itemTitle}>{strings('accounts.create_new_account')}</Text>
 					<Text style={styles.itemText}>{strings('onboarding.start_exploring_now')} ,add new current wallet</Text>
 				</TouchableOpacity>
 
-                <TouchableOpacity style={styles.item} onPress={this.manualBackup}>
+				<TouchableOpacity style={styles.item} onPress={this.manualBackup}>
 					<Text style={styles.itemTitle}>{strings('bitg_wallet.backup_wallet')}</Text>
 					<Text style={styles.itemText}>{strings('bitg_wallet.backup_wallet_description')}</Text>
 				</TouchableOpacity>
 
 
-                <TouchableOpacity style={styles.item} onPress={this.goToRevealPrivateCredential}>
+				<TouchableOpacity style={styles.item} onPress={this.goToRevealPrivateCredential}>
 					<Text style={styles.itemTitle}>{strings('reveal_credential.seed_phrase_title')}</Text>
 					<Text style={styles.itemText}>{strings('app_settings.protect_desc')}</Text>
 				</TouchableOpacity>
 
-
+{/* 
 				<TouchableOpacity style={styles.subMenu} onPress={this.goNetworkIdSetting}>
-                    <MaterialIcons name="rss-feed" size={25} color={colors.green} style={styles.icon} />
+					<MaterialIcons name="rss-feed" size={25} color={colors.green} style={styles.icon} />
 					<Text style={styles.titleText}>{strings('bitg_wallet.network')}</Text>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 
 			</View>
 		);
 	}
 }
+
 
 const mapStateToProps = state => ({
 	accounts: state.engine.backgroundState.AccountTrackerController.accounts,
@@ -307,7 +370,10 @@ const mapStateToProps = state => ({
 	balances: state.engine.backgroundState.TokenBalancesController.contractBalances,
 	conversionRate: state.engine.backgroundState.CurrencyRateController.conversionRate,
 	tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
-	currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency
+	currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
+	thirdPartyApiMode: state.privacy.thirdPartyApiMode,
+	keyrings: state.engine.backgroundState.KeyringController.keyrings,
+	identities: state.engine.backgroundState.PreferencesController.identities,
 });
 
 const mapDispatchToProps = dispatch => ({

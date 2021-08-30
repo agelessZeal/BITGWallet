@@ -780,6 +780,7 @@ class DrawerView extends PureComponent {
 				{
 					name: strings('drawer.settings'),
 					icon: this.getFeatherIcon('settings'),
+					selectedIcon: this.getSelectedFeatherIcon('settings'),
 					warning: strings('drawer.settings_warning_short'),
 					action: this.showSettings,
 					routeNames: ['SettingsScreen','NetworkIDSetting']
@@ -812,6 +813,7 @@ class DrawerView extends PureComponent {
 				{
 					name: strings('bitg_wallet.blockchain_explorer'),
 					icon: this.getIcon('eye'),
+					selectedIcon: this.getSelectedIcon('eye'),
 					action: this.goToBlockchainExploer,
 					
 				},
