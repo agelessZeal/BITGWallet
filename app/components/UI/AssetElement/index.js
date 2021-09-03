@@ -35,6 +35,8 @@ export default class AssetElement extends PureComponent {
 		 * Object being rendered
 		 */
 		asset: PropTypes.object,
+
+		hideArrow:PropTypes.bool,
 		/**
 		 * Callback triggered on long press
 		 */
@@ -56,7 +58,7 @@ export default class AssetElement extends PureComponent {
 	};
 
 	render = () => {
-		const { children } = this.props;
+		const { children,hideArrow } = this.props;
 		return (
 			<TouchableOpacity
 				onPress={this.handleOnPress}
@@ -64,9 +66,14 @@ export default class AssetElement extends PureComponent {
 				style={styles.itemWrapper}
 			>
 				{children}
-				<View styles={styles.arrow}>
-					<Icon name="ios-arrow-forward" size={24} color={colors.fontTertiary} style={styles.arrowIcon} />
-				</View>
+				{
+					!hideArrow && (
+						<View styles={styles.arrow}>
+							<Icon name="ios-arrow-forward" size={24} color={colors.fontTertiary} style={styles.arrowIcon} />
+						</View>
+					)
+				}
+
 			</TouchableOpacity>
 		);
 	};
