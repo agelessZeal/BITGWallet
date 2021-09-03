@@ -121,11 +121,9 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 							// const tokenInfo = await this.props.api.query.assets.asset(item.assetid);
 							const metaInfo = await this.props.api.query.assets.metadata(item.assetid);
 
-							console.log('f',metaInfo,this.hex2a(metaInfo.name),this.hex2a(metaInfo.symbol))
-	
 							details.push({
 								logo: '', 
-								address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+								address: item.assetid,
 								name:this.hex2a(metaInfo.name),
 								symbol:this.hex2a(metaInfo.symbol),
 								decimals:metaInfo.decimals,
@@ -134,9 +132,7 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 							})
 						}
 						this.setState({assets:details,searchResults:details})
-
 					}
-
 				}
 				
 			} else {
@@ -145,8 +141,6 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 		} catch (error) {
 			this.setState({loading:false})
 		}
-
-
 	}
 
 	hex2a = (hexx) => {
