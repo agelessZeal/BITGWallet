@@ -471,8 +471,9 @@ const Entry = props => {
 
 		props.setPolkaApi(api);
 
-		const { AccountTrackerController } = Engine.context;
+		const { AccountTrackerController ,TokenBalancesController} = Engine.context;
 		AccountTrackerController.setPolkaApi(api);
+		TokenBalancesController.setPolkaApi(api)
 
 		console.log('my address:',props.selectedAddress)
 
