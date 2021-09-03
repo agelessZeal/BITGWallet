@@ -20,8 +20,10 @@ import { toFixedFloor } from './lib/Helpers'
 import AssetElement from '../UI/AssetElement';
 import NetworkMainAssetLogo from '../UI/NetworkMainAssetLogo';
 import TokenImage from '../UI/TokenImage'
-import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol, toBN } from '../../util/number';
+import { renderFromWei, weiToFiat, hexToBN, getCurrencySymbol, toBN , renderFromTokenMinimalUnit, balanceToFiat } from '../../util/number';
 import moment from 'moment'
+import { safeToChecksumAddress } from '../../util/address';
+import contractMap from '@metamask/contract-metadata';
 
 import BITGAccountOverview from './BITGAccountOverview'
 import {
@@ -351,6 +353,7 @@ const dummy_impact = [
     // }
 ]
 
+
 function MyWalletScreen({
     swapsTokens,
     accounts,
@@ -365,6 +368,11 @@ function MyWalletScreen({
     userHasOnboarded,
     setHasOnboarded,
     api,
+    tokens,
+    tokenBalances,
+    hideZeroBalanceTokens,
+    chainId,
+	primaryCurrency,
     setLiveness }) {
 
     const navigation = useContext(NavigationContext);
@@ -474,32 +482,32 @@ function MyWalletScreen({
             accounts, selectedAddress
         ])
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        async function getTokenBalance() {
-            try {
-                if (api) {
-                    const tokenInfo = await api.query.assets.asset(1);
-                    const metaInfo = await api.query.assets.metadata(1);
-                    setTokenMeta(metaInfo)
-                    console.log('token metadata:', tokenInfo, metaInfo)
-                    const amount = await api.query.assets.account(1, selectedAddress);
+    //     async function getTokenBalance() {
+    //         try {
+    //             if (api) {
+    //                 const tokenInfo = await api.query.assets.asset(1);
+    //                 const metaInfo = await api.query.assets.metadata(1);
+    //                 setTokenMeta(metaInfo)
+    //                 console.log('token metadata:', tokenInfo, metaInfo)
+    //                 const amount = await api.query.assets.account(1, selectedAddress);
 
-                    const asset = { logo: '', address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', name:metaInfo.name,symbol:metaInfo.symbol,balance: amount.balance, balanceFiat: 0 };
-                    setTokenAsset(asset)
-                    // console.log('amount:',amount,amount.balance,asset)
+    //                 const asset = { logo: '', address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', name:metaInfo.name,symbol:metaInfo.symbol,balance: amount.balance, balanceFiat: 0 };
+    //                 setTokenAsset(asset)
+    //                 // console.log('amount:',amount,amount.balance,asset)
 
-                    // console.log('main wallet screen token', token)
-                    setTokenBalance(amount.balance)
+    //                 // console.log('main wallet screen token', token)
+    //                 setTokenBalance(amount.balance)
 
                     
-                }
-            } catch (error) {
-                console.log('query error:', error);
-            }
-        }
-        getTokenBalance()
-    }, [selectedAddress])
+    //             }
+    //         } catch (error) {
+    //             console.log('query error:', error);
+    //         }
+    //     }
+    //     getTokenBalance()
+    // }, [selectedAddress])
 
     const [periodDays, setPeriodDays] = useState(30);
     const [graphData, setGraphData] = useState([]);
@@ -597,8 +605,77 @@ function MyWalletScreen({
         }
 
     }
-    const addNewAsset = () => {
 
+	const renderItem = asset => {
+        
+        const itemAddress = safeToChecksumAddress('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48');
+
+        const {assetid} = asset;
+        
+        // const logo = asset.logo || ((contractMap[itemAddress] && contractMap[itemAddress].logo) || undefined);
+        
+		const exchangeRate = itemAddress in tokenExchangeRates ? tokenExchangeRates[itemAddress] : undefined;
+		const balance =
+			asset.balance ||
+			(assetid in tokenBalances ? renderFromTokenMinimalUnit(tokenBalances[assetid], asset.decimals) : 0);
+		const balanceFiat = null;
+		const balanceValue = `${balance} ${asset.symbol}`;
+
+		// render balances according to primary currency
+		let mainBalance, secondaryBalance;
+		if (primaryCurrency === 'ETH') {
+			mainBalance = balanceValue;
+			secondaryBalance = balanceFiat;
+		} else {
+			mainBalance = !balanceFiat ? balanceValue : balanceFiat;
+			secondaryBalance = !balanceFiat ? balanceFiat : balanceValue;
+		}
+
+		if (asset?.balanceError) {
+			mainBalance = asset.symbol;
+			secondaryBalance = strings('wallet.unable_to_load');
+		}
+
+        asset = { ...asset, ...{ balance, balanceFiat } };
+        // console.log('asset:',asset)
+		return (
+			<AssetElement
+				key={itemAddress || '0x'}
+				testID={'asset'}
+				// onPress={this.onItemPress}
+				// onLongPress={asset.isETH ? null : this.showRemoveMenu}
+                asset={asset}
+                hideArrow
+			>
+                <TokenImage asset={asset} containerStyle={styles.ethLogo} />
+
+				<View style={styles.balances} testID={'balance'}>
+					<Text style={styles.balance}>{mainBalance}</Text>
+					{secondaryBalance ? (
+						<Text style={[styles.balanceFiat, asset?.balanceError && styles.balanceFiatTokenError]}>
+							{secondaryBalance}
+						</Text>
+					) : null}
+				</View>
+			</AssetElement>
+		);
+    };
+    
+    const renderList = () => {
+
+        const tokensToDisplay = hideZeroBalanceTokens
+            ? tokens.filter(token => {
+                    const { address, isETH } = token;
+                    return (tokenBalances[address] && !tokenBalances[address]?.isZero?.()) || isETH;
+                    // eslint-disable-next-line no-mixed-spaces-and-tabs
+              })
+            : tokens;
+    
+        return (
+            <View>
+                {tokensToDisplay.map(item => renderItem(item))}
+            </View>
+        );
     }
 
     const account = { address: selectedAddress, ...identities[selectedAddress], ...accounts[selectedAddress] };
@@ -654,8 +731,11 @@ function MyWalletScreen({
                                         <Text style={styles.addAssetsText}>{strings('bitg_wallet.add_token')}</Text>
                                     </TouchableOpacity>  */}
                                 </View>
-
                                 {
+                                    renderList()
+                                }
+
+                                {/* {
                                     tokenAsset && (
                                         <AssetElement
                                             key={'0x'}
@@ -676,7 +756,7 @@ function MyWalletScreen({
                                             </View>
                                         </AssetElement>
                                     )
-                                }
+                                } */}
 
                                 {
                                     impactData && impactData.length > 0 && (
@@ -807,6 +887,7 @@ function MyWalletScreen({
     );
 }
 
+
 MyWalletScreen.navigationOptions = ({ navigation }) => getBITGWalletNavbarOptions('bitg_wallet.my_wallet', navigation);
 
 MyWalletScreen.propTypes = {
@@ -850,6 +931,29 @@ MyWalletScreen.propTypes = {
     identities: PropTypes.object,
 
     api: PropTypes.object,
+
+        /**
+     * Object containing token balances in the format address => balance
+     */
+    tokenBalances: PropTypes.object,
+    /**
+     * Object containing token exchange rates in the format address => exchangeRate
+     */
+    tokenExchangeRates: PropTypes.object,
+
+    /**
+     * A bool that represents if the user wants to hide zero balance token
+     */
+    hideZeroBalanceTokens: PropTypes.bool,
+
+    /**
+     * Primary currency, either ETH or Fiat
+     */
+    primaryCurrency: PropTypes.string,
+    /**
+     * Chain id
+     */
+    chainId: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
@@ -861,7 +965,13 @@ const mapStateToProps = state => ({
     tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
     currentCurrency: state.engine.backgroundState.CurrencyRateController.currentCurrency,
     identities: state.engine.backgroundState.PreferencesController.identities,
-    api: state.polka.api
+    tokens: state.engine.backgroundState.AssetsController.tokens,
+    api: state.polka.api,
+    tokenBalances: state.engine.backgroundState.TokenBalancesController.contractBalances,
+	tokenExchangeRates: state.engine.backgroundState.TokenRatesController.contractExchangeRates,
+    hideZeroBalanceTokens: state.settings.hideZeroBalanceTokens,
+    chainId: state.engine.backgroundState.NetworkController.provider.chainId,
+	primaryCurrency: state.settings.primaryCurrency,
 });
 
 const mapDispatchToProps = dispatch => ({
