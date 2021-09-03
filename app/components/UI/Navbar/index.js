@@ -929,6 +929,24 @@ export function getNetworkNavbarOptions(title, translate, navigation) {
 	};
 }
 
+export function getBITGNetworkNavbarOptions(title, translate, navigation) {
+	return {
+		headerTitle: <NavbarTitle title={title} translate={translate} hideNetwork disableNetwork/>,
+		headerLeft: (
+			// eslint-disable-next-line react/jsx-no-bind
+			<TouchableOpacity onPress={() => navigation.pop()} style={styles.backButton} testID={'asset-back-button'}>
+				<IonicIcon
+					name={Device.isAndroid() ? 'md-arrow-back' : 'ios-arrow-back'}
+					size={Device.isAndroid() ? 24 : 28}
+					style={styles.backIcon}
+				/>
+			</TouchableOpacity>
+		),
+		headerRight: <View />,
+		headerStyle:{backgroundColor:colors.green}
+	};
+}
+
 /**
  * Function that returns the navigation options containing title and network indicator
  *

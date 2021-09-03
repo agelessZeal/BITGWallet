@@ -19,6 +19,7 @@ import Contacts from '../../Views/Settings/Contacts';
 import Wallet from '../../Views/Wallet';
 import Asset from '../../Views/Asset';
 import AddAsset from '../../Views/AddAsset';
+import BITGAddAsset from '../../Views/AddAsset/bitgAdd'
 import Collectible from '../../Views/Collectible';
 import Send from '../../Views/Send';
 import SendTo from '../../Views/SendFlow/SendTo';
@@ -168,6 +169,9 @@ export default createStackNavigator(
 							},
 							AddAsset: {
 								screen: AddAsset
+							},
+							BITGAddAsset: {
+								screen: BITGAddAsset
 							},
 							Collectible: {
 								screen: Collectible

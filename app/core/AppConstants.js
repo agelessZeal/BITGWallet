@@ -15,6 +15,7 @@ export default {
 	IPNS_DEFAULT_GATEWAY_URL: 'https://cloudflare-ipfs.com/ipns/',
 	SWARM_DEFAULT_GATEWAY_URL: 'https://swarm-gateways.net/bzz:/',
 	TRANSACTION_QUERY_API:'https://testnode.bitg.org:9443/',
+	ASSETS_QUERY_API:'https://testnode.bitg.org:9443/assets',
 	supportedTLDs: ['eth', 'xyz', 'test'],
 	MAX_PUSH_NOTIFICATION_PROMPT_TIMES: 2,
 	CONNEXT: {
@@ -71,7 +72,7 @@ export default {
 	MAX_SAFE_CHAIN_ID: 4503599627370476,
 	URLS: {
 		TERMS_AND_CONDITIONS: 'https://consensys.net/terms-of-use/',
-		PRIVACY_POLICY: 'https://consensys.net/privacy-policy/',
+		PRIVACY_POLICY: 'https://bitg.org/privacy/',
 		CONNECTIVITY_ISSUES: 'https://metamask.zendesk.com/hc/en-us/articles/360059386712',
 		NFT: 'https://metamask.zendesk.com/hc/en-us/articles/360058238591-NFT-tokens-in-MetaMask-wallet'
 	},

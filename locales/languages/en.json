@@ -1732,6 +1732,7 @@
 			"success_title":"Swap successful",
 			"sucess_des":"Your BITG balance has been processed on the new chain and will appear shortly.",
 			"return":"Return Home"
-		}
+		},
+		"add_token":"ADD TOKEN"
 	}
 }

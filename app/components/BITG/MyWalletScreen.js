@@ -34,7 +34,7 @@ import {
 import axios from 'axios';
 import AppConstants from '../../core/AppConstants'
 import { BN_ONE, BN_TEN, formatBalance, isBn, isUndefined, BN_ZERO, BN_TWO, bnToBn } from '@polkadot/util'
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -310,7 +310,26 @@ const styles = StyleSheet.create({
         height: 50,
         overflow: 'hidden',
         marginRight: 20
-    }
+    },
+    assetAddWrapper:{
+		marginHorizontal: 20,
+		flexDirection:'row',
+		justifyContent:'flex-end',
+		alignItems:'center'
+	},
+	addAssetsButton: {
+		height: 20,
+		backgroundColor: colors.transparent,
+		alignItems: 'center',
+		justifyContent: 'center',
+        alignSelf: 'center',
+        flexDirection:'row'
+	},
+	addAssetsText: {
+		fontSize: 16,
+		color: colors.tintColor,
+		fontWeight: 'bold'
+	},
 })
 
 const bitgImageSource = require("../../images/ic_bitg.png");
@@ -466,7 +485,7 @@ function MyWalletScreen({
                     console.log('token metadata:', tokenInfo, metaInfo)
                     const amount = await api.query.assets.account(1, selectedAddress);
 
-                    const asset = { logo: '', address: '0x3Ed3B47Dd13EC9a98b44e6204A523E766B225811', name:metaInfo.name,symbol:metaInfo.symbol,balance: amount.balance, balanceFiat: 0 };
+                    const asset = { logo: '', address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', name:metaInfo.name,symbol:metaInfo.symbol,balance: amount.balance, balanceFiat: 0 };
                     setTokenAsset(asset)
                     // console.log('amount:',amount,amount.balance,asset)
 
@@ -479,8 +498,6 @@ function MyWalletScreen({
                 console.log('query error:', error);
             }
         }
-
-        
         getTokenBalance()
     }, [selectedAddress])
 
@@ -502,7 +519,14 @@ function MyWalletScreen({
         })
     }
 
-
+	const goToAddToken = () => {
+        console.log('gotoAsset')
+		navigation.push('BITGAddAsset', { assetType: 'token' });
+		// InteractionManager.runAfterInteractions(() => {
+		// 	Analytics.trackEvent(ANALYTICS_EVENT_OPTS.WALLET_ADD_TOKENS);
+		// });
+    };
+    
     const getBalancePoints = (dataPoints, periodDays = 1, currentBalance = 0) => {
         let result = [];
         let runningBalance = currentBalance;
@@ -573,6 +597,9 @@ function MyWalletScreen({
         }
 
     }
+    const addNewAsset = () => {
+
+    }
 
     const account = { address: selectedAddress, ...identities[selectedAddress], ...accounts[selectedAddress] };
 
@@ -617,6 +644,17 @@ function MyWalletScreen({
                                     </View>
                                 </View>
 
+                                <View style={styles.assetAddWrapper}>
+                                <TouchableOpacity style={styles.addAssetsButton} onPress={goToAddToken} testID={'add-token-button'}>
+                                    <Icon name="plus" size={16} color={colors.green} />
+                                    <Text style={styles.addAssetsText}>{strings('wallet.add_tokens')}</Text>
+                                </TouchableOpacity>
+                                    
+                                    {/* <TouchableOpacity style={styles.addAssetsButton} activeOpacity={0.4} onPress={addNewAsset}>
+                                        <Text style={styles.addAssetsText}>{strings('bitg_wallet.add_token')}</Text>
+                                    </TouchableOpacity>  */}
+                                </View>
+
                                 {
                                     tokenAsset && (
                                         <AssetElement
@@ -629,7 +667,7 @@ function MyWalletScreen({
                                             <TokenImage asset={tokenAsset} containerStyle={styles.ethLogo} />
 
                                             <View style={styles.balances} testID={'balance'}>
-                                                <Text style={styles.balance}>{`${tokenBalance} wUSDT`}</Text>
+                                                <Text style={styles.balance}>{`${tokenBalance} wUSDC`}</Text>
                                                 {tokenAsset.secondaryBalance ? (
                                                     <Text style={[styles.balanceFiat, asset?.balanceError && styles.balanceFiatTokenError]}>
                                                         {secondaryBalance}
