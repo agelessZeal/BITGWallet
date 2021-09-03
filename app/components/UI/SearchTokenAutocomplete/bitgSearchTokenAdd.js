@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, InteractionManager,TextInput } from 'react-native';
+import { View, StyleSheet, InteractionManager,TextInput ,	ActivityIndicator,} from 'react-native';
 
 import PropTypes from 'prop-types';
 import { strings } from '../../../../locales/i18n';
@@ -52,7 +52,8 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 		selectedAsset: {},
 		assets:[],
 		searchQuery: '',
-		inputWidth: '85%'
+		inputWidth: '85%',
+		loading:false
 	};
 
 	static propTypes = {
@@ -73,6 +74,18 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 
 	handleSearch = searchQuery => {
 		this.setState({ searchQuery });
+		const {assets} = this.state;
+		if(searchQuery.length > 0){
+			const addressSearchResult = assets.filter(item => toLowerCaseCompare(item.symbol,searchQuery) || toLowerCaseCompare(item.name,searchQuery))
+			this.setState({
+				searchResults:addressSearchResult
+			})
+		}else{
+			this.setState({
+				searchResults:assets
+			})
+		}
+
 		// const fuseSearchResult = fuse.search(searchQuery);
 		// const addressSearchResult = contractList.filter(token => toLowerCaseCompare(token.address, searchQuery));
 		// const results = [...addressSearchResult, ...fuseSearchResult];
@@ -86,20 +99,17 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 	componentDidMount = () => {
 		setTimeout(() => this.setState({ inputWidth: '86%' }), 100);
 		this.getAnalyticsParams();
-		this.getBITGAssetsList()
+		this.getBITGAssetsList() 
 	};
 
 	getBITGAssetsList = async () => {
 		this.setState({loading:true})
 		try {
 			const response = await axios.get(`${AppConstants.ASSETS_QUERY_API}`);
-			
 
 			this.setState({loading:false})
 	
 			if (response?.data) {
-				console.log('res:',response.data)
-
 				const assets = response.data.assets
 				if(assets.length > 0){
 					let details = [];
@@ -133,7 +143,7 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 				console.log('query empty response:');
 			}
 		} catch (error) {
-			this.setState({loading:true})
+			this.setState({loading:false})
 		}
 
 
@@ -167,15 +177,16 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 
 	addToken = async () => {
 		const { AssetsController } = Engine.context;
-		const { address, symbol, decimals } = this.state.selectedAsset;
-		await AssetsController.addToken(address, symbol, decimals);
+		const { address, symbol, decimals,assetid } = this.state.selectedAsset;
+		console.log('addBITG Token:',this.state.selectedAsset)
+		await AssetsController.addBITGToken('', symbol, decimals,'',assetid);
 
 		AnalyticsV2.trackEvent(AnalyticsV2.ANALYTICS_EVENTS.TOKEN_ADDED, this.getAnalyticsParams());
 
 		// Clear state before closing
 		this.setState(
 			{
-				searchResults: [],
+				searchResults: this.state.assets,
 				searchQuery: '',
 				selectedAsset: {}
 			},
@@ -188,13 +199,30 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 	};
 
 	render = () => {
-		const { searchResults, selectedAsset, searchQuery ,assets} = this.state;
+		const { searchResults, selectedAsset, searchQuery ,assets,loading} = this.state;
 		const { address, symbol, decimals } = selectedAsset;
 
 		const { inputWidth } = this.state;
 
 		return (
 			<View style={styles.wrapper} testID={'search-token-screen'}>
+
+				{
+					loading && (
+						<View style={{
+							flex: 1,
+							position:'absolute',
+							top:0,
+							left:0,
+							width:'100%',
+							height:'100%',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}} >
+							<ActivityIndicator style={{ alignSelf: 'center' }} size="large" color={colors.tintColor} />
+						</View>
+					)
+				}
 				<ActionView
 					cancelText={strings('add_asset.tokens.cancel_add_token')}
 					confirmText={strings('add_asset.tokens.add_token')}
@@ -203,6 +231,8 @@ export default class BITGSearchTokenAutocomplete extends PureComponent {
 					confirmDisabled={!(address && symbol && decimals)}
 				>
 					<View>
+
+
 						<View style={styles.searchSection} testID={'add-searched-token-screen'}>
 							<Icon name="search" size={22} style={styles.icon} />
 							<TextInput

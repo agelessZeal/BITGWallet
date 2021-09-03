@@ -6,6 +6,7 @@ import StyledButton from '../StyledButton'; // eslint-disable-line  import/no-un
 import AssetIcon from '../AssetIcon';
 import { fontStyles } from '../../../styles/common';
 import Text from '../../Base/Text';
+import TokenImage from '../TokenImage'
 
 const styles = StyleSheet.create({
 	rowWrapper: {
@@ -25,7 +26,13 @@ const styles = StyleSheet.create({
 	},
 	normalText: {
 		...fontStyles.normal
-	}
+	},
+	ethLogo: {
+        width: 50,
+        height: 50,
+        overflow: 'hidden',
+        marginRight: 20
+    },
 });
 
 /**
@@ -81,7 +88,8 @@ export default class BITGAssetList extends PureComponent {
 							testID={'searched-token-result'}
 						>
 							<View style={styles.assetListElement}>
-								<AssetIcon logo={logo} />
+								{/* <AssetIcon logo={logo} /> */}
+								<TokenImage asset={searchResults[i]} containerStyle={styles.ethLogo} />
 								<Text style={styles.text}>
 									{name} ({symbol})
 								</Text>
