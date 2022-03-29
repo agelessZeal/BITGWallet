@@ -192,7 +192,7 @@
     "react-native-vector-icons": "6.4.2",
     "react-native-video": "^5.1.1",
     "react-native-view-shot": "^3.1.2",
-    "react-native-webview": "^11.0.2",
+    "react-native-webview": "^11.18.0",
     "react-navigation": "^4.4.3",
     "react-navigation-drawer": "1.4.0",
     "react-navigation-material-bottom-tabs": "^2.3.4",
