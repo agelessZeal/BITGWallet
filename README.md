@@ -3,7 +3,7 @@
 # BITG
 
 
-BITG wallet is a mobile web browser that provides easy access to websites that use the [BITG chain(polkadot side chain)] blockchain.
+BITG wallet is a mobile web browser that provides easy access to websites that use the [BITG(https://bitgreen.org/) chain] blockchain.
 
 For up to the minute news, follow our [Twitter](https://twitter.com/metamask) or [Medium](https://medium.com/metamask) pages.
 
