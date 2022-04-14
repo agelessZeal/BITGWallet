@@ -2,9 +2,8 @@
 
 # BITG
 
-[![CircleCI](https://circleci.com/gh/BITG/metamask-mobile/tree/develop.svg?style=shield)](https://circleci.com/gh/BITG/metamask-mobile/tree/develop)
 
-BITG is a mobile web browser that provides easy access to websites that use the [Ethereum](https://ethereum.org/) blockchain.
+BITG wallet is a mobile web browser that provides easy access to websites that use the [BITG chain(polkadot side chain)] blockchain.
 
 For up to the minute news, follow our [Twitter](https://twitter.com/metamask) or [Medium](https://medium.com/metamask) pages.
 
